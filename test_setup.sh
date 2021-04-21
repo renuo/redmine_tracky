@@ -8,7 +8,7 @@ NAME_OF_PLUGIN=redmine_tracky
 PATH_TO_PLUGIN=$PWD
 REDMINE_VER=master
 
-mkdir $TESTSPACE
+mkdir -p $TESTSPACE
 
 cp test/support/* $TESTSPACE/
 
@@ -19,12 +19,19 @@ export REDMINE_GIT_TAG=$REDMINE_VER
 export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
 # checkout redmine
-git clone $REDMINE_GIT_REPO $PATH_TO_REDMINE
-cd $PATH_TO_REDMINE
+if [ -d "$PATH_TO_REDMINE" ]; then
+	cd $PATH_TO_REDMINE
+else
+	git clone $REDMINE_GIT_REPO $PATH_TO_REDMINE
+	cd $PATH_TO_REDMINE
+fi
+
 if [ ! "$REDMINE_GIT_TAG" = "master" ];
 then
   git checkout -b $REDMINE_GIT_TAG origin/$REDMINE_GIT_TAG
 fi
+
+git pull
 
 # create a link to the backlogs plugin
 ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
