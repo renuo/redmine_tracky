@@ -1,5 +1,5 @@
 version: "v1.0"
-name: [Redmine-Tracky]
+name: "Redmine-Tracky"
 agent:
   machine:
     type: e1-standard-2
@@ -12,7 +12,7 @@ blocks:
     dependencies: []
     task:
       secrets:
-        - name: [Redmine-Tracky]
+        - name: "Redmine-Tracky"
       jobs:
         - name: cache
           commands:
@@ -22,31 +22,41 @@ blocks:
             - bundle config --local path 'vendor/bundle'
             - bundle install -j 4
             - nvm install
-            - bin/yarn install --cache-folder ~/.cache/yarn
             - cache store
   - name: tests
     dependencies: ['cache']
     task:
       secrets:
-        - name: [Redmine-Tracky]
+        - name: "Redmine-Tracky"
       env_vars:
         - name: DATABASE_URL
           value: postgresql://postgres@localhost/test?encoding=utf8
         - name: RAILS_ENV
           value: test
+        - name: PWD
+          value: $PWD
+        - name: NAME_OF_PLUGIN
+          value: redmine-tracky
+        - name: PATH_TO_PLUGIN
+          value: $PWD
+        - name: PATH_TO_REDMINE
+          value: $TESTSPACE/redmine
       prologue:
         commands:
           - checkout
+          - TESTSPACE=$PWD/testspace
+          - mkdir $TESTSPACE
+          - cp test/support/* $TESTSPACE/
           - cache restore
           - bundle config --local deployment 'true'
           - bundle config --local path 'vendor/bundle'
           - bundle install -j 4
           - nvm use
           - sem-service start postgres
-          - cp config/application.example.yml config/application.yml
           - bin/rails db:create db:schema:load
           - bin/rails assets:precompile
+          - bash -x ./test_setup.sh
       jobs:
         - name: tests
           commands:
-            - bin/check
+            - bundle exec rake redmine:plugins:test NAME=redmine-tracky
