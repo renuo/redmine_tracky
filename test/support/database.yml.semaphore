@@ -1,0 +1,6 @@
+test:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: redmine_tracky_test
+  user: postgres

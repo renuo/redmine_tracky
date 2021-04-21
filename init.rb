@@ -1,4 +1,4 @@
-Redmine::Plugin.register :tracky do
+Redmine::Plugin.register :redmine_tracky do
   name 'Tracky plugin'
   author 'Nick Anthony Flueckiger'
   description 'Time tracking plugin for redmine'

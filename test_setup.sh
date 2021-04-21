@@ -2,24 +2,15 @@
 
 set -e
 
-if [[ ! "$TESTSPACE" = /* ]] ||
-   [[ ! "$PATH_TO_REDMINE" = /* ]] ||
-   [[ ! "$REDMINE_VER" = * ]] ||
-   [[ ! "$NAME_OF_PLUGIN" = * ]] ||
-   [[ ! "$PATH_TO_PLUGIN" = /* ]];
-then
-  echo "You should set"\
-       " TESTSPACE, PATH_TO_REDMINE, REDMINE_VER"\
-       " NAME_OF_PLUGIN, PATH_TO_PLUGIN"\
-       " environment variables"
-  echo "You set:"\
-       "$TESTSPACE"\
-       "$PATH_TO_REDMINE"\
-       "$REDMINE_VER"\
-       "$NAME_OF_PLUGIN"\
-       "$PATH_TO_PLUGIN"
-  exit 1;
-fi
+TESTSPACE=$PWD/testpace
+PATH_TO_REDMINE=$TESTSPACE/redmine
+NAME_OF_PLUGIN=redmine_tracky
+PATH_TO_PLUGIN=$PWD
+REDMINE_VER=master
+
+mkdir $TESTSPACE
+
+cp test/support/* $TESTSPACE/
 
 export RAILS_ENV=test
 
@@ -38,8 +29,10 @@ fi
 # create a link to the backlogs plugin
 ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
 
-mv $TESTSPACE/database.yml.sem config/database.yml
+mv $TESTSPACE/database.yml.semaphore config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
+
+bundle exec rails db:create
 
 # install gems
 bundle install

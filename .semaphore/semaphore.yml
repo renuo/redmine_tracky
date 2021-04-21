@@ -33,19 +33,9 @@ blocks:
           value: postgresql://postgres@localhost/test?encoding=utf8
         - name: RAILS_ENV
           value: test
-        - name: NAME_OF_PLUGIN
-          value: redmine-tracky
-        - name: PATH_TO_PLUGIN
-          value: $PWD
-        - name: PATH_TO_REDMINE
-          value: $TESTSPACE/redmine
-        - name: REDMINE_VER
-          value: master
       prologue:
         commands:
           - checkout
-          - mkdir $PWD/testspace
-          - $TESTSPACE=$PWD/testspace
           - cache restore
           - bundle config --local deployment 'true'
           - bundle config --local path 'vendor/bundle'
