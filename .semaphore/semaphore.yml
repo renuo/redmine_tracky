@@ -44,7 +44,7 @@ blocks:
       prologue:
         commands:
           - checkout
-          - TESTSPACE=$PWD/testspace
+          - $TESTSPACE=$PWD/testspace
           - mkdir $TESTSPACE
           - cache restore
           - bundle config --local deployment 'true'
