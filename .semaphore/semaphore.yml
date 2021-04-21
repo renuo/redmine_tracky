@@ -9,7 +9,6 @@ auto_cancel:
     when: "true"
 blocks:
   - name: tests
-    dependencies: ['cache']
     task:
       secrets:
         - name: "Redmine-Tracky"
