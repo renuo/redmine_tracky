@@ -22,8 +22,7 @@ blocks:
           - checkout
           - nvm use
           - sem-service start postgres
-          - bash -x ./test_setup.sh
       jobs:
         - name: tests
           commands:
-            - bundle exec rake redmine:plugins:test NAME=redmine-tracky
+            - bash -x ./test_setup.sh
