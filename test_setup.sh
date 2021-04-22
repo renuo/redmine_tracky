@@ -2,6 +2,7 @@
 
 set -e
 
+
 TESTSPACE=$PWD/../testpace
 PATH_TO_REDMINE=$TESTSPACE/redmine
 NAME_OF_PLUGIN=redmine_tracky
@@ -37,8 +38,22 @@ ln -sf $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 mv $TESTSPACE/database.yml.semaphore config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
 
+if command -v cache restore %> /dev/null
+then
+	cache restore
+fi
+
+bundle config --local deployment 'true'
+bundle config --local path 'vendor/bundle'
+bundle install -j 4
+
 # install gems
 bundle install
+
+if command -v cache store %> /dev/null
+then
+	cache store
+fi
 
 bundle exec rails db:create
 
@@ -52,6 +67,7 @@ bundle exec rake redmine:plugins:migrate
 #bundle exec rake redmine:load_default_data REDMINE_LANG=en
 
 bundle exec rake db:structure:dump
+
 # run tests
 # bundle exec rake TEST=test/unit/role_test.rb
 bundle exec rake redmine:plugins:test NAME=$NAME_OF_PLUGIN
