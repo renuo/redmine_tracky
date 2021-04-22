@@ -38,22 +38,8 @@ ln -sf $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 mv $TESTSPACE/database.yml.semaphore config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
 
-if command -v cache restore %> /dev/null
-then
-	cache restore
-fi
-
-bundle config --local deployment 'true'
-bundle config --local path 'vendor/bundle'
-bundle install -j 4
-
 # install gems
 bundle install
-
-if command -v cache store %> /dev/null
-then
-	cache store
-fi
 
 bundle exec rails db:create
 
