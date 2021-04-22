@@ -2,7 +2,7 @@
 
 set -e
 
-TESTSPACE=$PWD/testpace
+TESTSPACE=$PWD/../testpace
 PATH_TO_REDMINE=$TESTSPACE/redmine
 NAME_OF_PLUGIN=redmine_tracky
 PATH_TO_PLUGIN=$PWD
@@ -19,12 +19,10 @@ export REDMINE_GIT_TAG=$REDMINE_VER
 export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
 # checkout redmine
-if [ -d "$PATH_TO_REDMINE" ]; then
-	cd $PATH_TO_REDMINE
-else
+if [ ! -d "$PATH_TO_REDMINE" ]; then
 	git clone $REDMINE_GIT_REPO $PATH_TO_REDMINE
-	cd $PATH_TO_REDMINE
 fi
+cd $PATH_TO_REDMINE
 
 if [ ! "$REDMINE_GIT_TAG" = "master" ];
 then
@@ -54,7 +52,6 @@ bundle exec rake redmine:plugins:migrate
 #bundle exec rake redmine:load_default_data REDMINE_LANG=en
 
 bundle exec rake db:structure:dump
-
 # run tests
 # bundle exec rake TEST=test/unit/role_test.rb
 bundle exec rake redmine:plugins:test NAME=$NAME_OF_PLUGIN
