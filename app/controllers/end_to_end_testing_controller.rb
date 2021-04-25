@@ -1,5 +1,5 @@
-class EndToEndTestingController < ApplicationController
+# frozen_string_literal: true
 
-  def index
-  end
+class EndToEndTestingController < ApplicationController
+  def index; end
 end

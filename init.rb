@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Redmine::Plugin.register :redmine_tracky do
   name 'Tracky plugin'
   author 'Nick Anthony Flueckiger'
