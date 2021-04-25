@@ -1,9 +1,7 @@
 #/bin/bash
-
 set -e
 
-
-TESTSPACE=$PWD/../testpace
+TESTSPACE=$HOME/testpace
 PATH_TO_REDMINE=$TESTSPACE/redmine
 NAME_OF_PLUGIN=redmine_tracky
 PATH_TO_PLUGIN=$PWD
