@@ -1,7 +1,6 @@
 require:
   - rubocop-performance
   - rubocop-rails
-  - rubocop-rspec
 
 Rails/SkipsModelValidations:
   Exclude:
@@ -47,30 +46,6 @@ Metrics/MethodLength:
   - array
   - hash
   - heredoc
-
-RSpec/MultipleExpectations:
-  Enabled: false
-
-RSpec/DescribeClass:
-  Exclude:
-    - 'spec/system/**/*'
-    - 'spec/views/**/*'
-
-RSpec/DescribedClass:
-  SkipBlocks: true
-
-RSpec/ExampleLength:
-  Exclude:
-    - 'spec/system/**/*'
-    - 'spec/requests/**/*'
-    - 'spec/views/**/*'
-
-RSpec/InstanceVariable:
-  Exclude:
-    - 'spec/views/**/*'
-
-RSpec/NestedGroups:
-  Max: 5
 
 AllCops:
   NewCops: enable
