@@ -1,60 +1,60 @@
+version: "v1.0"
+name: "Redmine-Tracky"
 agent:
   machine:
-    os_image: ubuntu1804
     type: e1-standard-2
+    os_image: ubuntu1804
 auto_cancel:
   running:
-    when: true
+    when: "true"
 blocks:
-  - dependencies: []
-    name: cache
+  - name: cache
+    dependencies: []
     task:
-      jobs:
-        - commands:
-            - checkout
-            - 'cache restore'
-            - 'bundle config --local deployment ''true'''
-            - 'bundle config --local path ''vendor/bundle'''
-            - 'bundle install -j 4'
-            - 'nvm install'
-            - 'cache store'
-          name: cache
       secrets:
-        - name: Redmine-Tracky
-  - dependencies:
-      - cache
-    name: linting
-    task:
+        - name: "Redmine-Tracky"
       jobs:
-        - commands:
-            - bin/check_linters
-          name: Lint
+        - name: cache
+          commands:
+            - checkout
+            - cache restore
+            - bundle config --local deployment 'true'
+            - bundle config --local path 'vendor/bundle'
+            - bundle install -j 4
+            - nvm install
+            - cache store
+  - name: linting
+    dependencies: ['cache']
+    task:
+      secrets:
+        - name: "Redmine-Tracky"
       prologue:
         commands:
           - checkout
-          - 'cache restore'
-          - 'bundle config --local deployment ''true'''
-          - 'bundle config --local path ''vendor/bundle'''
-          - 'bundle install -j 4'
-      secrets:
-        - name: Redmine-Tracky
+          - cache restore
+          - bundle config --local deployment 'true'
+          - bundle config --local path 'vendor/bundle'
+          - bundle install -j 4
+      jobs:
+        - name: Lint
+          commands:
+            - bin/check_linters
   - name: tests
+    dependencies: []
     task:
+      secrets:
+        - name: "Redmine-Tracky"
       env_vars:
         - name: DATABASE_URL
           value: postgresql://postgres@localhost/test?encoding=utf8
         - name: RAILS_ENV
           value: test
-      jobs:
-        - commands:
-            - 'bash -x ./test_setup.sh'
-          name: tests
       prologue:
         commands:
           - checkout
-          - 'nvm use'
-          - 'sem-service start postgres'
-      secrets:
-        - name: Redmine-Tracky
-name: Redmine-Tracky
-version: v1.0
+          - nvm use
+          - sem-service start postgres
+      jobs:
+        - name: tests
+          commands:
+            - bash -x ./test_setup.sh
