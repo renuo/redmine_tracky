@@ -18,9 +18,7 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - bundle config --local deployment 'true'
-            - bundle config --local path 'vendor/bundle'
-            - bundle install -j 4
+            - bundle install -j 4 --gemfile DEV_Gemfile
             - nvm install
             - cache store
   - name: linting
@@ -32,9 +30,7 @@ blocks:
         commands:
           - checkout
           - cache restore
-          - bundle config --local deployment 'true'
-          - bundle config --local path 'vendor/bundle'
-          - bundle install -j 4
+          - bundle install -j 4 --gemfile DEV_Gemfile
       jobs:
         - name: Lint
           commands:

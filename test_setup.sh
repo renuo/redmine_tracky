@@ -21,6 +21,7 @@ export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 if [ ! -d "$PATH_TO_REDMINE" ]; then
 	git clone $REDMINE_GIT_REPO $PATH_TO_REDMINE
 fi
+
 cd $PATH_TO_REDMINE
 
 if [ ! "$REDMINE_GIT_TAG" = "master" ];
@@ -35,7 +36,6 @@ ln -sf $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 
 mv $TESTSPACE/database.yml.semaphore config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
-cd $PATH_TO_REDMINE
 
 # install gems
 bundle install
