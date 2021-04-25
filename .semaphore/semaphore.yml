@@ -30,9 +30,7 @@ blocks:
       prologue:
         commands:
           - checkout --use-cache
-          - bundle config --local deployment 'true'
-          - bundle config --local path 'vendor/bundle'
-          - bundle install -j 4
+          - bundle install --without production development --deployment -j 4 --path vendor/bundle
       jobs:
         - name: Lint
           commands:
