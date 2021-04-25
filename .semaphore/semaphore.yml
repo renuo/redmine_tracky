@@ -8,6 +8,37 @@ auto_cancel:
   running:
     when: "true"
 blocks:
+  - name: cache
+    dependencies: []
+  task:
+    secrets:
+      - name: "Redmine-Tracky"
+    jobs:
+      - name: cache
+        commands:
+          - checkout
+          - cache restore
+          - bundle config --local deployment 'true'
+          - bundle config --local path 'vendor/bundle'
+          - bundle install -j 4
+          - nvm install
+          - cache store
+  - name: tests
+    dependencies: ['cache']
+    task:
+      secrets:
+        - name: "Redmine-Tracky"
+      prologue:
+        commands:
+          - checkout
+          - cache restore
+          - bundle config --local deployment 'true'
+          - bundle config --local path 'vendor/bundle'
+          - bundle install -j 4
+      jobs:
+        - name: Lint
+          commands:
+            - bin/check_linters
   - name: tests
     task:
       secrets:
