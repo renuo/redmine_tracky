@@ -23,7 +23,7 @@ blocks:
           - bundle install -j 4
           - nvm install
           - cache store
-  - name: tests
+  - name: linting
     dependencies: ['cache']
     task:
       secrets:
