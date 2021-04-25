@@ -18,7 +18,6 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - gem install bundler
             - bundle config --local deployment 'true'
             - bundle config --local path 'vendor/bundle'
             - bundle install -j 4
@@ -31,7 +30,8 @@ blocks:
         - name: "Redmine-Tracky"
       prologue:
         commands:
-          - checkout --use-cache
+          - checkout
+          - cache restore
           - bundle config --local deployment 'true'
           - bundle config --local path 'vendor/bundle'
           - bundle install -j 4

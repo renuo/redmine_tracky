@@ -35,6 +35,7 @@ ln -sf $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 
 mv $TESTSPACE/database.yml.semaphore config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
+cd $PATH_TO_REDMINE
 
 # install gems
 bundle install
