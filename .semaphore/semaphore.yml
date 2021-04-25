@@ -18,9 +18,8 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - bundle config --local deployment 'true'
-            - bundle config --local path 'vendor/bundle'
-            - bundle install -j 4
+            - gem install bundler
+            - bundle install --without production development --deployment -j 4 --path vendor/bundle
             - nvm install
             - cache store
   - name: linting
@@ -30,8 +29,7 @@ blocks:
         - name: "Redmine-Tracky"
       prologue:
         commands:
-          - checkout
-          - cache restore
+          - checkout --use-cache
           - bundle config --local deployment 'true'
           - bundle config --local path 'vendor/bundle'
           - bundle install -j 4
@@ -51,7 +49,7 @@ blocks:
           value: test
       prologue:
         commands:
-          - checkout
+          - checkout --use-cache
           - nvm use
           - sem-service start postgres
       jobs:
