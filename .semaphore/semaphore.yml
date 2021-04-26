@@ -18,7 +18,7 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - bundle install -j 4 --gemfile DEV_Gemfile
+            - BUNDLE_GEMFILE=DEV_Gemfile bundle install -j 4 --gemfile
             - nvm install
             - cache store
   - name: linting
