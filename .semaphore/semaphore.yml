@@ -18,9 +18,10 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - BUNDLE_GEMFILE=DEV_Gemfile bundle install -j 4
+            - BUNDLE_GEMFILE=DEV_Gemfile bundle install -j 4 --path vendor/bundle
             - nvm install
-            - cache store
+            - bash -x ./test_setup.sh
+            - cache store $HOME/testpace/redmine vendor/bundle
   - name: linting
     dependencies: ['setup']
     task:
@@ -36,7 +37,7 @@ blocks:
           commands:
             - bin/check_linters
   - name: tests
-    dependencies: []
+    dependencies: ['setup']
     task:
       secrets:
         - name: "Redmine-Tracky"
@@ -48,9 +49,10 @@ blocks:
       prologue:
         commands:
           - checkout --use-cache
+          - cache restore
           - nvm use
           - sem-service start postgres
       jobs:
         - name: tests
           commands:
-            - bash -x ./test_setup.sh
+            - bash -x ./test_runner.sh
