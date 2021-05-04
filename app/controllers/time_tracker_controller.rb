@@ -9,17 +9,13 @@ class TimeTrackerController < ApplicationController
     if @current_timer_session
       respond_with_error(error: :timer_already_present)
     else
-      timer_session = TimerSession.create!(
-        timer_start: timer_params[:timer_start].presence || Time.zone.now,
-        comments: timer_params[:comments],
-        user: @current_user
-      )
-      TimerSessionIssue.create!(
-        timer_session: timer_session,
-        issue: Issue.find(1)
-      )
-      if timer_params[:timer_end]
-        create_entry_with_end(timer_session, timer_params[:timer_end])
+      timer_session = SessionCreator.new(@current_user, timer_params).create
+      issue_connector = IssueConnector.new(timer_params[:issue_ids].split(','), timer_session)
+      issue_connector.run
+      if timer_session.session_finished?
+        time_splitter = TimeSplitter.new(timer_session)
+        time_splitter.create_time_entries
+        render :stop, layout: true
       else
         @timer_session = timer_session
         render :start, layout: false
@@ -41,8 +37,6 @@ class TimeTrackerController < ApplicationController
   def respond_with_error(error: :invalid); end
 
   def create_entry_with_end(timer_session, timer_end)
-    timer_session.update(timer_end: timer_end)
-    @timer_session = timer_session
     render :start, layout: true
   end
 
