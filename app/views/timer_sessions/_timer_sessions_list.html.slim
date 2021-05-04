@@ -1,2 +1,4 @@
-- (timer_sessions_by_day || []).each do |timer_session_day|
-  = render 'timer_session_day_block', timer_sessions: timer_session_day
+- (timer_sessions_by_day || []).each do |date, timer_session_day|
+  = render 'timer_sessions_day_block',
+    date: date,
+    timer_sessions: timer_session_day

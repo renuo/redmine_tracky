@@ -1,9 +1,14 @@
-h1 = t('timer_sessions.index.title')
-.container
-  div[data-timer-session-container]
-    = render 'timer_container', timer_session: @current_timer_session
+.redmine-tracky
+  h1 = t('timer_sessions.index.title')
+  .container
+    div[data-timer-session-container]
+      = render 'timer_container', timer_session: @current_timer_session
+    hr
+    div[data-timer-session-container]
+      = render 'entries_report_query'
 
-  div[data-timer-sessions-list]
-    = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions
+    hr
+    div[data-timer-sessions-list]
+      = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions
 
-= render 'shared/assets'
+  = render 'shared/assets'
