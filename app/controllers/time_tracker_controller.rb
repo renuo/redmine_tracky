@@ -4,7 +4,6 @@ class TimeTrackerController < ApplicationController
   before_action :set_current_user
   before_action :set_current_timer_session
 
-  # rubocop:disable Metrics/AbcSize
   def start
     if @current_timer_session
       respond_with_error(error: :timer_already_present)
@@ -22,7 +21,6 @@ class TimeTrackerController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def stop
     if params[:commit].to_sym == :cancel
@@ -36,7 +34,7 @@ class TimeTrackerController < ApplicationController
 
   def respond_with_error(error: :invalid); end
 
-  def create_entry_with_end(timer_session, timer_end)
+  def create_entry_with_end(_timer_session, _timer_end)
     render :start, layout: true
   end
 

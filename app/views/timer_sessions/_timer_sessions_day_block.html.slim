@@ -1,4 +1,6 @@
-= date
+= format_block_date(date)
+br
+b = sum_work_hours(Array.wrap(timer_sessions))
 table.list.timer-sessions-table
   thead
     tr
@@ -11,5 +13,5 @@ table.list.timer-sessions-table
       tr
         td = timer_session.issues.map(&:id)
         td[colspan='3'] = timer_session.comments
-        td = timer_session.timer_start
-        td = timer_session.timer_end
+        td = format_session_time(timer_session.timer_start, timer_session.timer_end)
+        td = format_worked_hours(timer_session.splittable_hours)

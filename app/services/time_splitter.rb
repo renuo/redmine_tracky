@@ -9,7 +9,7 @@ class TimeSplitter
   def create_time_entries
     TimeEntry.transaction do
       time_entry = base_time_entry
-      @issues.each do | issue |
+      @issues.each do |issue|
         create_time_entry(issue, time_entry.dup)
       end
     end
@@ -27,14 +27,13 @@ class TimeSplitter
     )
     default_activity(time_entry)
   end
-  
+
   def default_activity(time_entry)
     time_entry.activity ||= TimeEntryActivity.default
     time_entry.activity ||= TimeEntryActivity.where(name: 'Entwicklung').first
     time_entry.activity ||= TimeEntryActivity.where(parent_id: nil, project_id: nil).first
     time_entry
   end
-
 
   def create_time_entry(issue, time_entry)
     time_entry.issue_id = issue.id
