@@ -3,3 +3,12 @@ en:
   timer_sessions:
     index:
       title: Tracky
+      table:
+        total_hours_worked: 'Total Hours: %{hours} h'
+    relative_times:
+      today: Today
+      yesterday: Yesterday
+    formats:
+      time: '%H:%M'
+      date_with_year: '%d.%m.%Y'
+      date_without_year: '%d.%m'

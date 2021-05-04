@@ -18,7 +18,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   def splittable_hours
     @splittable_hours ||= ((timer_end - timer_start) / SECONDS_IN_HOUR)
   end
-  
+
   def session_finished?
     timer_end.present?
   end

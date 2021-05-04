@@ -10,9 +10,13 @@
       remote: true,
       format: :js) do |f|
       = f.text_field :issue_ids, label: false
+      br
       = f.text_field :comments
+      br
       = f.datetime_field :timer_start, class: 'datetime-picker'
+      br
       = f.datetime_field :timer_end, class: 'datetime-picker'
+      br
 
       - if timer_session
         / Replace with fancy buttons

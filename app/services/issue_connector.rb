@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class IssueConnector
-
   attr_reader :errors
 
   def initialize(issues, timer_session)
@@ -18,12 +17,12 @@ class IssueConnector
   def issues_exist?
     found_issues = Issue.where(id: @issues)
     invalid_issue_ids = @issues - found_issues.pluck(:id)
-    if invalid_issue_ids.count > 0
-      invalid_issue_ids.each do | invalid_issue_id |
+    if invalid_issue_ids.count.positive?
+      invalid_issue_ids.each do |invalid_issue_id|
         @errors << { invalid_issue_id: invalid_issue_id }
       end
     end
-    @errors.count == 0
+    @errors.count.zero?
   end
 
   def run
@@ -32,13 +31,13 @@ class IssueConnector
   end
 
   def create_connections
-    return false unless @errors.count == 0
-    
-    TimerSessionIssue.transaction do 
-      @issues.each do | issue_id |
+    return false unless @errors.count.zero?
+
+    TimerSessionIssue.transaction do
+      @issues.each do |issue_id|
         TimerSessionIssue.create!(
           timer_session_id: @timer_session.id,
-          issue_id: issue_id,
+          issue_id: issue_id
         )
       end
     end
