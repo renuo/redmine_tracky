@@ -34,10 +34,6 @@ class TimeTrackerController < ApplicationController
 
   def respond_with_error(error: :invalid); end
 
-  def create_entry_with_end(_timer_session, _timer_end)
-    render :start, layout: true
-  end
-
   def handle_cancel
     @current_timer_session.delete
     render :cancel, layout: false
