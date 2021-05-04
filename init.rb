@@ -7,4 +7,6 @@ Redmine::Plugin.register :redmine_tracky do
   version '0.0.1'
   url 'https://github.com/renuo/redmine-tracky'
   author_url 'https://github.com/Liberty'
+
+  requires_redmine version_or_higher: '4.0.0'
 end
