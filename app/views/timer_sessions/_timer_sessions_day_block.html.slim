@@ -7,7 +7,7 @@ table.list.timer-sessions-table
       th
       th
   tbody
-    - Array.wrap(timer_sessions).each do | timer_session |
+    - Array.wrap(timer_sessions).each do |timer_session|
       tr
         td = timer_session.issues.map(&:id)
         td[colspan='3'] = timer_session.comments
