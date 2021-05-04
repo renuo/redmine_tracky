@@ -9,7 +9,20 @@
       method: :post,
       remote: true,
       format: :js) do |f|
-      = f.text_field :issue_ids, label: false
+      .issue-container
+        .box
+          = f.text_field :issue_id, label: false
+          div[data-issue-selection-container]
+            - active_timer_session.issues.each do |issue|
+              .issue-container
+                label[for="timer_session_issue_id_#{issue.id}"]
+                  = issue.subject
+                input[id="timer_session_issue_id_#{issue.id}" readonly
+                  name='timer_session[issue_ids][]'
+                  value=issue.id]
+                .input-group-text[data-issue-deletion-action]
+                  i.icon-only.icon-del
+      br
       br
       = f.text_field :comments
       br
@@ -24,3 +37,5 @@
         = f.submit :cancel
       - else
         = f.submit :start
+
+= render 'timer_sessions/issue_completion'

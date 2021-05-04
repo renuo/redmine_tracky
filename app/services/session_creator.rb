@@ -12,7 +12,6 @@ class SessionCreator
       comments: @params[:comments],
       user: @user
     )
-
     timer_session.update(timer_end: @params[:timer_end]) if update_with_timer_end?
 
     timer_session

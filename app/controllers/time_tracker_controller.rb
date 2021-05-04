@@ -9,7 +9,7 @@ class TimeTrackerController < ApplicationController
       respond_with_error(error: :timer_already_present)
     else
       timer_session = SessionCreator.new(@current_user, timer_params).create
-      issue_connector = IssueConnector.new(timer_params[:issue_ids].split(','), timer_session)
+      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], timer_session)
       issue_connector.run
       if timer_session.session_finished?
         time_splitter = TimeSplitter.new(timer_session)
@@ -53,9 +53,9 @@ class TimeTrackerController < ApplicationController
   end
 
   def timer_params
-    params.require(:timer_session).permit(:issue_ids,
-                                          :comments,
+    params.require(:timer_session).permit(:comments,
                                           :timer_start,
-                                          :timer_end)
+                                          :timer_end,
+                                          issue_ids: [])
   end
 end

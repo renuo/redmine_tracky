@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
+  HOUR_FORMAT_PRECISION = 2
   def format_session_time(timer_start, timer_end)
     DisplayDateFormatBuilder.new(timer_start, timer_end).format
   end
 
   def format_worked_hours(hours)
-    "#{hours} h"
+    "#{number_with_precision(hours, precision: HOUR_FORMAT_PRECISION)} h"
   end
 
   def format_block_date(date)
@@ -21,7 +22,8 @@ module TimerSessionsHelper
   end
 
   def sum_work_hours(timer_sessions)
-    total_hours = timer_sessions.sum(&:splittable_hours)
+    total_hours = number_with_precision(timer_sessions.sum(&:splittable_hours),
+                                        precision: HOUR_FORMAT_PRECISION)
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
   end
 end
