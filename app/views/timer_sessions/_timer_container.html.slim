@@ -1,41 +1,48 @@
 .box
-  .tracker-container
+  .timer-container
     ruby:
       active_timer_session = timer_session || TimerSession.new
-      is_new_model = !active_timer_session.persisted?
-      method_path = is_new_model ? start_time_tracker_path : stop_time_tracker_path
     = labelled_form_for(active_timer_session,
-      url: method_path,
+      url: active_timer_session.persisted? ? stop_time_tracker_path : start_time_tracker_path,
       method: :post,
       remote: true,
       format: :js) do |f|
-      .issue-container
-        .box
-          = f.text_field :issue_id, label: false
-          div[data-issue-selection-container]
-            - active_timer_session.issues.each do |issue|
-              .issue-container
-                label[for="timer_session_issue_id_#{issue.id}"]
-                  = issue.subject
-                input[id="timer_session_issue_id_#{issue.id}" readonly
-                  name='timer_session[issue_ids][]'
-                  value=issue.id]
-                .input-group-text[data-issue-deletion-action]
-                  i.icon-only.icon-del
+      .row
+        .issue-container
+          .box
+            = f.text_field :issue_id, label: false
+            div[data-issue-selection-container]
+              - active_timer_session.issues.each do |issue|
+                .issue-container
+                  label[for="timer_session_issue_id_#{issue.id}"]
+                    = issue.subject
+                  input[id="timer_session_issue_id_#{issue.id}" readonly
+                    name='timer_session[issue_ids][]'
+                    value=issue.id]
+                  .input-group-text[data-issue-deletion-action]
+                    i.icon-only.icon-del
       br
       br
-      = f.text_field :comments
+      .row
+        = f.text_field :comments
       br
-      = f.datetime_field :timer_start, class: 'datetime-picker'
+      .times-container
+        .col
+          = f.datetime_field :timer_start, class: 'datetime-picker',
+            value: active_timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
+        br
+        .col
+          = f.datetime_field :timer_end, class: 'datetime-picker',
+            value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
       br
-      = f.datetime_field :timer_end, class: 'datetime-picker'
-      br
-
       - if timer_session
-        / Replace with fancy buttons
-        = f.submit :stop
-        = f.submit :cancel
+        = f.button :stop, type: :submit, name: :stop do
+          =<> t('timer_sessions.timer.stop')
+          i.icon.icon-error
+        = f.button :cancel, type: :submit, name: :cancel do
+          =<> t('timer_sessions.timer.cancel')
+          i.icon.icon-cancel
       - else
-        = f.submit :start
-
-= render 'timer_sessions/issue_completion'
+        = f.button :start, type: :submit, name: :start do
+          =<> t('timer_sessions.timer.start')
+          i.icon.icon-add.new-issue
