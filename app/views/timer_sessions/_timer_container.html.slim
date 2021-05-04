@@ -13,7 +13,7 @@
         .box
           = f.text_field :issue_id, label: false
           div[data-issue-selection-container]
-            - active_timer_session.issues.each do | issue |
+            - active_timer_session.issues.each do |issue|
               .issue-container
                 label[for="timer_session_issue_id_#{issue.id}"]
                   = issue.subject

@@ -56,7 +56,6 @@ class TimeTrackerController < ApplicationController
     params.require(:timer_session).permit(:comments,
                                           :timer_start,
                                           :timer_end,
-                                          issue_ids: []
-                                         )
+                                          issue_ids: [])
   end
 end
