@@ -1,13 +1,13 @@
 .redmine-tracky
   h1 = t('timer_sessions.index.title')
-  .container
+  .w-75.mx-auto
     div[data-timer-session-container]
       = render 'timer_container', timer_session: @current_timer_session
     hr
     div[data-timer-session-container]
       = render 'entries_report_query'
     hr
-    div[data-timer-sessions-list]
-      = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions
+  div[data-timer-sessions-list]
+    = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions
 
   = render 'shared/assets'

@@ -23,10 +23,10 @@ class TimeTrackerController < ApplicationController
   end
 
   def stop
-    if params[:commit].to_sym == :cancel
-      handle_cancel
-    else
+    if params[:cancel].nil?
       handle_stop
+    else
+      handle_cancel
     end
   end
 

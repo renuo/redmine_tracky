@@ -10,6 +10,10 @@ module TimerSessionsHelper
     "#{number_with_precision(hours, precision: HOUR_FORMAT_PRECISION)} h"
   end
 
+  def action_path_for_timer(timer_session)
+    timer_session.persisted? ? stop_time_tracker_path : start_time_tracker_path
+  end
+
   def format_block_date(date)
     return I18n.t('timer_sessions.relative_times.today') if date == Time.zone.now.to_date
 

@@ -1,6 +1,10 @@
 # English strings go here for Rails i18n
 en:
   timer_sessions:
+    timer:
+      start: Start
+      stop: Stop
+      cancel: Cancel
     index:
       title: Tracky
       table:
@@ -12,3 +16,5 @@ en:
       time: '%H:%M'
       date_with_year: '%d.%m.%Y'
       date_without_year: '%d.%m'
+      jquery_datetime_format: d.m.Y H:i
+      datetime_format: '%d.%m.%Y %H:%M'
