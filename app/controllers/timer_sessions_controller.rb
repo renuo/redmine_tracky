@@ -7,6 +7,7 @@ class TimerSessionsController < ApplicationController
   def index
     create_test_data
     @timer_sessions = TimerSession.includes(:issues).finished_sessions.where(user_id: @current_user)
+                                  .order(timer_start: :desc)
                                   .group_by { |entry| entry.timer_start&.to_date }
   end
 
