@@ -1,0 +1,13 @@
+.box.tabular
+  = labelled_form_for(timer_session || TimerSession.new) do |f|
+    = f.text_field :issue_ids
+    = f.text_field :comments
+    = f.datetime_field :timer_start, class: 'datetime-picker'
+    = f.datetime_field :timer_end, class: 'datetime-picker'
+
+    - if timer_session
+      / Replace with fancy buttons
+      = f.submit :stop
+      = f.submit :cancel
+    - else
+      = f.submit :start
