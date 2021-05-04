@@ -1,1 +1,1 @@
-BUNDLE_GEMFILE=DEV_Gemfile bundle exec rubocop ./**/*.rb
+BUNDLE_GEMFILE=DEV_Gemfile bundle exec rubocop ./**/*.rb -A
