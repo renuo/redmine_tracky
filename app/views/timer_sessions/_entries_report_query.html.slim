@@ -1,0 +1,5 @@
+.box
+  = form_for :entry_report_query do |f|
+    = f.date_field :date
+    = f.select :period, %i[day week month year]
+    = f.submit :see_query

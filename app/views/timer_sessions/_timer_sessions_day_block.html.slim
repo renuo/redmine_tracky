@@ -1,0 +1,15 @@
+= date
+table.list.timer-sessions-table
+  thead
+    tr
+      th
+      th[colspan='3']
+      th
+      th
+  tbody
+    - Array.wrap(timer_sessions).each do | timer_session |
+      tr
+        td = timer_session.issues.map(&:id)
+        td[colspan='3'] = timer_session.comments
+        td = timer_session.timer_start
+        td = timer_session.timer_end
