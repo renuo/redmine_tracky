@@ -1,8 +1,9 @@
 .box
   .tracker-container
-    - active_timer_session = timer_session || TimerSession.new
-    - is_new_model = !active_timer_session.persisted?
-    - method_path = is_new_model ? start_time_tracker_path : stop_time_tracker_path
+    ruby:
+      active_timer_session = timer_session || TimerSession.new
+      is_new_model = !active_timer_session.persisted?
+      method_path = is_new_model ? start_time_tracker_path : stop_time_tracker_path
     = labelled_form_for(active_timer_session,
       url: method_path,
       method: :post,

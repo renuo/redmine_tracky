@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IssueConnector
   def initialize(user, issues, timer_session)
     @user = user
@@ -11,11 +13,7 @@ class IssueConnector
     issues_exist?
   end
 
-  def issues_exist?
+  def issues_exist?; end
 
-  end
-
-  def create_connection
-
-  end
+  def create_connection; end
 end
