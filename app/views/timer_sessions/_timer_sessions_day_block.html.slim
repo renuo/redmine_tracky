@@ -11,7 +11,7 @@ table.list.timer-sessions-table
   tbody
     - Array.wrap(timer_sessions).each do |timer_session|
       tr
-        td = timer_session.issues.map(&:id)
+        td = timer_session.issues.map(&:subject).join(', ')
         td[colspan='3'] = timer_session.comments
         td = format_session_time(timer_session.timer_start, timer_session.timer_end)
         td = format_worked_hours(timer_session.splittable_hours)
