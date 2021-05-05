@@ -8,6 +8,7 @@
       remote: true,
       format: :js) do |f|
       = f.hidden_field :id, data: { timer_id: '' }
+      = error_messages_for active_timer_session
       .row
         .issue-container
           .box
