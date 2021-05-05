@@ -8,13 +8,12 @@ class TimeTrackerController < ApplicationController
     if @current_timer_session
       respond_with_error(error: :timer_already_present)
     else
-      timer_session = SessionCreator.new(@current_user, timer_params).create
-      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], timer_session)
+      @timer_session = SessionCreator.new(@current_user, timer_params).create
+      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
       issue_connector.run
-      if timer_session.session_finished?
+      if @timer_session.session_finished?
         handle_finished_timer_session
       else
-        @timer_session = timer_session
         render :start, layout: false
       end
     end
@@ -36,13 +35,12 @@ class TimeTrackerController < ApplicationController
   private
 
   def handle_finished_timer_session
-    if timer_session.valid?
-      time_splitter = TimeSplitter.new(timer_session)
+    if @timer_session.valid?
+      time_splitter = TimeSplitter.new(@timer_session)
       time_splitter.create_time_entries
-      timer_session.update(finished: true)
+      @timer_session.update(finished: true)
       render :stop, layout: true
     else
-      @timer_session = timer_session
       render :start, layout: false
     end
   end
