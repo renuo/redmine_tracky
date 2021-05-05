@@ -14,6 +14,7 @@ class TimeTrackerController < ApplicationController
       if timer_session.session_finished?
         time_splitter = TimeSplitter.new(timer_session)
         time_splitter.create_time_entries
+        timer_session.update(finished: true)
         render :stop, layout: true
       else
         @timer_session = timer_session
@@ -30,6 +31,12 @@ class TimeTrackerController < ApplicationController
     end
   end
 
+  def update
+    @current_timer_session.update(timer_params)
+    @timer_session = @current_timer_session
+    render :start, layout: false
+  end
+
   private
 
   def respond_with_error(error: :invalid); end
@@ -40,7 +47,10 @@ class TimeTrackerController < ApplicationController
   end
 
   def handle_stop
-    @current_timer_session.update!(timer_end: Time.zone.now)
+    @current_timer_session.update!(
+      timer_end: @current_timer_session.timer_end.presence || Time.zone.now,
+      finished: true
+    )
     render :stop, layout: false
   end
 

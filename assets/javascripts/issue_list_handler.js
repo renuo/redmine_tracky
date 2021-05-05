@@ -16,10 +16,12 @@ export default class IssueListHandler {
 	}
 
 	static bind() {
-		$('[data-issue-deletion-action]').off('click');
-		$('[data-issue-deletion-action]').on('click', function() {
-			const element = $(this).parent();
-			element.remove();
+		$(document).ready(() => {
+			$('[data-issue-deletion-action]').off('click');
+			$('[data-issue-deletion-action]').on('click', function() {
+				const element = $(this).parent();
+				element.remove();
+			});
 		});
 	}
 
