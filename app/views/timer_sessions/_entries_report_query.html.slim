@@ -1,5 +1,8 @@
 .box
-  = form_for :entry_report_query do |f|
-    = f.date_field :date
+  - current_report_query = current_report || WorkReportQuery.new
+  = labelled_form_for(current_report_query, url: timer_sessions_report_path, method: :get) do |f|
+    = f.date_field :date, value: Time.zone.now.to_date
+    br
     = f.select :period, %i[day week month year]
+    br
     = f.submit :see_query
