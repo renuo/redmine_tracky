@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
+  # Use in settings
   HOUR_FORMAT_PRECISION = 2
+
   def format_session_time(timer_start, timer_end)
     DisplayDateFormatBuilder.new(timer_start, timer_end).format
   end

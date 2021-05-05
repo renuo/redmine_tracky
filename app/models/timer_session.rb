@@ -11,9 +11,9 @@ class TimerSession < RedmineTrackyApplicationRecord
   has_many :issues, through: :timer_session_issues
   has_many :time_entries, through: :timer_session_time_entries
 
-  scope :active_session, ->(user_id) { where(user_id: user_id, timer_end: nil) }
+  scope :active_session, ->(user_id) { where(user_id: user_id, finished: false) }
 
-  scope :finished_sessions, -> { where.not(timer_end: nil) }
+  scope :finished_sessions, -> { where(finished: true) }
 
   attr_accessor :issue_id
 

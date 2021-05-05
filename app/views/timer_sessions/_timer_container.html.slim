@@ -7,6 +7,7 @@
       method: :post,
       remote: true,
       format: :js) do |f|
+      = f.hidden_field :id, data: { timer_id: '' }
       .row
         .issue-container
           .box
@@ -24,24 +25,28 @@
       br
       br
       .row
-        = f.text_field :comments
+        = f.text_field :comments, data: { timer_comment_input: '' }
       br
       .times-container
         .col
-          = f.datetime_field :timer_start, class: 'datetime-picker',
+          = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
             value: active_timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
         br
         .col
-          = f.datetime_field :timer_end, class: 'datetime-picker',
+          = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
             value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
       br
+      div[data-hours-timer]
+        #hours-clock
+      br
       - if timer_session
-        = f.button :stop, type: :submit, name: :stop do
-          =<> t('timer_sessions.timer.stop')
-          i.icon.icon-error
-        = f.button :cancel, type: :submit, name: :cancel do
-          =<> t('timer_sessions.timer.cancel')
-          i.icon.icon-cancel
+        div[data-ending-action-buttons]
+          = f.button :stop, type: :submit, name: :stop do
+            =<> t('timer_sessions.timer.stop')
+            i.icon.icon-error
+          = f.button :cancel, type: :submit, name: :cancel do
+            =<> t('timer_sessions.timer.cancel')
+            i.icon.icon-cancel
       - else
         = f.button :start, type: :submit, name: :start do
           =<> t('timer_sessions.timer.start')

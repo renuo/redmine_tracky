@@ -18,3 +18,4 @@ en:
       date_without_year: '%d.%m'
       jquery_datetime_format: d.m.Y H:i
       datetime_format: '%d.%m.%Y %H:%M'
+      js_datetime_format: 'dd.MM.yyyyy HH:mm'
