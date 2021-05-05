@@ -39,5 +39,9 @@ class TimeSplitter
     time_entry.issue_id = issue.id
     time_entry.project_id = issue.project_id
     time_entry.save!
+    TimerSessionTimeEntry.create!(
+      time_entry: time_entry,
+      timer_session: @timer_session
+    )
   end
 end
