@@ -13,6 +13,7 @@
         .issue-container
           .box
             = f.text_field :issue_id, label: false
+            small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
             div[data-issue-selection-container]
               - active_timer_session.issues.each do |issue|
                 .issue-container
@@ -26,16 +27,21 @@
       br
       br
       .row
-        = f.text_field :comments, data: { timer_comment_input: '' }
+        .col
+          = f.text_field :comments, data: { timer_comment_input: '' },
+            placeholder: t('timer_sessions.messaging.comments_placeholder')
+          small.form-text.text-muted = t('timer_sessions.messaging.comments_hint')
       br
       .times-container
         .col
           = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
             value: active_timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
+          small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
         br
         .col
           = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
             value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
+          small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
       br
       div[data-hours-timer]
         #hours-clock

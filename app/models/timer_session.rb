@@ -35,7 +35,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def comment_present
-    # errors.add(:comments, :blank) if comments.blank?
+    errors.add(:comments, :blank) if comments.blank?
   end
 
   def issues_selected
@@ -44,18 +44,17 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   def start_before_end_date
     return if timer_start.blank? || timer_end.blank?
+    return unless timer_end <= timer_start
 
-    if timer_end < timer_start
-      errors.add(:timer_start, :after_end)
-      errors.add(:timer_end, :before_start)
-    end
+    errors.add(:timer_start, :after_end)
+    errors.add(:timer_end, :before_start)
   end
 
   def validate_session_attributes
-    if finished_changed?
-      start_and_end_present
-      comment_present
-      issues_selected
-    end
+    return unless finished_changed? || finished?
+
+    start_and_end_present
+    comment_present
+    issues_selected
   end
 end

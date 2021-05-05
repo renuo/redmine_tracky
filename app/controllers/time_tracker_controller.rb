@@ -12,10 +12,7 @@ class TimeTrackerController < ApplicationController
       issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], timer_session)
       issue_connector.run
       if timer_session.session_finished?
-        time_splitter = TimeSplitter.new(timer_session)
-        time_splitter.create_time_entries
-        timer_session.update(finished: true)
-        render :stop, layout: true
+        handle_finished_timer_session
       else
         @timer_session = timer_session
         render :start, layout: false
@@ -38,7 +35,17 @@ class TimeTrackerController < ApplicationController
 
   private
 
-  def respond_with_error(error: :invalid); end
+  def handle_finished_timer_session
+    if timer_session.valid?
+      time_splitter = TimeSplitter.new(timer_session)
+      time_splitter.create_time_entries
+      timer_session.update(finished: true)
+      render :stop, layout: true
+    else
+      @timer_session = timer_session
+      render :start, layout: false
+    end
+  end
 
   def handle_cancel
     @current_timer_session.delete
@@ -50,8 +57,10 @@ class TimeTrackerController < ApplicationController
       timer_end: @current_timer_session.timer_end.presence || Time.zone.now,
       finished: true
     )
+      time_splitter = TimeSplitter.new(@current_timer_session)
+      time_splitter.create_time_entries
       render :stop, layout: false
-      else
+    else
       render :update, layout: false
     end
   end

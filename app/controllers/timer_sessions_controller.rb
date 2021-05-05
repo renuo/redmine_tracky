@@ -10,6 +10,20 @@ class TimerSessionsController < ApplicationController
                                   .group_by { |entry| entry.timer_start&.to_date }
   end
 
+  def destroy
+    timer_session = TimerSession.find(params[:id])
+    TimerEntityCleaner.new(timer_session).run
+    timer_session.destroy
+    redirect_to timer_sessions_path
+  end
+
+  def edit
+    @timer_session = TimerSession.find(params[:id])
+    render :edit, layout: false
+  end
+
+  def update; end
+
   private
 
   def set_current_user

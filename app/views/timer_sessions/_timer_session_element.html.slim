@@ -1,0 +1,12 @@
+tr
+  td = timer_session.issues.map(&:subject).join(', ')
+  td[colspan='3'] = timer_session.comments
+  td = format_session_time(timer_session.timer_start, timer_session.timer_end)
+  td = format_worked_hours(timer_session.splittable_hours)
+  td
+    = link_to edit_timer_session_path(timer_session), remote: true do
+      .icon-only.icon-edit
+    = link_to timer_session_path(timer_session),
+      data: { confirm: l(:text_are_you_sure) },
+      method: :delete, title: l(:button_delete) do
+      .icon-only.icon-del
