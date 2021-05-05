@@ -33,8 +33,7 @@ class TimeTrackerController < ApplicationController
 
   def update
     @current_timer_session.update(timer_params)
-    @timer_session = @current_timer_session
-    render :start, layout: false
+    render :update, layout: false
   end
 
   private
@@ -47,11 +46,14 @@ class TimeTrackerController < ApplicationController
   end
 
   def handle_stop
-    @current_timer_session.update!(
+    if @current_timer_session.update(
       timer_end: @current_timer_session.timer_end.presence || Time.zone.now,
       finished: true
     )
-    render :stop, layout: false
+      render :stop, layout: false
+      else
+      render :update, layout: false
+    end
   end
 
   def set_current_user
