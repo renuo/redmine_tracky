@@ -24,8 +24,12 @@
                     value=issue.id]
                   .input-group-text[data-issue-deletion-action]
                     i.icon-only.icon-del
-      br
-      br
+      div[data-hours-timer]
+        #hours-clock
+          - if active_timer_session.timer_start
+            - time_difference = ((active_timer_session.timer_end.presence || Time.zone.now) - active_timer_session.timer_start)
+            = Time.at(time_difference).utc.strftime("%H:%M:%S")
+      .mb-3
       .row
         .col
           = f.text_field :comments, data: { timer_comment_input: '' },
@@ -35,17 +39,16 @@
       .times-container
         .col
           = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+            placeholder: t('timer_sessions.timer.date_placeholder'),
             value: active_timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
           small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
         br
         .col
           = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+            placeholder: t('timer_sessions.timer.date_placeholder'),
             value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
           small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
-      br
-      div[data-hours-timer]
-        #hours-clock
-      br
+      .mb-3
       - if timer_session
         div[data-ending-action-buttons]
           = f.button :stop, type: :submit, name: :stop do

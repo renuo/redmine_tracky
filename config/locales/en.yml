@@ -6,6 +6,9 @@ en:
         timer_start: Start of session
         timer_end: End of session
         comments: Description of your work
+      work_report_query:
+        date: Query Date
+        period: Query Period
     errors:
       models:
         timer_session:
@@ -17,6 +20,14 @@ en:
             issue_id:
               no_selection: at least one issue must be selected
   timer_sessions:
+    work_report_query:
+      periods:
+        day: Day
+        week: Week
+        month: Month
+        year: Year
+      buttons:
+        submit: View Report Query
     messaging:
       comments_hint: Maybe a break? Maybe focused coding?
       comments_placeholder: What are you working on?
@@ -27,6 +38,7 @@ en:
       start: Start
       stop: Stop
       cancel: Cancel
+      date_placeholder: 'dd.mm.yyyy hh:mm'
     index:
       title: Tracky
       table:
@@ -36,6 +48,7 @@ en:
     relative_times:
       today: Today
       yesterday: Yesterday
+      tomorrow: Tomorrow
     formats:
       time: '%H:%M'
       date_with_year: '%d.%m.%Y'
