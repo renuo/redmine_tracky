@@ -15,4 +15,8 @@ export default class ActionBinder {
 			HoursTracker.bind();
 		});
 	}
+
+	static hoursTracker() {
+		return HoursTracker;
+	}
 }

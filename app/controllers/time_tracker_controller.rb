@@ -52,7 +52,7 @@ class TimeTrackerController < ApplicationController
 
   def handle_stop
     if @current_timer_session.update(
-      timer_end: @current_timer_session.timer_end.presence || Time.zone.now,
+      timer_end: @current_timer_session&.timer_end.presence || Time.zone.now,
       finished: true
     )
       time_splitter = TimeSplitter.new(@current_timer_session)

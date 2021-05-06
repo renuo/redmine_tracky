@@ -34,6 +34,17 @@ en:
       timer_start_hint: If you leave this empty on start, the current time is used
       timer_end_hint: If you leave this empty on stop, the current time is used
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
+      errors:
+        discrepancy_in_time_sum:
+          title: Discrepancy in Time Sum found
+          body: |
+            A discrepancy in the timer session %{range} was found! Please resolve the discrepancy!
+          resolution_options:
+            options: "To resolve the discrepancy you have the following options:"
+            edit_timer_session: You can edit the Timer Session directly and edit it to match %{hours} h
+            edit_time_entries: You may edit one of the time entries in order to match %{hours}
+            last_resort: |
+              If you are not able to edit either of the entries you may also remove the timer session and all the associated time entries
     timer:
       start: Start
       stop: Stop
@@ -43,6 +54,8 @@ en:
       title: Tracky
       table:
         total_hours_worked: 'Total Hours: %{hours} h'
+    destroy:
+      button: Delete Timer Session
     edit:
       title: Edit Work Entry
     relative_times:

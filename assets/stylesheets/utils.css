@@ -5,3 +5,13 @@
 .mt-3 {
   margin-top: 1rem !important;
 }
+
+.error-block {
+  border-style: solid;
+  border-color: red;
+  border-width: 1.5px;
+}
+
+.timer-sessions-table {
+  border-collapse:collapse;
+}

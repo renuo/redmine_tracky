@@ -5,10 +5,8 @@ export default class HoursTracker {
 		if (!$('[data-timer-id]').val()) {
 			return;
 		}
-		// TODO: refactor
-		if(window.timerInterval) {
-			clearInterval(window.timerInterval);
-		}
+
+		HoursTracker.endTicker();
 
 		const timerStartValue = $('[data-timer-start-input]').val();
 		const timerEndValue = $('[data-timer-end-input]').val();
@@ -36,6 +34,12 @@ export default class HoursTracker {
 			HoursTracker.tickTimer(difference);
 		} else {
 			HoursTracker.displayTimer(difference);
+		}
+	}
+
+	static endTicker() {
+		if(window.timerInterval) {
+			clearInterval(window.timerInterval);
 		}
 	}
 

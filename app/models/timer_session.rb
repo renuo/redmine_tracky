@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class TimerSession < RedmineTrackyApplicationRecord
-  SECONDS_IN_HOUR = 3600
-
   has_many :timer_session_issues, dependent: :destroy
   has_many :timer_session_time_entries, dependent: :destroy
 
@@ -17,16 +15,22 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   scope :finished_sessions, -> { where(finished: true) }
 
+  scope :created_by, ->(user) { where(user_id: user.id) }
+
   validate :start_before_end_date
 
   attr_accessor :issue_id
 
   def splittable_hours
-    @splittable_hours ||= ((timer_end - timer_start) / SECONDS_IN_HOUR)
+    @splittable_hours ||= ((timer_end - timer_start) / 1.hour)
   end
 
   def session_finished?
     timer_end.present?
+  end
+
+  def recorded_hours
+    time_entries.sum(:hours)
   end
 
   def start_and_end_present
