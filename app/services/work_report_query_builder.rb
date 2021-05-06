@@ -3,7 +3,6 @@
 class WorkReportQueryBuilder
   include Rails.application.routes.url_helpers
 
-  AVAILABLE_PERIODS = %i[day week month year].freeze
   DATE_FORMAT_FOR_QUERY = '%Y-%m-%d'
   COLUMNS_TO_QUERY = %w[project spent_on activity issue comments hours].freeze
   BETWEEN_OPERATOR = '><'
@@ -31,10 +30,6 @@ class WorkReportQueryBuilder
       v: { spent_on: [date_range.first, date_range.last], user_id: [QUERY_CURRENT_USER_SYMBOL] },
       c: COLUMNS_TO_QUERY, group_by: '', t: ['hours']
     )
-  end
-
-  def valid?
-    AVAILABLE_PERIODS.include?(@work_report_query.period)
   end
 
   def build_date_range

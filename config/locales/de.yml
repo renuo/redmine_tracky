@@ -1,0 +1,58 @@
+# German strings go here for Rails i18n
+de:
+  activerecord:
+    attributes:
+      timer_session:
+        timer_start: Start der Arbeitszeit
+        timer_end: Ende der Arbeitszeit
+        comments: Beschreibung der geleisteten Arbeit
+      work_report_query:
+        date: Auswertungsdatum
+        period: Auswertungsperiode
+    errors:
+      models:
+        timer_session:
+          attributes:
+            timer_start:
+              after_end: muss vor dem Ende der Arbeitszeit sein
+            timer_end:
+              before_start: muss nach dem Start der Arbeitszeit sein
+            issue_id:
+              no_selection: mindestens ein Issue muss gewählt sein
+  timer_sessions:
+    work_report_query:
+      periods:
+        day: Tag
+        week: Woche
+        month: Monat
+        year: Jahr
+      buttons:
+        submit: Auswertung einsehen
+    messaging:
+      comments_hint: Vielleicht eine Pause? Vielleich konzentriertes Coden?
+      comments_placeholder: An was arbeitest du gerade?
+      timer_start_hint: Wenn du dieses Feld leer lässt, wir die aktuelle Zeit verwendet
+      timer_end_hint: Wenn du dieses Feld mein Stoppen leer lässt, wird die aktuelle Zeit verwendet
+      issue_list_hint: Falls du mehr als ein issue auswählst, splitten wir die Zeit auf die Issues auf
+    timer:
+      start: Start
+      stop: Stop
+      cancel: Abbrechen
+      date_placeholder: 'dd.mm.yyyy hh:mm'
+    index:
+      title: Tracky
+      table:
+        total_hours_worked: 'Totale Stunden: %{hours} h'
+    edit:
+      title: Arbeitseintrag bearbeiten
+    relative_times:
+      today: Heute
+      tomorrow: Morgen
+      yesterday: Gestern
+    formats:
+      time: '%H:%M'
+      date_with_year: '%d.%m.%Y'
+      date_without_year: '%d.%m'
+      jquery_datetime_format: d.m.Y H:i
+      datetime_format: '%d.%m.%Y %H:%M'
+      js_datetime_format: 'dd.MM.yyyyy HH:mm'

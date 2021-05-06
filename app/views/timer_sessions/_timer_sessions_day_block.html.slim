@@ -1,14 +1,7 @@
-= format_block_date(date)
-br
-b = sum_work_hours(Array.wrap(timer_sessions))
-table.list.timer-sessions-table
-  thead
-    tr
-      th
-      th[colspan='3']
-      th
-      th
-      th
-  tbody
-    - Array.wrap(timer_sessions).each do |timer_session|
-      = render 'timer_session_element', timer_session: timer_session
+.box
+  h3 = format_block_date(date)
+  b.float-right = sum_work_hours(Array.wrap(timer_sessions))
+  table.list.timer-sessions-table
+    tbody
+      - Array.wrap(timer_sessions).each do |timer_session|
+        = render 'timer_session_element', timer_session: timer_session
