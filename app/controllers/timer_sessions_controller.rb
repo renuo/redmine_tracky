@@ -3,6 +3,7 @@
 class TimerSessionsController < ApplicationController
   before_action :set_current_user
   before_action :set_current_timer_session
+  before_action :set_permission_manager
   before_action :set_non_matching_timer_sessions, only: %i[index]
 
   def index
@@ -60,5 +61,9 @@ class TimerSessionsController < ApplicationController
       [timer_session_id,
        timer_session_id]
     end
+  end
+
+  def set_permission_manager
+    @permission_manager = PermissionManager.new
   end
 end

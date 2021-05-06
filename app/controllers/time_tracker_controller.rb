@@ -3,6 +3,7 @@
 class TimeTrackerController < ApplicationController
   before_action :set_current_user
   before_action :set_current_timer_session
+  before_action :set_permission_manager
 
   def start
     if @current_timer_session
@@ -76,5 +77,9 @@ class TimeTrackerController < ApplicationController
                                           :timer_start,
                                           :timer_end,
                                           issue_ids: [])
+  end
+
+  def set_permission_manager
+    @permission_manager = PermissionManager.new
   end
 end

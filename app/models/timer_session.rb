@@ -22,7 +22,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   attr_accessor :issue_id
 
   def splittable_hours
-    @splittable_hours ||= ((timer_end - timer_start) / 1.hour)
+    @splittable_hours ||= (((timer_end || Time.zone.now) - timer_start) / 1.hour)
   end
 
   def session_finished?
