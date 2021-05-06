@@ -10,6 +10,13 @@ class IssueConnector
     @errors = []
   end
 
+  def run
+    validate_issues
+    create_connections
+  end
+
+  private
+
   def validate_issues
     issues_exist?
   end
@@ -23,11 +30,6 @@ class IssueConnector
       end
     end
     @errors.count.zero?
-  end
-
-  def run
-    validate_issues
-    create_connections
   end
 
   def create_connections
