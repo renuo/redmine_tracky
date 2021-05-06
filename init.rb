@@ -23,7 +23,8 @@ Redmine::Plugin.register :redmine_tracky do
   default_settings = {
     'displayed_hours_rounding' => 2,
     'max_hours_recorded_per_day' => 24,
-    'max_hours_recorded_per_session' => 24
+    'max_hours_recorded_per_session' => 24,
+    'visible_hints' => true
   }
 
   settings default: default_settings, partial: 'settings/redmine_tracky_settings'
@@ -35,7 +36,6 @@ Redmine::Plugin.register :redmine_tracky do
     caption: 'TimerSessions'
 
   project_module :timer_sessions do
-
     permission :manage_timer_sessions, {
       timer_sessions: %i[index create update edit patch destroy report time_error report time_error],
       time_tracker: %i[start stop update]
@@ -63,6 +63,6 @@ Redmine::Plugin.register :redmine_tracky do
 
     permission :delete_timer_sessions,{
       timer_sessions: %i[destroy],
-    },require: :loggedin
+    }, require: :loggedin
   end
 end
