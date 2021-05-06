@@ -20,6 +20,10 @@ en:
             issue_id:
               no_selection: at least one issue must be selected
   timer_sessions:
+    permissions:
+      not_allowed: You are not allowed to perform this action
+    settings:
+      displayed_hours_rounding: Rounding for displayed hours
     work_report_query:
       periods:
         day: Day

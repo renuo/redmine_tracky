@@ -4,9 +4,10 @@
     div[data-timer-session-container]
       = render 'timer_container', timer_session: @current_timer_session
     hr
-    div[data-timer-session-container]
-      = render 'entries_report_query', current_report: @current_report
-    hr
+    - if @permission_manager.can?(:report, :timer_sessions)
+      div[data-timer-session-container]
+        = render 'entries_report_query', current_report: @current_report
+      hr
   .w-75.wm-100.mx-auto
     div[data-timer-sessions-list]
       = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions

@@ -52,13 +52,15 @@
       .mb-3
       - if timer_session
         div[data-ending-action-buttons]
-          = f.button :stop, type: :submit, name: :stop do
-            =<> t('timer_sessions.timer.stop')
-            i.icon.icon-error
-          = f.button :cancel, type: :submit, name: :cancel do
-            =<> t('timer_sessions.timer.cancel')
-            i.icon.icon-cancel
-      - else
+          - if @permission_manager.can?(:stop, :time_tracker)
+            = f.button :stop, type: :submit, name: :stop do
+              =<> t('timer_sessions.timer.stop')
+              i.icon.icon-error
+          - if @permission_manager.can?(:cancel, :time_tracker)
+            = f.button :cancel, type: :submit, name: :cancel do
+              =<> t('timer_sessions.timer.cancel')
+              i.icon.icon-cancel
+      - elsif !timer_session && @permission_manager.can?(:start, :time_tracker)
         = f.button :start, type: :submit, name: :start do
           =<> t('timer_sessions.timer.start')
           i.icon.icon-add.new-issue

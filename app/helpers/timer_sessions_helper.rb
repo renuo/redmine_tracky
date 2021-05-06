@@ -2,14 +2,16 @@
 
 module TimerSessionsHelper
   # Use in settings
-  HOUR_FORMAT_PRECISION = 2
+  def precision_for_display_hours
+    SettingsManager.rounding_for_displayed_hours
+  end
 
   def format_session_time(timer_start, timer_end)
     DisplayDateFormatBuilder.new(timer_start, timer_end).format
   end
 
   def format_worked_hours(hours)
-    "#{number_with_precision(hours, precision: HOUR_FORMAT_PRECISION)} h"
+    "#{number_with_precision(hours, precision: precision_for_display_hours)} h"
   end
 
   def action_path_for_timer(timer_session)
@@ -53,9 +55,9 @@ module TimerSessionsHelper
       timer_sessions
       .sum do |timer_session|
         number_with_precision(timer_session.splittable_hours,
-                              precision: HOUR_FORMAT_PRECISION).to_f
+                              precision: precision_for_display_hours).to_f
       end,
-      precision: HOUR_FORMAT_PRECISION
+      precision: precision_for_display_hours
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
   end
