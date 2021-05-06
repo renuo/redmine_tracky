@@ -3,9 +3,10 @@
 class TimerSessionsController < ApplicationController
   before_action :set_current_user
   before_action :set_current_timer_session
+  before_action :set_non_matching_timer_sessions, only: %i[index]
 
   def index
-    @timer_sessions = TimerSession.includes(:issues).finished_sessions.where(user_id: @current_user)
+    @timer_sessions = TimerSession.includes(:issues).finished_sessions.created_by(@current_user)
                                   .order(timer_start: :desc)
                                   .group_by { |entry| entry.timer_start&.to_date }
   end
@@ -28,6 +29,11 @@ class TimerSessionsController < ApplicationController
     render :edit, layout: false
   end
 
+  def time_error
+    @timer_session = TimerSession.find(params[:id])
+    render :time_error, layout: false
+  end
+
   def update; end
 
   private
@@ -42,5 +48,17 @@ class TimerSessionsController < ApplicationController
 
   def report_query_params
     params.require(:work_report_query).permit(:date, :period)
+  end
+
+  def set_non_matching_timer_sessions
+    @non_matching_timer_sessions = TimeDiscrepancyLoader.new(
+      TimerSession.includes(:time_entries)
+        .created_by(@current_user)
+    )
+                                                        .where_time_not_adding_up
+                                                        .pluck(:id).to_h do |timer_session_id|
+      [timer_session_id,
+       timer_session_id]
+    end
   end
 end

@@ -1,0 +1,6 @@
+$('#ajax-modal').html(
+  ("<%= j render 'time_discrepancy_modal', timer_session: @timer_session %>")
+);
+
+showModal('ajax-modal', '800px', '<%= t('timer_sessions.messaging.errors.discrepancy_in_time_sum.title') %>');
+$('#ajax-modal').addClass('new-watcher');

@@ -1,9 +1,7 @@
-div[id="timer-session-edit-modal-#{timer_session.id}"]
 = labelled_form_for(timer_session,
   remote: true, method: :post) do |f|
   = f.text_field :comments, data: { timer_comment_input: '' },
     placeholder: t('timer_sessions.messaging.comments_placeholder')
 
   .buttons
-    = submit_tag l(:button_submit), onclick: 'hideModal(this);'
     = link_to_function l(:button_cancel), 'hideModal(this);'
