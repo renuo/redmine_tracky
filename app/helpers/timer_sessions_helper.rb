@@ -18,19 +18,29 @@ module TimerSessionsHelper
 
   def select_options_for_work_period
     WorkReportQuery::AVAILABLE_PERIODS
-      .map { | period | I18n.t(period.to_s,
-         scope: 'timer_sessions.work_report_query.periods')}
+      .map do |period|
+      I18n.t(period.to_s,
+             scope: 'timer_sessions.work_report_query.periods')
+    end
       .zip(
         WorkReportQuery::AVAILABLE_PERIODS
       )
   end
 
   def format_block_date(date)
-    return I18n.t('timer_sessions.relative_times.today') if date == Time.zone.now.to_date
-    return I18n.t('timer_sessions.relative_times.tomorrow') if date == Time.zone.now.to_date.tomorrow
-    return I18n.t('timer_sessions.relative_times.yesterday') if date == Time.zone.now.to_date.yesterday
+    current_date = Time.zone.now.to_date
+    if current_date == date || current_date.yesterday == date || current_date.tomorrow == date
+      format_relative_date(date, current_date)
+    else
+      I18n.l(date, format: I18n.t('timer_sessions.formats.date_with_year'))
+    end
+  end
 
-    I18n.l(date, format: I18n.t('timer_sessions.formats.date_with_year'))
+  def format_relative_date(date, current_date)
+    return I18n.t('timer_sessions.relative_times.tomorrow') if date == current_date.tomorrow
+    return I18n.t('timer_sessions.relative_times.yesterday') if date == current_date.yesterday
+
+    I18n.t('timer_sessions.relative_times.today')
   end
 
   def sum_work_hours(timer_sessions)

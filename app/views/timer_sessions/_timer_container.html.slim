@@ -27,8 +27,9 @@
       div[data-hours-timer]
         #hours-clock
           - if active_timer_session.timer_start
-            - time_difference = ((active_timer_session.timer_end.presence || Time.zone.now) - active_timer_session.timer_start)
-            = Time.at(time_difference).utc.strftime("%H:%M:%S")
+            - current_timer_end = active_timer_session.timer_end.presence || Time.zone.now
+            - time_difference = (current_timer_end - active_timer_session.timer_start)
+            = Time.at(time_difference).utc.strftime('%H:%M:%S')
       .mb-3
       .row
         .col
