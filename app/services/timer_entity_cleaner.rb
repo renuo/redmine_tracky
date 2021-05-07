@@ -18,5 +18,6 @@ class TimerEntityCleaner
 
   def delete_time_entries
     @timer_session.time_entries.destroy_all
+    @timer_session.timer_session_time_entries.delete_all
   end
 end

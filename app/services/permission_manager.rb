@@ -6,7 +6,7 @@ class PermissionManager
   end
 
   def cannot?(action, controller)
-    !allowed_to?(action, controller)
+    !can?(action, controller)
   end
 
   def forbidden_to_access_operation
