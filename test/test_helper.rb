@@ -18,7 +18,6 @@ SimpleCov.start 'rails' do
   end
 end
 
-
 # SimpleCov.minimum_coverage 100
 FactoryBot.definition_file_paths = [File.expand_path('../factories', __FILE__)]
 FactoryBot.find_definitions
@@ -26,5 +25,13 @@ FactoryBot.find_definitions
 require File.expand_path("#{File.dirname(__FILE__)}/../../../test/test_helper")
 
 class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
+end
+
+class ActionController::TestCase
+  include FactoryBot::Syntax::Methods
+end
+
+class ActionDispatch::IntegrationTest
   include FactoryBot::Syntax::Methods
 end
