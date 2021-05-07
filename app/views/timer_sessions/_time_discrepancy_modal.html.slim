@@ -14,11 +14,14 @@ ul
     = t('resolution_options.edit_time_entries', scope: base_scope,
       hours: format_worked_hours(timer_session.splittable_hours))
     br
-    - timer_session.time_entries.each do |time_entry|
-      ul
-        li = link_to edit_time_entry_path(time_entry) do
-          =<> format_time_entry_information(time_entry)
-          .icon-only.icon-edit
+    - if timer_session.time_entries.present?
+      - timer_session.time_entries.each do |time_entry|
+        ul
+          li = link_to edit_time_entry_path(time_entry) do
+            =<> format_time_entry_information(time_entry)
+            .icon-only.icon-edit
+    - else
+      b = t('timer_sessions.messaging.no_time_entries_found')
 hr
 = t('resolution_options.last_resort', scope: base_scope, hours: timer_session.recorded_hours)
 .mt-3

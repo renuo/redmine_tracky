@@ -38,6 +38,7 @@ en:
       timer_start_hint: If you leave this empty on start, the current time is used
       timer_end_hint: If you leave this empty on stop, the current time is used
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
+      no_time_entries_found: No time entries found
       errors:
         discrepancy_in_time_sum:
           title: Discrepancy in Time Sum found
