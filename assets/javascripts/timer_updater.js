@@ -37,7 +37,14 @@ export default class TimerUpdater {
 
 	// TODO: implement
 	static updateIssue() {
+		if(!TimerUpdater.timerID()){
+			return;
+		}
+		const ids = $("input[name^='timer_session[issue_ids]']").map(function(){
+			return $(this).val();
+		}).get() || [''];
 
+		TimerUpdater.sendUpdate({ issue_ids: ids.length ? ids : [' '] });
 	}
 
 	static updateComment() {

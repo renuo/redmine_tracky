@@ -10,7 +10,6 @@ export default class IssueCompleter {
 				data['scope'] = 'all';
 				$.get(url, data, null, 'json')
 					.done(function(data){
-						console.log(data);
 						callback(data);
 					})
 					.fail(function(jqXHR, status, error){
@@ -20,9 +19,10 @@ export default class IssueCompleter {
 			{
 				select: function(event, item) {
 					window.IssueListHandler.addIssue(item.item);
+					window.ActionBinder.timerUpdate().updateIssue();
 				}
 			}
 		);
-			});
+	});
 	}
 }

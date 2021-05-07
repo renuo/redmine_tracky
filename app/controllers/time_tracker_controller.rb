@@ -30,6 +30,7 @@ class TimeTrackerController < ApplicationController
 
   def update
     @current_timer_session.update(timer_params)
+    TimeRebalancer.new(timer_params[:issue_ids], @current_timer_session).rebalance_entries if timer_params[:issue_ids]
     render :update, layout: false
   end
 

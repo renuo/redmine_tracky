@@ -45,10 +45,11 @@ en:
             A discrepancy in the timer session %{range} was found! Please resolve the discrepancy!
           resolution_options:
             options: "To resolve the discrepancy you have the following options:"
-            edit_timer_session: You can edit the Timer Session directly and edit it to match %{hours} h
+            edit_timer_session: You can edit the Timer Session directly and edit it to match %{hours}
             edit_time_entries: You may edit one of the time entries in order to match %{hours}
             last_resort: |
               If you are not able to edit either of the entries you may also remove the timer session and all the associated time entries
+              or you can let the system rebalance your timer session and recreate all the entries again
     timer:
       start: Start
       stop: Stop
@@ -58,6 +59,8 @@ en:
       title: Tracky
       table:
         total_hours_worked: 'Total Hours: %{hours} h'
+    rebalance:
+      button: Rebalance
     destroy:
       button: Delete Timer Session
     edit:
