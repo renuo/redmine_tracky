@@ -16,6 +16,14 @@ export default class ActionBinder {
 		});
 	}
 
+	static timerUpdate() {
+		return TimerUpdater;
+	}
+
+	static datetimePicker() {
+		return DateTimePickerRegister;
+	}
+
 	static hoursTracker() {
 		return HoursTracker;
 	}

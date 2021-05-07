@@ -1,7 +1,22 @@
-= labelled_form_for(timer_session,
-  remote: true, method: :post) do |f|
+= error_messages_for timer_session
+= labelled_form_for(timer_session, remote: true) do |f|
   = f.text_field :comments, data: { timer_comment_input: '' },
     placeholder: t('timer_sessions.messaging.comments_placeholder')
+  br
+  .times-container
+    .col
+      = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+        placeholder: t('timer_sessions.timer.date_placeholder'),
+        value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
+      small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
+    br
+    .col
+      = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+        placeholder: t('timer_sessions.timer.date_placeholder'),
+        value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
+      small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
+  .mb-3
 
   .buttons
     = link_to_function l(:button_cancel), 'hideModal(this);'
+    = f.submit :update

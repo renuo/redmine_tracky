@@ -11,18 +11,19 @@ export default class IssueListHandler {
 		return 'data-issue-deletion-action';
 	}
 
-	static buildNewIssue() {
-
-	}
-
 	static bind() {
 		$(document).ready(() => {
 			$('[data-issue-deletion-action]').off('click');
 			$('[data-issue-deletion-action]').on('click', function() {
-				const element = $(this).parent();
-				element.remove();
+				IssueListHandler.removeIssue($(this));
 			});
 		});
+	}
+
+	static removeIssue(element) {
+		const parent = element.parent();
+		parent.remove();
+		window.ActionBinder.timerUpdate().updateIssue();
 	}
 
 	static addIssue(item) {
@@ -35,7 +36,7 @@ export default class IssueListHandler {
 		return $(`
         <div class="issue-container">
 					<label for='timer_session_issue_id_${id}'>${label}</label>
-          <input data-issue-element='${id}'
+          <input hidden data-issue-element='${id}'
 					id='timer_session_issue_id_${id}'
           class="ml-10 form-control" readonly name="${IssueListHandler.elementID()}[]" value="${id}"/>
 					<div class="input-group-text" ${IssueListHandler.issueDeletionButton()}="">

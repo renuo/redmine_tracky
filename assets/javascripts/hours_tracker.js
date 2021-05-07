@@ -15,7 +15,7 @@ export default class HoursTracker {
 			timerStartValue,
 			window.RedmineTracky.datetimeFormatJavascript
 		);
-	
+
 		let timerEndDateTime;
 		
 		if(timerEndValue === '') {

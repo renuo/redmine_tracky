@@ -18,6 +18,13 @@ class TimerSessionsController < ApplicationController
     redirect_to result_url
   end
 
+  def rebalance
+    @timer_session = TimerSession.find(params[:id])
+    TimeRebalancer.new(@timer_session.issue_ids,
+                       @timer_session).force_rebalance
+    redirect_to timer_sessions_path
+  end
+
   def destroy
     timer_session = TimerSession.find(params[:id])
     TimerEntityCleaner.new(timer_session).run
@@ -35,7 +42,16 @@ class TimerSessionsController < ApplicationController
     render :time_error, layout: false
   end
 
-  def update; end
+  def update
+    @timer_session = TimerSession.find(params[:id])
+    if @timer_session.update(timer_session_params)
+      TimeRebalancer.new(timer_session_params[:issue_ids],
+                         @timer_session).rebalance_entries
+      render :update_redirect, layout: false
+    else
+      render :update, layout: false
+    end
+  end
 
   private
 
@@ -45,6 +61,13 @@ class TimerSessionsController < ApplicationController
 
   def set_current_timer_session
     @current_timer_session = TimerSession.active_session(@current_user.id).first
+  end
+
+  def timer_session_params
+    params.require(:timer_session).permit(:comments,
+                                          :timer_start,
+                                          :timer_end,
+                                          issue_ids: [])
   end
 
   def report_query_params

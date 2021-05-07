@@ -20,6 +20,7 @@
                   label[for="timer_session_issue_id_#{issue.id}"]
                     = issue.subject
                   input[id="timer_session_issue_id_#{issue.id}" readonly
+                    hidden
                     name='timer_session[issue_ids][]'
                     value=issue.id]
                   .input-group-text[data-issue-deletion-action]
