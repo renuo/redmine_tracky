@@ -1,3 +1,79 @@
 # English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+  activerecord:
+    attributes:
+      timer_session:
+        timer_start: Start of session
+        timer_end: End of session
+        comments: Description of your work
+      work_report_query:
+        date: Query Date
+        period: Query Period
+    errors:
+      models:
+        timer_session:
+          attributes:
+            timer_start:
+              after_end: must be before the end of the timer
+            timer_end:
+              before_start: must be after the start of the timer
+            issue_id:
+              no_selection: at least one issue must be selected
+  timer_sessions:
+    permissions:
+      not_allowed: You are not allowed to perform this action
+    settings:
+      displayed_hours_rounding: Rounding for displayed hours
+    work_report_query:
+      periods:
+        day: Day
+        week: Week
+        month: Month
+        year: Year
+      buttons:
+        submit: View Report Query
+    messaging:
+      comments_hint: Maybe a break? Maybe focused coding?
+      comments_placeholder: What are you working on?
+      timer_start_hint: If you leave this empty on start, the current time is used
+      timer_end_hint: If you leave this empty on stop, the current time is used
+      issue_list_hint: If you select more than one issue we will split the worked hours evenly
+      no_time_entries_found: No time entries found
+      errors:
+        discrepancy_in_time_sum:
+          title: Discrepancy in Time Sum found
+          body: |
+            A discrepancy in the timer session %{range} was found! Please resolve the discrepancy!
+          resolution_options:
+            options: "To resolve the discrepancy you have the following options:"
+            edit_timer_session: You can edit the Timer Session directly and edit it to match %{hours}
+            edit_time_entries: You may edit one of the time entries in order to match %{hours}
+            last_resort: |
+              If you are not able to edit either of the entries you may also remove the timer session and all the associated time entries
+              or you can let the system rebalance your timer session and recreate all the entries again
+    timer:
+      start: Start
+      stop: Stop
+      cancel: Cancel
+      date_placeholder: 'dd.mm.yyyy hh:mm'
+    index:
+      title: Tracky
+      table:
+        total_hours_worked: 'Total Hours: %{hours} h'
+    rebalance:
+      button: Rebalance
+    destroy:
+      button: Delete Timer Session
+    edit:
+      title: Edit Work Entry
+    relative_times:
+      today: Today
+      yesterday: Yesterday
+      tomorrow: Tomorrow
+    formats:
+      time: '%H:%M'
+      date_with_year: '%d.%m.%Y'
+      date_without_year: '%d.%m'
+      jquery_datetime_format: d.m.Y H:i
+      datetime_format: '%d.%m.%Y %H:%M'
+      js_datetime_format: 'dd.MM.yyyyy HH:mm'

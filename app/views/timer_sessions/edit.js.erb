@@ -1,0 +1,7 @@
+$('#ajax-modal').html(
+  ("<%= j render 'edit_modal', timer_session: @timer_session %>")
+);
+
+showModal('ajax-modal', '800px', '<%= t('timer_sessions.edit.title') %>');
+$('#ajax-modal').addClass('new-watcher');
+window.ActionBinder.datetimePicker().bind();

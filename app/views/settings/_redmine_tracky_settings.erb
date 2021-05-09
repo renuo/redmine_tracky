@@ -1,0 +1,36 @@
+<table>
+  <tbody>
+    <tr>
+      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <td>
+        <input type="number" id="settings_notification_default" 
+                           value="<%= settings['displayed_hours_rounding'] %>" 
+                           name="settings[displayed_hours_rounding]" >
+      </td>
+    </tr>
+    <tr>
+      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <td>
+        <input type="number" id="max_hours_recorded_per_day" 
+                           value="<%= settings['max_hours_recorded_per_day'] %>" 
+                           name="settings[max_hours_recorded_per_day]" >
+      </td>
+    </tr>
+    <tr>
+      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <td>
+        <input type="number" id="max_hours_recorded_per_session" 
+                           value="<%= settings['max_hours_recorded_per_session'] %>" 
+                           name="settings[max_hours_recorded_per_session]" >
+      </td>
+    </tr>
+    <tr>
+      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <td>
+        <input type="number" id="visible_hints"
+                           value="<%= settings['visible_hints'] %>"
+                           name="settings[visible_hints]" >
+      </td>
+    </tr>
+  </tbody>
+</table>
