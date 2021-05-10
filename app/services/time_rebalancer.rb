@@ -45,7 +45,6 @@ class TimeRebalancer
     end
   end
 
-  # TODO: refactor
   def update_comments
     @timer_session.time_entries.each do |time_entry|
       time_entry.update!(comments: @timer_session.comments)
@@ -60,7 +59,6 @@ class TimeRebalancer
     @timer_session.saved_change_to_timer_start? || @timer_session.saved_change_to_timer_end?
   end
 
-  # TODO: properly implement
   def difference_in_time
     spent_hours_before_save = (
         @timer_session.timer_end_previously_was - @timer_session.timer_start_previously_was

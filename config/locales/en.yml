@@ -1,5 +1,10 @@
 # English strings go here for Rails i18n
 en:
+  activemodel:
+    attributes:
+      filtering/timer_sessions_filter:
+        min_date: Min Date
+        max_date: Max Date
   activerecord:
     attributes:
       timer_session:
@@ -15,14 +20,21 @@ en:
           attributes:
             timer_start:
               after_end: must be before the end of the timer
+              limit_reached_day: You are trying to record too much time for one day
+              limit_reached_session: You are trying to record too much time for one session
             timer_end:
               before_start: must be after the start of the timer
             issue_id:
               no_selection: at least one issue must be selected
   timer_sessions:
+    filters:
+      filter: Filter
     permissions:
       not_allowed: You are not allowed to perform this action
     settings:
+      max_hours_recorded_per_day: Max Hours recorder per day
+      max_hours_recorded_per_session: Max Hours recorded per session
+      visible_hints: Display hints
       displayed_hours_rounding: Rounding for displayed hours
     work_report_query:
       periods:
@@ -40,6 +52,8 @@ en:
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
       no_time_entries_found: No time entries found
       errors:
+        permission:
+          no_access: You are not allowed to access this action
         discrepancy_in_time_sum:
           title: Discrepancy in Time Sum found
           body: |
