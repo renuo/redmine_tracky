@@ -7,7 +7,6 @@ class TimeTrackerController < TrackyController
 
   def start
     if @current_timer_session
-      p ':O'
     else
       start_timer
     end
@@ -48,7 +47,7 @@ class TimeTrackerController < TrackyController
       time_splitter = TimeSplitter.new(@timer_session)
       time_splitter.create_time_entries
       @timer_session.update(finished: true)
-      render :stop, layout: true
+      render :stop, layout: false
     else
       render :start, layout: false
     end
