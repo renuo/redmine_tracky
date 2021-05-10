@@ -1,15 +1,22 @@
 # frozen_string_literal: true
 
-class TimerSessionsController < ApplicationController
+class TimerSessionsController < TrackyController
   before_action :set_current_user
   before_action :set_current_timer_session
   before_action :set_permission_manager
-  before_action :set_non_matching_timer_sessions, only: %i[index]
 
   def index
-    @timer_sessions = TimerSession.includes(:issues).finished_sessions.created_by(@current_user)
-                                  .order(timer_start: :desc)
-                                  .group_by { |entry| entry.timer_start&.to_date }
+    @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries)
+                                           .finished_sessions.created_by(@current_user)
+    set_non_matching_timer_sessions(@timer_sessions_in_range)
+    @timer_sessions = apply_filter(@timer_sessions_in_range)
+                      .order(timer_start: :desc)
+                      .group_by { |entry| entry.timer_start&.to_date }
+  end
+
+  def apply_filter(timer_sessions)
+    @filter = Filtering::TimerSessionsFilter.new(filter_params)
+    @filter.apply(timer_sessions)
   end
 
   def report
@@ -74,16 +81,21 @@ class TimerSessionsController < ApplicationController
     params.require(:work_report_query).permit(:date, :period)
   end
 
-  def set_non_matching_timer_sessions
+  def set_non_matching_timer_sessions(timer_sessions)
     @non_matching_timer_sessions = TimeDiscrepancyLoader.new(
-      TimerSession.includes(:time_entries)
-        .created_by(@current_user)
+      timer_sessions
     )
                                                         .where_time_not_adding_up
                                                         .pluck(:id).to_h do |timer_session_id|
       [timer_session_id,
        timer_session_id]
     end
+  end
+
+  def filter_params
+    return {} unless params[:filter].is_a?(ActionController::Parameters)
+
+    params[:filter].permit(:min_date, :max_date).to_h
   end
 
   def set_permission_manager

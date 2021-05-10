@@ -20,7 +20,7 @@ class SettingsManager
     end
 
     def visible_hints
-      settings_object['visible_hints'] || DEFAULT_VISIBLE_HINTS
+      settings_object['visible_hints']
     end
 
     def settings_object

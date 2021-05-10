@@ -41,6 +41,10 @@ Redmine::Plugin.register :redmine_tracky do
       time_tracker: %i[start stop update]
     }, require: :loggedin
 
+    permission :index_timer_sessions, {
+      timer_sessions: %i[index]
+    }, require: :loggedin
+
     permission :create_timer_sessions, {
       time_tracker: %i[start]
     }, require: :loggedin
@@ -58,7 +62,7 @@ Redmine::Plugin.register :redmine_tracky do
     }, require: :loggedin
 
     permission :edit_timer_sessions, {
-      timer_sessions: %i[update patch edit time_error],
+      timer_sessions: %i[update patch edit time_error rebalance],
     }, require: :loggedin
 
     permission :delete_timer_sessions,{
