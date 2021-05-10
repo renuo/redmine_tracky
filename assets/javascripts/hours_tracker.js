@@ -67,12 +67,18 @@ export default class HoursTracker {
 	}
 
 	static displayTimer(timerObject) {
-		$('#hours-clock').text(HoursTracker.formatTimer(timerObject));
+		const formatedTimer = HoursTracker.formatTimer(timerObject);
+		$('#hours-clock').text(formatedTimer);
+		HoursTracker.setTitle(formatedTimer);
 	}
 
 	static padNumber(n, width) {
 		n = n + '';
 		return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+	}
+
+	static setTitle(time){
+		document.title = `${window.RedmineTracky.documentTitle} - ${time}`;
 	}
 
 	static formatTimer(timerObject) {

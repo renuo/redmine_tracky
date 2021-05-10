@@ -9,7 +9,7 @@
       </td>
     </tr>
     <tr>
-      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <th><%= t('timer_sessions.settings.max_hours_recorded_per_day') %></th>
       <td>
         <input type="number" id="max_hours_recorded_per_day" 
                            value="<%= settings['max_hours_recorded_per_day'] %>" 
@@ -17,7 +17,7 @@
       </td>
     </tr>
     <tr>
-      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <th><%= t('timer_sessions.settings.max_hours_recorded_per_session') %></th>
       <td>
         <input type="number" id="max_hours_recorded_per_session" 
                            value="<%= settings['max_hours_recorded_per_session'] %>" 
@@ -25,11 +25,9 @@
       </td>
     </tr>
     <tr>
-      <th><%= t('timer_sessions.settings.displayed_hours_rounding') %></th>
+      <th><%= t('timer_sessions.settings.visible_hints') %></th>
       <td>
-        <input type="number" id="visible_hints"
-                           value="<%= settings['visible_hints'] %>"
-                           name="settings[visible_hints]" >
+         <%= check_box_tag "settings[visible_hints]", true, @settings[:visible_hints] %>
       </td>
     </tr>
   </tbody>
