@@ -15,6 +15,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
            :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
 
   setup do
+    @request.session[:user_id] = 1 # Admin!
     @issue = Issue.find(1)
     @timer_session = FactoryBot.create(:timer_session,
                                        user: User.find(2))
@@ -24,17 +25,24 @@ class TimerSessionsControllerTest < ActionController::TestCase
     )
   end
 
+  test 'access without login' do
+    @request.session[:user_id] = nil
+    get :index
+    assert_response 403
+  end
+
   test '#index list view' do
     get :index
-    assert_response :success
+    assert_response 302
   end
 
   test '#update' do
+
   end
 
   test '#edit' do
     get :index
-    assert_response :success
+    assert_response 302
   end
 
   test '#report' do

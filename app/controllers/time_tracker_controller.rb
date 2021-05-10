@@ -7,7 +7,7 @@ class TimeTrackerController < TrackyController
 
   def start
     if @current_timer_session
-      respond_with_error(error: :timer_already_present)
+      p ':O'
     else
       start_timer
     end

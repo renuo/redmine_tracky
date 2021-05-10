@@ -4,6 +4,7 @@ FactoryBot.define do
     timer_start { Time.zone.now - 1.hour }
     timer_end { Time.zone.now }
     comments { 'Working on tickets!' }
+    finished { true }
     user {  }
   end
 end
