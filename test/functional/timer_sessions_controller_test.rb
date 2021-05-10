@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class TimerSessionsControllerTest < ActionController::TestCase
+class TimerSessionsControllerTest < Redmine::ControllerTest
   tests TimerSessionsController
 
   fixtures :projects, :users, :email_addresses, :user_preferences, :members, :member_roles, :roles,
@@ -15,7 +15,6 @@ class TimerSessionsControllerTest < ActionController::TestCase
            :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
 
   setup do
-    @request.session[:user_id] = 1 # Admin!
     @issue = Issue.find(1)
     @timer_session = FactoryBot.create(:timer_session,
                                        user: User.find(2))
@@ -23,6 +22,9 @@ class TimerSessionsControllerTest < ActionController::TestCase
       issue_id: @issue.id,
       timer_session_id: @timer_session.id
     )
+
+    session[:user_id] = 1 # Admin!
+    User.current = User.find(1)
   end
 
   test 'access without login' do
@@ -33,16 +35,28 @@ class TimerSessionsControllerTest < ActionController::TestCase
 
   test '#index list view' do
     get :index
-    assert_response 302
+
+    assert_response 200
   end
 
   test '#update' do
 
   end
 
-  test '#edit' do
-    get :index
+  test '#destroy' do
+    delete(
+      :destroy,
+      params: {
+        id: @timer_session.id,
+      }
+    )
     assert_response 302
+  end
+
+  test '#edit' do
+    get(:edit, params: {id: @timer_session.id})
+
+    assert_response 200
   end
 
   test '#report' do
@@ -50,6 +64,14 @@ class TimerSessionsControllerTest < ActionController::TestCase
   end
 
   test '#rebalance' do
+    post(
+      :rebalance,
+      params: {
+        id: @timer_session.id,
+      }
+    )
 
+    assert_response 200
+    assert_equal @timer_session.reload.time_entries.first.hours, @timer_session.hours
   end
 end

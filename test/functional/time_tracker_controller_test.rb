@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class TimeTrackerControllerTest < ActionController::TestCase
+class TimeTrackerControllerTest < Redmine::ControllerTest
 
   fixtures :projects, :users, :email_addresses, :user_preferences, :members, :member_roles, :roles,
            :groups_users,
@@ -22,34 +22,30 @@ class TimeTrackerControllerTest < ActionController::TestCase
   test '#start - without login' do
     User.current = nil
     @request.session[:user_id] = nil
+    post :start
+    assert_response 403
+  end
 
-    post(:start, params: { timer_sesson: {
-      timer_start: Time.zone.now - 1.hour,
-      timer_end: Time.zone.now,
-      comments: 'What a great working session',
-      issue_ids: ['1'],
-    } })
+  test '#stop - without login' do
+    User.current = nil
+    @request.session[:user_id] = nil
 
-    assert_response 422
+    post :stop
+
+    assert_response 403
   end
 
   test '#start - with valid params' do
-    post :start
-    assert_response 200
-    post :stop, params: { timer_sesson: {
+    post :start, params: { timer_sesson: {
       timer_start: Time.zone.now - 1.hour,
       timer_end: Time.zone.now,
       comments: 'What a great working session',
       issue_ids: ['1'],
     } }
 
-    assert_response 422
+    assert_response 200
   end
   
-  test '#start - invalid params' do
-
-  end
-
   test '#stop - valid params' do
 
   end

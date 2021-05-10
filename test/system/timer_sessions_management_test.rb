@@ -10,7 +10,10 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   setup do
     log_user('admin', 'admin')
     User.current = User.find(1)
-    @timer_sessions = FactoryBot.create_list(:timer_session, 3, :with_issues, user: User.current)
+    @timer_sessions = FactoryBot.create_list(:timer_session, 3,
+                                             :with_issues,
+                                             :with_time_entries,
+                                             user: User.current)
     visit timer_sessions_path
   end
 
@@ -30,8 +33,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
 
   test '#edit' do
     visit timer_sessions_path
-    @timer_sessions.each do | timer_session |
-      assert has_content?(timer_session.comments)
-    end
+    find('[data-timer-session-edit-button]', match: :first).click
+    assert has_content?(I18n.t('timer_sessions.edit.title'))
   end
 end

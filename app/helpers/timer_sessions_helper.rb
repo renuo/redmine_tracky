@@ -14,10 +14,6 @@ module TimerSessionsHelper
     "#{number_with_precision(hours, precision: precision_for_display_hours)} h"
   end
 
-  def action_path_for_timer(timer_session)
-    timer_session.persisted? ? stop_time_tracker_path : start_time_tracker_path
-  end
-
   def select_options_for_work_period
     WorkReportQuery::AVAILABLE_PERIODS
       .map do |period|

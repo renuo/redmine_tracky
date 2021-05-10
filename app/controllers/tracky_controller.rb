@@ -2,6 +2,7 @@
 
 class TrackyController < ApplicationController
   before_action :verify_permission!
+  skip_before_action :verify_authenticity_token
 
   def verify_permission!
     return unless User.current

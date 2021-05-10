@@ -56,5 +56,6 @@ class TimerManagementTest < ApplicationSystemTestCase
     )
     visit timer_sessions_path
     find('[data-timer-stop-button]').click
+    p timer_session.reload
   end
 end

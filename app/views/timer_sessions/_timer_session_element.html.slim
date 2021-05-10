@@ -5,7 +5,8 @@ tr[class=('error-block' if @non_matching_timer_sessions[timer_session.id])]
   td = format_worked_hours(timer_session.splittable_hours)
   td
     - if @permission_manager.can?(:edit, :timer_sessions)
-      = link_to edit_timer_session_path(timer_session), remote: true do
+      = link_to edit_timer_session_path(timer_session), data: { timer_session_edit_button: '' },
+        remote: true do
         .icon-only.icon-edit
     - if @permission_manager.can?(:destroy, :timer_sessions)
       = link_to timer_session_path(timer_session),
