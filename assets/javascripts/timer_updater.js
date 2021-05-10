@@ -44,7 +44,8 @@ export default class TimerUpdater {
 			return $(this).val();
 		}).get() || [''];
 
-		TimerUpdater.sendUpdate({ issue_ids: ids.length ? ids : [' '] });
+
+		TimerUpdater.sendUpdate({ issue_ids: ids.length ? Array.from(new Set(ids)) : [' '] });
 	}
 
 	static updateComment() {

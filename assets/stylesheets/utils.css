@@ -15,3 +15,7 @@
 .timer-sessions-table {
   border-collapse:collapse;
 }
+
+.text-center {
+  text-align: center;
+}

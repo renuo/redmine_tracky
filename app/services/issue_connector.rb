@@ -4,15 +4,14 @@ class IssueConnector
   attr_reader :errors
 
   def initialize(issues, timer_session)
-    @issues = Array.wrap(issues).map(&:to_i)
+    @issues = Array.wrap(issues).map(&:to_i).uniq
     @timer_session = timer_session
     # TODO: replace with ActiveModel errors
     @errors = []
   end
 
   def run
-    validate_issues
-    create_connections
+    validate_issues ? create_connections : false
   end
 
   private
