@@ -10,10 +10,11 @@
       = f.hidden_field :id, data: { timer_id: '' }
       = error_messages_for active_timer_session
       - if active_timer_session.timer_start
-        .box
+        .text-center
           div[data-hours-timer]
             h1
-              #hours-clock
+              =<> t('timer_sessions.timer.current')
+              span#hours-clock
       .row
         .issue-container
           .box

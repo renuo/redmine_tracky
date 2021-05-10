@@ -16,6 +16,23 @@
   border-collapse:collapse;
 }
 
+.timer-sessions-table > td {
+    text-align: left;
+    margin-left: 5px;
+}
+
 .text-center {
   text-align: center;
+}
+
+.space-between {
+  display: flex;
+  -moz-box-pack: justify;
+  justify-content: space-between;
+  -moz-box-align: center;
+  align-items: center;
+}
+
+.h3 {
+  font-size: 3rem;
 }
