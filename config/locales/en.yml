@@ -70,6 +70,7 @@ en:
       stop: Stop
       cancel: Cancel
       date_placeholder: 'dd.mm.yyyy hh:mm'
+      current: 'Current Timer:'
     index:
       title: Tracky
       table:

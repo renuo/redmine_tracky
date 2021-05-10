@@ -1,5 +1,5 @@
-= render 'sessions_filters'
-
+.w-75.mx-auto
+  = render 'sessions_filters'
 - (timer_sessions_by_day || []).each do |date, timer_session_day|
   = render 'timer_sessions_day_block',
     date: date,
