@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TimeTrackerController < ApplicationController
+class TimeTrackerController < TrackyController
   before_action :set_current_user
   before_action :set_current_timer_session
   before_action :set_permission_manager
@@ -9,14 +9,7 @@ class TimeTrackerController < ApplicationController
     if @current_timer_session
       respond_with_error(error: :timer_already_present)
     else
-      @timer_session = SessionCreator.new(@current_user, timer_params).create
-      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
-      issue_connector.run
-      if @timer_session.session_finished?
-        handle_finished_timer_session
-      else
-        render :start, layout: false
-      end
+      start_timer
     end
   end
 
@@ -30,11 +23,25 @@ class TimeTrackerController < ApplicationController
 
   def update
     @current_timer_session.update(timer_params)
-    TimeRebalancer.new(timer_params[:issue_ids], @current_timer_session).rebalance_entries if timer_params[:issue_ids]
     render :update, layout: false
   end
 
   private
+
+  def start_timer
+    @timer_session = SessionCreator.new(@current_user, timer_params).create
+    issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
+    if issue_connector.run
+      if @timer_session.session_finished?
+        handle_finished_timer_session
+      else
+        render :start, layout: false
+      end
+    else
+      @timer_session.errors.add(:issues, :invalid)
+      render :start, layout: false
+    end
+  end
 
   def handle_finished_timer_session
     if @timer_session.valid?
