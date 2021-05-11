@@ -16,6 +16,10 @@ export default class ActionBinder {
 		});
 	}
 
+	static issueCompleter() {
+		return IssueCompleter;
+	}
+
 	static timerUpdate() {
 		return TimerUpdater;
 	}

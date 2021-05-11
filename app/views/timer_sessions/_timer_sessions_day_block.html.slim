@@ -1,6 +1,6 @@
 .box
   .space-between.mb-3
-    b.h3 = format_block_date(date)
+    b = format_block_date(date)
     b.float-right = sum_work_hours(Array.wrap(timer_sessions))
   table.list.timer-sessions-table
     tbody

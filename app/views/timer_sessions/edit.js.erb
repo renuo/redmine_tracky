@@ -5,3 +5,5 @@ $('#ajax-modal').html(
 showModal('ajax-modal', '800px', '<%= t('timer_sessions.edit.title') %>');
 $('#ajax-modal').addClass('new-watcher');
 window.ActionBinder.datetimePicker().bind();
+window.ActionBinder.issueCompleter().bind(true);
+window.UpdateIssuesList.bind();
