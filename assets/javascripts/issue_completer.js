@@ -1,7 +1,12 @@
 export default class IssueCompleter {
-	static bind() {
+
+	static completionID(update) {
+		return update ? 'timer_session_update_issue_id' :'timer_session_issue_id';
+	}
+
+	static bind(update = false) {
 		$(document).ready(() => {
-		observeAutocompleteField('timer_session_issue_id',
+		observeAutocompleteField(IssueCompleter.completionID(update),
 			function(request, callback) {
 				var url = window.RedmineTracky.issueCompletionPath;
 				var data = {
@@ -18,8 +23,12 @@ export default class IssueCompleter {
 			},
 			{
 				select: function(event, item) {
-					window.IssueListHandler.addIssue(item.item);
-					window.ActionBinder.timerUpdate().updateIssue();
+					if(update) {
+						window.UpdateIssuesList.addIssue(item.item);
+					} else{
+						window.IssueListHandler.addIssue(item.item);
+						window.ActionBinder.timerUpdate().updateIssue();
+					}
 				}
 			}
 		);

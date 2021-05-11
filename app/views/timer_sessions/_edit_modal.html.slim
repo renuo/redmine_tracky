@@ -3,10 +3,10 @@
   .row
     .update-issue-container
       .box
-        = f.text_field :issue_id, label: false
+        = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
         - if SettingsManager.visible_hints
           small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-        div[data-updat-issue-selection-container]
+        div[data-update-issue-selection-container]
           - timer_session.issues.each do |issue|
             .issue-container
               label[for="timer_session_issue_id_#{issue.id}"]
