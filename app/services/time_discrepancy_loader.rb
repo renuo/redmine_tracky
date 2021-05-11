@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TimeDiscrepancyLoader
+  DECIMALS_TO_ROUND_TO = 2
   # base_query ==> Expected to be TimerSession.where(user_id: user.id)
   def initialize(base_query)
     @base_query = base_query
@@ -17,7 +18,7 @@ class TimeDiscrepancyLoader
     @base_query.reject do |timer_session|
       hours_to_spend = timer_session.splittable_hours
       total_hours_recorded = timer_session.time_entries.sum(:hours)
-      hours_to_spend.to_d.round(2) == total_hours_recorded.to_d.round(2)
+      hours_to_spend.to_d.round(DECIMALS_TO_ROUND_TO) == total_hours_recorded.to_d.round(DECIMALS_TO_ROUND_TO)
     end
   end
 end

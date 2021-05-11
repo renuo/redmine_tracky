@@ -57,4 +57,5 @@ cd $PATH_TO_REDMINE
 
 # run tests
 # bundle exec rake TEST=test/unit/role_test.rb
-bundle exec rake redmine:plugins:test NAME=$NAME_OF_PLUGIN
+bundle exec rake redmine:plugins:test:units NAME=redmine_tracky
+bundle exec rake redmine:plugins:test:functionals NAME=redmine_tracky

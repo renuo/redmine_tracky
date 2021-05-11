@@ -26,7 +26,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   attr_accessor :issue_id
 
   def splittable_hours
-    @splittable_hours ||= (((timer_end || Time.zone.now) - timer_start) / 1.hour)
+    ((timer_end || Time.zone.now) - timer_start) / 1.hour
   end
 
   def session_finished?
@@ -61,16 +61,25 @@ class TimerSession < RedmineTrackyApplicationRecord
   def limit_recorded_hours
     return if timer_start.blank? || timer_end.blank?
 
-    max_hours_per_session = SettingsManager.max_hours_recorded_per_session.to_i
-    max_hours_per_day = SettingsManager.max_hours_recorded_per_day.to_i
-    hours_worked = TimerSession.recorded_on(user, timer_start.to_date)
+    day_limit
+    session_limit
+  end
 
-    if splittable_hours <= max_hours_per_session && (hours_worked + splittable_hours) <= max_hours_per_day
-      nil
-    else
-      errors.add(:timer_start, :limit_reached_session) if splittable_hours > max_hours_per_session
-      errors.add(:timer_start, :limit_reached_day) if (splittable_hours + hours_worked) > max_hours_per_day
-    end
+  def day_limit
+    return unless (
+      splittable_hours + TimerSession.recorded_on(
+        user,
+        timer_start.to_date
+      )
+    ) > SettingsManager.max_hours_recorded_per_day.to_i
+
+    errors.add(:timer_start, :limit_reached_day)
+  end
+
+  def session_limit
+    return unless splittable_hours > SettingsManager.max_hours_recorded_per_session
+
+    errors.add(:timer_start, :limit_reached_session)
   end
 
   def validate_session_attributes
