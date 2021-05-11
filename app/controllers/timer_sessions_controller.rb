@@ -8,7 +8,7 @@ class TimerSessionsController < TrackyController
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries)
                                            .finished_sessions.created_by(@current_user)
-    set_non_matching_timer_sessions(@timer_sessions_in_range)
+    load_non_matching_timer_sessions(@timer_sessions_in_range)
     @timer_sessions = apply_filter(@timer_sessions_in_range)
                       .order(timer_start: :desc)
                       .group_by { |entry| entry.timer_start&.to_date }
@@ -81,7 +81,7 @@ class TimerSessionsController < TrackyController
     params.require(:work_report_query).permit(:date, :period)
   end
 
-  def set_non_matching_timer_sessions(timer_sessions)
+  def load_non_matching_timer_sessions(timer_sessions)
     @non_matching_timer_sessions = TimeDiscrepancyLoader.new(
       timer_sessions
     )

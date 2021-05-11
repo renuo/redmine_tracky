@@ -7,6 +7,7 @@ class TimeTrackerController < TrackyController
 
   def start
     if @current_timer_session
+      # TODO: invalid
     else
       start_timer
     end
@@ -37,16 +38,16 @@ class TimeTrackerController < TrackyController
         render :start, layout: false
       end
     else
-      @timer_session.errors.add(:issues, :invalid)
+      @timer_session.errors.add(:issue_id, :invalid)
       render :start, layout: false
     end
   end
 
   def handle_finished_timer_session
+    @timer_session.update(finished: true)
     if @timer_session.valid?
       time_splitter = TimeSplitter.new(@timer_session)
       time_splitter.create_time_entries
-      @timer_session.update(finished: true)
       render :stop, layout: false
     else
       render :start, layout: false
@@ -60,7 +61,7 @@ class TimeTrackerController < TrackyController
 
   def handle_stop
     if @current_timer_session.update(
-      timer_end: @current_timer_session&.timer_end.presence || Time.zone.now,
+      timer_end: @current_timer_session&.timer_end.presence || timer_params[:timer_end] || Time.zone.now,
       finished: true
     )
       time_splitter = TimeSplitter.new(@current_timer_session)

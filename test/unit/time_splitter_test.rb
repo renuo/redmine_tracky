@@ -1,5 +1,7 @@
 require File.expand_path('../test_helper', __dir__)
 
+SimpleCov.command_name 'test:units'
+
 class TimeSplitterTest < ActiveSupport::TestCase
   fixtures :projects, :users, :email_addresses, :user_preferences, :members, :member_roles, :roles,
            :groups_users,

@@ -26,6 +26,7 @@ en:
               before_start: must be after the start of the timer
             issue_id:
               no_selection: at least one issue must be selected
+              invalid: one or more issues do not exist
   timer_sessions:
     filters:
       filter: Filter
