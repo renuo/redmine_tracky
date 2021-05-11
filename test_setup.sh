@@ -53,8 +53,9 @@ bundle exec rake redmine:plugins:migrate
 
 bundle exec rake db:structure:dump
 
-cd $PATH_TO_REDMINE
+cd $PATH_TO_PLUGIN
+
+bin/check
 
 # run tests
 # bundle exec rake TEST=test/unit/role_test.rb
-bundle exec rake redmine:plugins:test NAME=$NAME_OF_PLUGIN
