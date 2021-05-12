@@ -1,13 +1,24 @@
 export default class HoursTracker {
 
-	// TODO: rewrite and implement cleaner
 	static bind() {
 		if (!$('[data-timer-id]').val()) {
 			return;
 		}
+		const hoursTracker = new HoursTracker();
+		hoursTracker.run();
+	}
 
-		HoursTracker.endTicker();
+	run() {
+		this.endTicker();
+		const [difference, tick] = this.timeDifference();
+		if(tick){
+			this.tickTimer(difference);
+		} else {
+			this.displayTimer(difference);
+		}
+	}
 
+	dateElements () {
 		const timerStartValue = $('[data-timer-start-input]').val();
 		const timerEndValue = $('[data-timer-end-input]').val();
 
@@ -17,7 +28,6 @@ export default class HoursTracker {
 		);
 
 		let timerEndDateTime;
-		
 		if(timerEndValue === '') {
 			timerEndDateTime = luxon.DateTime.local();
 		} else {
@@ -26,31 +36,29 @@ export default class HoursTracker {
 				window.RedmineTracky.datetimeFormatJavascript
 			);
 		}
-
-		const difference = HoursTracker.roundDifferences(timerEndDateTime.diff(timerStartDateTime,
-			['hours', 'minutes', 'seconds']).toObject());
-
-		if(timerEndValue === '') {
-			HoursTracker.tickTimer(difference);
-		} else {
-			HoursTracker.displayTimer(difference);
-		}
+		return [[timerStartDateTime, timerEndDateTime], timerEndValue === ''];
 	}
 
-	static endTicker() {
+	timeDifference() {
+		const [timerValues, tick] = this.dateElements();
+		return [this.roundDifferences(timerValues[1].diff(timerValues[0],
+			['hours', 'minutes', 'seconds']).toObject()), tick];
+	}
+
+	endTicker() {
 		if(window.timerInterval) {
 			clearInterval(window.timerInterval);
 		}
 	}
 
-	static roundDifferences(timerObject) {
+	roundDifferences(timerObject) {
 		timerObject.seconds = Math.round(timerObject.seconds);
 		return timerObject;
 	}
 
 	// TODO: rewrite and implement cleaner
-	static tickTimer(timerObject) {
-		const updateTime = function() {
+	tickTimer(timerObject) {
+		const updateTime = () => {
 			timerObject.seconds += 1;
 			if(timerObject.seconds >= 60) {
 				timerObject.seconds = 0;
@@ -60,30 +68,30 @@ export default class HoursTracker {
 					timerObject.hours += 1;
 				}
 			}
-			HoursTracker.displayTimer(timerObject);
+			this.displayTimer(timerObject);
 		};
 
 		window.timerInterval = setInterval(updateTime, 1000);
 	}
 
-	static displayTimer(timerObject) {
-		const formatedTimer = HoursTracker.formatTimer(timerObject);
+	displayTimer(timerObject) {
+		const formatedTimer = this.formatTimer(timerObject);
 		$('#hours-clock').text(formatedTimer);
-		HoursTracker.setTitle(formatedTimer);
+		this.setTitle(formatedTimer);
 	}
 
-	static padNumber(n, width) {
+	padNumber(n, width) {
 		n = n + '';
 		return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 	}
 
-	static setTitle(time){
+	setTitle(time){
 		document.title = `${window.RedmineTracky.documentTitle} - ${time}`;
 	}
 
-	static formatTimer(timerObject) {
-		const minutes = HoursTracker.padNumber(timerObject.minutes, 2);
-		const seconds = HoursTracker.padNumber(timerObject.seconds, 2);
+	formatTimer(timerObject) {
+		const minutes = this.padNumber(timerObject.minutes, 2);
+		const seconds = this.padNumber(timerObject.seconds, 2);
 		if (timerObject.hours > 0) {
 			return `${timerObject.hours}:${minutes}:${seconds}`;
 		} else {

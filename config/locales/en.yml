@@ -82,6 +82,7 @@ en:
       button: Delete Timer Session
     edit:
       title: Edit Work Entry
+      update: Update
     relative_times:
       today: Today
       yesterday: Yesterday

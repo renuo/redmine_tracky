@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TimeRebalancer
+  HOUR = 1.hour
+
   def initialize(issues, timer_session)
     @issues = issues
     @timer_session = timer_session
@@ -35,7 +37,6 @@ class TimeRebalancer
     update_comments if comments_changed?
   end
 
-  # TODO: refactor
   def update_times
     time_difference = difference_in_time / @timer_session.issue_ids.count
     @timer_session.time_entries.each do |time_entry|
@@ -62,7 +63,7 @@ class TimeRebalancer
   def difference_in_time
     spent_hours_before_save = (
         @timer_session.timer_end_previously_was - @timer_session.timer_start_previously_was
-      ) / 1.hour
+      ) / HOUR
     (@timer_session.splittable_hours - spent_hours_before_save)
   end
 

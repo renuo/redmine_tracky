@@ -11,12 +11,12 @@ class DisplayDateFormatBuilder
   end
 
   def format
-    formatted_values.join(' - ')
+    formatted_dates.join(' - ')
   end
 
   private
 
-  def formatted_values
+  def formatted_dates
     return same_date_format if @start_datetime.to_date == @end_datetime.to_date
 
     if @start_datetime.to_date.year == @end_datetime.to_date.year

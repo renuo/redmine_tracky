@@ -1,41 +1,42 @@
 = error_messages_for timer_session
-= labelled_form_for(timer_session, remote: true) do |f|
-  .row
-    .update-issue-container
-      .box
-        = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
-        - if SettingsManager.visible_hints
-          small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-        div[data-update-issue-selection-container]
-          - timer_session.issues.each do |issue|
-            .issue-container
-              label[for="timer_session_issue_id_#{issue.id}"]
-                = issue.subject
-              input[id="timer_session_issue_id_#{issue.id}" readonly
-                hidden
-                name='timer_session[issue_ids][]'
-                value=issue.id]
-              .input-group-text[data-update-issue-deletion-action]
-                i.icon-only.icon-del
-  = f.text_field :comments, data: { timer_comment_input: '' },
-    placeholder: t('timer_sessions.messaging.comments_placeholder')
-  br
-  .times-container
-    .col
-      = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
-        placeholder: t('timer_sessions.timer.date_placeholder'),
-        value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
-      - if SettingsManager.visible_hints
-        small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
+.edit-modal
+  = labelled_form_for(timer_session, remote: true) do |f|
+    .row
+      .update-issue-container
+        .box
+          = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
+          - if SettingsManager.visible_hints
+            small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
+          div[data-update-issue-selection-container]
+            - timer_session.issues.each do |issue|
+              .issue-container
+                label[for="timer_session_issue_id_#{issue.id}"]
+                  = issue.subject
+                input[id="timer_session_issue_id_#{issue.id}" readonly
+                  hidden
+                  name='timer_session[issue_ids][]'
+                  value=issue.id]
+                .input-group-text[data-update-issue-deletion-action]
+                  i.icon-only.icon-del
+    = f.text_field :comments, data: { timer_comment_input: '' },
+      placeholder: t('timer_sessions.messaging.comments_placeholder')
     br
-    .col
-      = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
-        placeholder: t('timer_sessions.timer.date_placeholder'),
-        value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
-      - if SettingsManager.visible_hints
-        small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
-  .mb-3
+    .times-container
+      .col
+        = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+          placeholder: t('timer_sessions.timer.date_placeholder'),
+          value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
+        - if SettingsManager.visible_hints
+          small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
+      br
+      .col
+        = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+          placeholder: t('timer_sessions.timer.date_placeholder'),
+          value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
+        - if SettingsManager.visible_hints
+          small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
+    .mb-3
 
-  .buttons
-    = link_to_function l(:button_cancel), 'hideModal(this);'
-    = f.submit :update
+    .buttons
+      = link_to_function l(:button_cancel), 'hideModal(this);'
+      = f.submit t('timer_sessions.edit.update'), data: { modal_update_button: '' }

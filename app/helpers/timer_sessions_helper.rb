@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
-  # Use in settings
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
   end
