@@ -2,6 +2,7 @@
 
 class TimeDiscrepancyLoader
   DECIMALS_TO_ROUND_TO = 2
+
   # base_query ==> Expected to be TimerSession.where(user_id: user.id)
   def initialize(base_query)
     @base_query = base_query

@@ -2,12 +2,13 @@
 
 class IssueConnector
   attr_reader :errors
+  attr_accessor :logger
 
   def initialize(issues, timer_session)
     @issues = Array.wrap(issues).map(&:to_i).uniq
     @timer_session = timer_session
-    # TODO: replace with ActiveModel errors
     @errors = []
+    self.logger = Logger.new($stdout)
   end
 
   def run
@@ -35,12 +36,13 @@ class IssueConnector
     return false unless @errors.count.zero?
 
     TimerSessionIssue.transaction do
-      @issues.each do |issue_id|
-        TimerSessionIssue.create!(
-          timer_session_id: @timer_session.id,
-          issue_id: issue_id
-        )
+      issue_creation = @issues.map do |issue_id|
+        TimerSessionIssue.create(timer_session_id: @timer_session.id, issue_id: issue_id)
       end
+
+      raise ActiveRecord::Rollback, 'Issue arose during connection creation' if issue_creation.any?(false)
+      @errors << { issue_connection_creation: :failed } if issue_creation.any?(false)
     end
+    @errors.count.zero?
   end
 end

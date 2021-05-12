@@ -10,7 +10,8 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
            :enumerations,
            :issues, :journals, :journal_details,
            :watchers,
-           :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
+           :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values,
+           :time_entries
 
   setup do
     User.current = User.find(1)
@@ -19,7 +20,7 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
                                              :with_time_entries,
                                              user: User.current)
     @timer_sessions.each do | timer_session |
-      timer_session.time_entries.update(hours: timer_session.hours)
+      timer_session.time_entries.update(hours: timer_session.splittable_hours)
     end
   end
 

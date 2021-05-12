@@ -5,7 +5,8 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
              :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
              :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
              :watchers, :journals, :journal_details, :versions,
-             :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions
+             :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions,
+             :time_entries
 
   setup do
     log_user('admin', 'admin')
@@ -17,23 +18,29 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     visit timer_sessions_path
   end
 
-  test '#index' do
-    visit timer_sessions_path
+  test 'index' do
     @timer_sessions.each do | timer_session |
       assert has_content?(timer_session.comments)
     end
   end
 
-  test '#filter' do
-    visit timer_sessions_path
+  test 'filter' do
     @timer_sessions.each do | timer_session |
       assert has_content?(timer_session.comments)
     end
   end
 
-  test '#edit' do
-    visit timer_sessions_path
+  test 'edit' do
     find('[data-timer-session-edit-button]', match: :first).click
     assert has_content?(I18n.t('timer_sessions.edit.title'))
+  end
+
+  test 'update' do
+    find('[data-timer-session-edit-button]', match: :first).click
+    within '.edit-modal' do
+      fill_in 'timer_session_comments', with: 'Working on stuff'
+      find('[data-modal-update-button]', match: :first).click
+    end
+    assert_equal 'Working on stuff', @timer_sessions.first.reload.comments
   end
 end
