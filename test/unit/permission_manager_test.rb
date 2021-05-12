@@ -1,6 +1,12 @@
 require File.expand_path('../test_helper', __dir__)
 
 class PermissionManagerTest < ActiveSupport::TestCase
+  fixtures :users, :roles
+
+  setup do
+    User.current = User.find(2)
+  end
+
   test 'can? - default' do
     assert_equal PermissionManager.new.can?(:edit, :timer_sessions), false
   end

@@ -25,7 +25,8 @@ SimpleCov.start 'rails' do
   track_files "app/**/*.rb"
 end
 
-# SimpleCov.minimum_coverage 100
+SimpleCov.minimum_coverage 100
+
 FactoryBot.definition_file_paths = [File.expand_path('../factories', __FILE__)]
 FactoryBot.find_definitions
 

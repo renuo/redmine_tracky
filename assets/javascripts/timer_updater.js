@@ -6,36 +6,36 @@ export default class TimerUpdater {
 	static bind() {
 		$(document).ready(() => {
 			if(TimerUpdater.timerID() !== '') {
-				TimerUpdater.setupUpdaters();
+				const timerUpdater = new TimerUpdater();
+				timerUpdater.setupUpdaters();
 			}
 		});
 	}
 
-	static setupUpdaters() {
-		TimerUpdater.updateComment();
-		TimerUpdater.updateStartTime();
-		TimerUpdater.updateEndTime();
+	setupUpdaters() {
+		this.updateComment();
+		this.updateStartTime();
+		this.updateEndTime();
 	}
 
-	static updateStartTime() {
+	updateStartTime() {
 		$('[data-timer-start-input]').off('change');
-		$('[data-timer-start-input]').on('change', function() {
-			const element = $(this);
+		$('[data-timer-start-input]').on('change', () => {
+			const element = $(event.target);
 			const inputValue = element.val();
 			TimerUpdater.sendUpdate({ timer_start: inputValue });
 		});
 	}
 
-	static updateEndTime(){
+	updateEndTime(){
 		$('[data-timer-end-input]').off('change');
-		$('[data-timer-end-input]').on('change', function() {
-			const element = $(this);
+		$('[data-timer-end-input]').on('change', () => {
+			const element = $(event.target);
 			const inputValue = element.val();
 			TimerUpdater.sendUpdate({ timer_end: inputValue });
 		});
 	}
 
-	// TODO: implement
 	static updateIssue() {
 		if(!TimerUpdater.timerID()){
 			return;
@@ -45,26 +45,26 @@ export default class TimerUpdater {
 		}).get() || [''];
 
 
-		TimerUpdater.sendUpdate({ issue_ids: ids.length ? Array.from(new Set(ids)) : [' '] });
+		new TimerUpdater().sendUpdate({ issue_ids: ids.length ? Array.from(new Set(ids)) : [' '] });
 	}
 
-	static updateComment() {
+	updateComment() {
 		$('[data-timer-comment-input]').off('change');
-		$('[data-timer-comment-input]').on('change', function() {
-			const element = $(this);
+		$('[data-timer-comment-input]').on('change', () => {
+			const element = $(event.target);
 			const inputValue = element.val();
-			TimerUpdater.sendUpdate({ comments: inputValue });
+			this.sendUpdate({ comments: inputValue });
 		});
 	}
 
-	static disableButtons() {
+	disableButtons() {
 		const container = $('[data-ending-action-buttons]');
 		const buttons = container.find('button');
 		buttons.attr('disabled', true);
 	}
 
-	static sendUpdate(updateData) {
-		TimerUpdater.disableButtons();
+	sendUpdate(updateData) {
+		this.disableButtons();
 		$.ajax({
 			type: 'POST',
 			url: window.RedmineTracky.trackerUpdatePath,

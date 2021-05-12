@@ -1,3 +1,4 @@
+# Taken from Renuo - Hillary Project
 module Filtering
   class BaseFilter
     include ActiveModel::Model

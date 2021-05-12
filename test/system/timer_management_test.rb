@@ -1,5 +1,7 @@
 require File.expand_path("../../application_system_test_case", __FILE__)
 
+SimpleCov.command_name 'test:system'
+
 def wait_for_load
   sleep 2
   yield
@@ -18,7 +20,6 @@ class TimerManagementTest < ApplicationSystemTestCase
   end
 
   test 'creation of timer' do
-    visit timer_sessions_path
     find('[data-timer-start-button]').click
     assert has_content?(I18n.t('timer_sessions.timer.stop'))
     assert has_content?(I18n.t('timer_sessions.timer.cancel'))
@@ -42,7 +43,6 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'stopping of timer with invalid attributes' do
     timer_session = FactoryBot.create(:timer_session, finished: false, user: User.current)
-    p timer_session
     visit timer_sessions_path
     find('[data-timer-stop-button]').click
     assert has_content?(I18n.t('activerecord.errors.models.timer_session.attributes.issue_id.no_selection', locale: :en))
@@ -56,6 +56,5 @@ class TimerManagementTest < ApplicationSystemTestCase
     )
     visit timer_sessions_path
     find('[data-timer-stop-button]').click
-    p timer_session.reload
   end
 end
