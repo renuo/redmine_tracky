@@ -30,6 +30,9 @@ class TimeSplitter
     default_activity(time_entry)
   end
 
+  # Taken from https://github.com/renuo/redmine_auto_time_entries/blob/master/lib/redmine_adapter.rb
+  # Line: 26
+  # Accessed on: 07.05.2021
   def default_activity(time_entry)
     time_entry.activity ||= TimeEntryActivity.default
     time_entry.activity ||= TimeEntryActivity.where(name: 'Entwicklung').first

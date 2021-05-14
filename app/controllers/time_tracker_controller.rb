@@ -6,11 +6,7 @@ class TimeTrackerController < TrackyController
   before_action :set_permission_manager
 
   def start
-    if @current_timer_session
-      # TODO: invalid
-    else
-      start_timer
-    end
+    start_timer
   end
 
   def stop

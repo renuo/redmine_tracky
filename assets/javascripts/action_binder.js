@@ -7,28 +7,28 @@ import HoursTracker from './hours_tracker.js';
 // Combines multiple Binders and wraps them in document.ready
 export default class ActionBinder {
 
-	static bind() {
-		$(document).ready(() => {
-			DateTimePickerRegister.bind();
-			IssueCompleter.bind();
-			TimerUpdater.bind();
-			HoursTracker.bind();
-		});
-	}
+    static bind() {
+        $(document).ready(() => {
+            DateTimePickerRegister.bind();
+            IssueCompleter.bind();
+            TimerUpdater.bind();
+            HoursTracker.bind();
+        });
+    }
 
-	static issueCompleter() {
-		return IssueCompleter;
-	}
+    static issueCompleter() {
+        return IssueCompleter;
+    }
 
-	static timerUpdate() {
-		return TimerUpdater;
-	}
+    static timerUpdate() {
+        return TimerUpdater;
+    }
 
-	static datetimePicker() {
-		return DateTimePickerRegister;
-	}
+    static datetimePicker() {
+        return DateTimePickerRegister;
+    }
 
-	static hoursTracker() {
-		return HoursTracker;
-	}
+    static hoursTracker() {
+        return HoursTracker;
+    }
 }

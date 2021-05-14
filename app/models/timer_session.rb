@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TimerSession < RedmineTrackyApplicationRecord
+  MIN_HOURS = 0.01
   has_many :timer_session_issues, dependent: :destroy
   has_many :timer_session_time_entries, dependent: :destroy
 
@@ -66,7 +67,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def enough_time
-    errors.add(:timer_start, :too_short) unless splittable_hours.round(2).positive?
+    errors.add(:timer_start, :too_short) unless (splittable_hours / issues.count) > MIN_HOURS
   end
 
   def day_limit

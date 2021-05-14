@@ -54,7 +54,7 @@ Redmine::Plugin.register :redmine_tracky do
     }, require: :loggedin
 
     permission :create_timer_sessions, {
-      time_tracker: %i[start]
+      time_tracker: %i[start update]
     }, require: :loggedin
 
     permission :stop_timer_sessions, {
