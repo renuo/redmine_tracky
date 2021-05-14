@@ -52,6 +52,8 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     assert has_content?(@timer_sessions.first.comments)
     assert has_content?(@timer_sessions.second.comments)
     assert_equal 2, TimerSession.count
+    assert_equal 2, TimerSessionIssue.count
+    assert_equal 2, TimerSessionTimeEntry.count
   end
 
   test 'discrepancy in time sum' do
