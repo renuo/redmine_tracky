@@ -15,11 +15,24 @@ de:
           attributes:
             timer_start:
               after_end: muss vor dem Ende der Arbeitszeit sein
+              limit_reached_day: Du versuchst zu viel Zeit am Starttag zu buchen
+              limit_reached_session: Du versuchst zu viel Zeit in dieser Session zu buchen
+              too_short: Bitte buche mindestens 0.01 Stunden für jedes Issue
             timer_end:
               before_start: muss nach dem Start der Arbeitszeit sein
             issue_id:
               no_selection: mindestens ein Issue muss gewählt sein
+              invalid: ein oder mehrere Issues müssen gewählt sein
   timer_sessions:
+    filters:
+      filter: Filter
+    permissions:
+      not_allowed: Du hast keine Berechtigung um diese Aktion auszufüren!
+    settings:
+      max_hours_recorded_per_day: Maximal erfasste Stunden pro Tag
+      max_hours_recorded_per_session: Maximal erfasste Stunden pro Session
+      visible_hints: Hints anzeigen
+      displayed_hours_rounding: Stunden Rundung in der Anzeige
     work_report_query:
       periods:
         day: Tag
@@ -33,18 +46,40 @@ de:
       comments_placeholder: An was arbeitest du gerade?
       timer_start_hint: Wenn du dieses Feld leer lässt, wir die aktuelle Zeit verwendet
       timer_end_hint: Wenn du dieses Feld mein Stoppen leer lässt, wird die aktuelle Zeit verwendet
-      issue_list_hint: Falls du mehr als ein issue auswählst, splitten wir die Zeit auf die Issues auf
+      issue_list_hint: Falls du mehr als ein Issue auswählst, splitten wir die Zeit auf die Issues aufgeteilt
+      no_time_entries_found: Es wurden keine Zeiteinträge gefunden!
+      errors:
+        permission:
+          not_allowed: Du hast keine Berechtigung um diese Aktion auszufüren!
+        discrepancy_in_time_sum:
+          title: Diskrepanz in der Summe der Zeiterfassungen
+          body: |
+            Es wurde eine Diskrepanz in der erfassten Zeit der Session %{range} gefunden!
+            Bitte resuliere diese Diskrepanz!
+          resolution_options:
+            options: "Um eine Diskrepanz zu resulieren hast du folgende Optionen:"
+            edit_timer_session: Du kannst die Session direkt editieren, damit sie %{hours} umfasst
+            edit_time_entries: Du kannst einen der Zeiterfassungen anpassen damit die Summe %{hours} ergibt
+            last_resort: |
+              Solltes du weder die Session noch die Zeiterfassungen editieren können / wollen, kannst du entweder die Session
+              löschen oder das System die Diskrepanz ausbalancieren lassen.
     timer:
       start: Start
       stop: Stop
       cancel: Abbrechen
       date_placeholder: 'dd.mm.yyyy hh:mm'
+      current: "Aktuelle Arbeitserfassung: "
     index:
       title: Tracky
       table:
         total_hours_worked: 'Totale Stunden: %{hours} h'
+    rebalance:
+      button: "Ausbalancieren"
     edit:
       title: Arbeitseintrag bearbeiten
+      update: Überarbeiten
+    destroy:
+      button: Eintrag löschen
     relative_times:
       today: Heute
       tomorrow: Morgen

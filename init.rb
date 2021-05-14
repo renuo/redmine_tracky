@@ -27,13 +27,21 @@ Redmine::Plugin.register :redmine_tracky do
     'visible_hints' => true
   }
 
+  # Suggestions and examples for init.rb taken from:
+  # https://github.com/alexbevi/redmine_knowledgebase/blob/master/init.rb
+  # and
+  # https://github.com/jgraichen/redmine_dashboard/blob/stable-v2/init.rb
+  #
+  # Both last accessed on: 12.05.2021
+  # Used for menu, settings, and permission
+
   settings default: default_settings, partial: 'settings/redmine_tracky_settings'
 
   menu :application_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
-    caption: 'TimerSessions'
+    caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
 
-  menu :project_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
-    caption: 'TimerSessions'
+  menu :top_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
+    caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
 
   project_module :timer_sessions do
     permission :manage_timer_sessions, {

@@ -2,31 +2,27 @@
 
 Improved time tracking for redmine
 
-## Environments
-
-| Branch  | Domain                                | Deployment     |
-| ------- | ------------------------------------- | ---------------|
-| develop | https://`[project-name]`-develop.renuoapp.ch | auto    |
-| testing | https://`[project-name]`-testing.renuoapp.ch | auto    |
-| master  | https://`[project-name]`-master.renuoapp.ch  | release |
-
 ## Setup
 
+    bundle install
+    bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 ### Configuration
 
+Administration => Roles & Permissions
 
 ### Run
+    
+    cd $REDMINE_LOCATION
+    rails s
 
 ### Dependency
 
-Dependencies list
-
 ### Tests / Checks
 
-## Other
-
-special stuff
+    cd $PLUGIN_LOCATION
+    bin/check
+    bin/system_check
 
 ## Copyright
 

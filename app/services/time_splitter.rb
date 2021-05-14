@@ -18,9 +18,11 @@ class TimeSplitter
   private
 
   def base_time_entry
+    hours_for_entry = @timer_session.splittable_hours.zero? ? 0.01 : @timer_session.splittable_hours
+    split_hours = hours_for_entry / @issues.count.to_f
     time_entry = TimeEntry.new(
       comments: @timer_session.comments,
-      hours: (@timer_session.splittable_hours || 0) / @issues.count,
+      hours: split_hours,
       spent_on: @timer_session.timer_start,
       user_id: @timer_session.user_id,
       activity: TimeEntryActivity.default

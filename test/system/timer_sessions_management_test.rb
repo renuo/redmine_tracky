@@ -41,6 +41,33 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
       fill_in 'timer_session_comments', with: 'Working on stuff'
       find('[data-modal-update-button]', match: :first).click
     end
-    assert_equal 'Working on stuff', @timer_sessions.first.reload.comments
+    assert has_content?(@timer_sessions.last.comments)
+    assert_equal 'Working on stuff', @timer_sessions.last.reload.comments
+  end
+
+  test 'destroy' do
+    assert_equal 3, TimerSession.count
+    find('[data-timer-session-destroy-button]', match: :first).click
+    page.driver.browser.switch_to.alert.accept
+    assert has_content?(@timer_sessions.first.comments)
+    assert has_content?(@timer_sessions.second.comments)
+    assert_equal 2, TimerSession.count
+    assert_equal 2, TimerSessionIssue.count
+    assert_equal 2, TimerSessionTimeEntry.count
+  end
+
+  test 'discrepancy in time sum' do
+    @timer_sessions.last.time_entries.each do | time_entry |
+      time_entry.update(hours: 0.01)
+    end
+    visit timer_sessions_path
+    find('[data-timer-session-discrepancy-button]', match: :first).click
+    assert has_content?(I18n.t('resolution_options.options',
+                               scope: 'timer_sessions.messaging.errors.discrepancy_in_time_sum'))
+  end
+
+  test 'spent - time query' do
+    click_button I18n.t('timer_sessions.work_report_query.buttons.submit')
+    assert has_content?(I18n.t(:label_spent_time))
   end
 end

@@ -11,7 +11,7 @@ FactoryBot.define do
       after(:create) do | timer_session |
         TimerSessionIssue.create!(
           timer_session_id: timer_session.id,
-          issue_id: Issue.order('RANDOM()').first.id
+          issue_id: Issue.first.id
         )
       end
     end
@@ -20,7 +20,7 @@ FactoryBot.define do
       after(:create) do | timer_session |
         TimerSessionTimeEntry.create!(
           timer_session_id: timer_session.id,
-          time_entry_id: TimeEntry.order("RANDOM()").first.id
+          time_entry_id: TimeEntry.first.id
         )
       end
     end

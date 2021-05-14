@@ -15,10 +15,18 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
 
   setup do
     User.current = User.find(1)
-    @timer_sessions = FactoryBot.create_list(:timer_session, 3,
-                                             :with_issues,
-                                             :with_time_entries,
-                                             user: User.current)
+    @timer_sessions = [1, 2, 3].map do | id |
+      timer_session = FactoryBot.create(:timer_session, user: User.current)
+      TimerSessionTimeEntry.create!(
+        timer_session_id: timer_session.id,
+        time_entry_id: id
+      )
+      TimerSessionIssue.create!(
+        timer_session_id: timer_session.id,
+        issue_id: id
+      )
+      timer_session
+    end
     @timer_sessions.each do | timer_session |
       timer_session.time_entries.update(hours: timer_session.splittable_hours)
     end

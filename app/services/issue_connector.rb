@@ -8,7 +8,7 @@ class IssueConnector
     @issues = Array.wrap(issues).map(&:to_i).uniq
     @timer_session = timer_session
     @errors = []
-    self.logger = Logger.new($stdout)
+    self.logger = ::Rails.logger
   end
 
   def run
@@ -40,8 +40,9 @@ class IssueConnector
         TimerSessionIssue.create(timer_session_id: @timer_session.id, issue_id: issue_id)
       end
 
-      raise ActiveRecord::Rollback, 'Issue arose during connection creation' if issue_creation.any?(false)
       @errors << { issue_connection_creation: :failed } if issue_creation.any?(false)
+      logger.error 'Issue arose during connection creation' if issue_creation.any?(false)
+      raise ActiveRecord::Rollback, 'Issue arose during connection creation' if issue_creation.any?(false)
     end
     @errors.count.zero?
   end

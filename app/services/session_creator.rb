@@ -7,13 +7,14 @@ class SessionCreator
   end
 
   def create
-    timer_session = TimerSession.create!(
+    timer_session = TimerSession.create(
       timer_start: timer_start_value,
       comments: @params[:comments],
       user: @user
     )
-    timer_session.update(timer_end: @params[:timer_end]) if update_with_timer_end?
 
+    logger.error 'Was not able to create timer session' unless timer_session.persisted? && logger
+    timer_session.update(timer_end: @params[:timer_end]) if update_with_timer_end?
     timer_session
   end
 
@@ -27,5 +28,7 @@ class SessionCreator
     @params[:timer_start].presence || Time.zone.now
   end
 
-  def validate; end
+  def logger
+    ::Rails.logger
+  end
 end
