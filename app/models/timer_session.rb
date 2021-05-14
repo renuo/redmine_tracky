@@ -65,19 +65,23 @@ class TimerSession < RedmineTrackyApplicationRecord
     session_limit
   end
 
+  def enough_time
+    errors.add(:timer_start, :too_short) unless splittable_hours.round(2).positive?
+  end
+
   def day_limit
     return unless (
       splittable_hours + TimerSession.recorded_on(
         user,
         timer_start.to_date
       )
-    ) > SettingsManager.max_hours_recorded_per_day.to_i
+    ) > SettingsManager.max_hours_recorded_per_day.to_f
 
     errors.add(:timer_start, :limit_reached_day)
   end
 
   def session_limit
-    return unless splittable_hours > SettingsManager.max_hours_recorded_per_session
+    return unless splittable_hours > SettingsManager.max_hours_recorded_per_session.to_f
 
     errors.add(:timer_start, :limit_reached_session)
   end
@@ -88,6 +92,7 @@ class TimerSession < RedmineTrackyApplicationRecord
     start_and_end_present
     comment_present
     issues_selected
+    enough_time
     limit_recorded_hours
   end
 

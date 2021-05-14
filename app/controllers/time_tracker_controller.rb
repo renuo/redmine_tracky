@@ -55,13 +55,13 @@ class TimeTrackerController < TrackyController
   end
 
   def handle_cancel
-    @current_timer_session.delete
+    @current_timer_session.destroy
     render :cancel, layout: false
   end
 
   def handle_stop
     if @current_timer_session.update(
-      timer_end: @current_timer_session&.timer_end.presence || timer_params[:timer_end] || Time.zone.now,
+      timer_end: @current_timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || Time.zone.now,
       finished: true
     )
       time_splitter = TimeSplitter.new(@current_timer_session)

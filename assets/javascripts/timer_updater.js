@@ -23,7 +23,7 @@ export default class TimerUpdater {
 		$('[data-timer-start-input]').on('change', () => {
 			const element = $(event.target);
 			const inputValue = element.val();
-			TimerUpdater.sendUpdate({ timer_start: inputValue });
+			new TimerUpdater().sendUpdate({ timer_start: inputValue });
 		});
 	}
 
@@ -32,7 +32,7 @@ export default class TimerUpdater {
 		$('[data-timer-end-input]').on('change', () => {
 			const element = $(event.target);
 			const inputValue = element.val();
-			TimerUpdater.sendUpdate({ timer_end: inputValue });
+			new TimerUpdater().sendUpdate({ timer_end: inputValue });
 		});
 	}
 
@@ -57,14 +57,7 @@ export default class TimerUpdater {
 		});
 	}
 
-	disableButtons() {
-		const container = $('[data-ending-action-buttons]');
-		const buttons = container.find('button');
-		buttons.attr('disabled', true);
-	}
-
 	sendUpdate(updateData) {
-		this.disableButtons();
 		$.ajax({
 			type: 'POST',
 			url: window.RedmineTracky.trackerUpdatePath,

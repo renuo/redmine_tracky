@@ -10,9 +10,11 @@ tr[class=('error-block' if @non_matching_timer_sessions[timer_session.id])]
         .icon-only.icon-edit
     - if @permission_manager.can?(:destroy, :timer_sessions)
       = link_to timer_session_path(timer_session),
-        data: { confirm: l(:text_are_you_sure) },
+        data: { confirm: l(:text_are_you_sure), timer_session_destroy_button: '' },
         method: :delete, title: l(:button_delete) do
         .icon-only.icon-del
     - if @non_matching_timer_sessions[timer_session.id]
-      = link_to timer_sessions_time_error_path(timer_session), remote: true do
+      = link_to timer_sessions_time_error_path(timer_session),
+        data: { timer_session_discrepancy_button: '' },
+        remote: true do
         .icon-only.icon-warning

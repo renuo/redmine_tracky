@@ -23,14 +23,14 @@
     br
     .times-container
       .col
-        = f.datetime_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+        = f.text_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
           placeholder: t('timer_sessions.timer.date_placeholder'),
           value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
         - if SettingsManager.visible_hints
           small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
       br
       .col
-        = f.datetime_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+        = f.text_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
           placeholder: t('timer_sessions.timer.date_placeholder'),
           value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
         - if SettingsManager.visible_hints

@@ -12,7 +12,11 @@ class WorkReportQueryBuilder
 
   def initialize(work_report_query)
     @work_report_query = work_report_query
-    @date = Date.parse(@work_report_query.date)
+    @date = begin
+      Date.parse(@work_report_query.date)
+    rescue StandardError
+      Time.zone.now.to_date
+    end
   end
 
   def build_query
