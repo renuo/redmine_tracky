@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TimeRebalancer
-  HOUR = 1.hour
+  MIN_HOURS = 0.01
 
   def initialize(issues, timer_session)
     @issues = issues
@@ -38,11 +38,12 @@ class TimeRebalancer
   end
 
   def update_times
-    time_difference = difference_in_time / @timer_session.issue_ids.count
+    new_time = @timer_session.splittable_hours / @timer_session.issue_ids.count
+    @timer_session.errors.add(:timer_start, :too_short) if new_time < 0.01
+    return unless @timer_session.valid?
+
     @timer_session.time_entries.each do |time_entry|
-      new_spent_hours = time_entry.hours + time_difference
-      new_spent_hours = new_spent_hours <= 0 ? 0.01 : new_spent_hours
-      time_entry.update!(hours: new_spent_hours, spent_on: @timer_session.timer_start)
+      time_entry.update!(hours: new_time, spent_on: @timer_session.timer_start)
     end
   end
 
@@ -58,13 +59,6 @@ class TimeRebalancer
 
   def times_changed?
     @timer_session.saved_change_to_timer_start? || @timer_session.saved_change_to_timer_end?
-  end
-
-  def difference_in_time
-    spent_hours_before_save = (
-        @timer_session.timer_end_previously_was - @timer_session.timer_start_previously_was
-      ) / HOUR
-    (@timer_session.splittable_hours - spent_hours_before_save)
   end
 
   def issues_changed?

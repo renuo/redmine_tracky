@@ -54,7 +54,7 @@ class TimerSessionsController < TrackyController
     if @timer_session.update(timer_session_params)
       TimeRebalancer.new(timer_session_params[:issue_ids],
                          @timer_session).rebalance_entries
-      render :update_redirect, layout: false
+      render (@timer_session.valid? ? :update_redirect : :update), layout: false
     else
       render :update, layout: false
     end
