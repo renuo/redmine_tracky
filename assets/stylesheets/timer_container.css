@@ -1,93 +1,90 @@
-.redmine-tracky {
-  .times-container {
-    column-count: 2;
-  }
+.times-container {
+  column-count: 2;
+}
 
-  .w-25 {
-    width: 25% !important;
-  }
+.w-25 {
+  width: 25% !important;
+}
 
-  .w-50 {
-    width: 50% !important;
-  }
+.w-50 {
+  width: 50% !important;
+}
 
-  .w-75 {
-    width: 75% !important;
-  }
+.w-75 {
+  width: 75% !important;
+}
 
-  .w-100 {
+.w-100 {
+  width: 100% !important;
+}
+
+@media only screen and (max-width: 480px) {
+  [class*="w-"] {
     width: 100% !important;
   }
+}
 
-  @media only screen and (max-width: 480px) {
-    [class*="w-"] {
-      width: 100% !important;
-    }
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.icon-bullet-delete {
+  background-image: url(../images/bullet_delete.png);
+}
+
+input:disabled,
+button:disabled {
+  background-color: #e9ecef;
+  opacity: 1;
+  cursor: default;
+}
+
+.error {
+  color: red;
+}
+
+label { 
+  display: block;
+  margin-bottom: .5rem;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.form-text {
+  display: block;
+  margin-top: .25rem;
+}
+
+small {
+  font-size: 80%;
+  font-weight: 400;
+}
+
+/* from https://www.w3schools.com/css/css_rwd_mediaqueries.asp */
+/* For desktop: */
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  [class*="col-"] {
+    width: 100%;
   }
+}
 
-  .mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .icon-bullet-delete {
-    background-image: url(../images/bullet_delete.png);
-  }
-
-  input:disabled,
-  button:disabled {
-    background-color: #e9ecef;
-    opacity: 1;
-    cursor: default;
-  }
-
-  .error {
-    color: red;
-  }
-
-  label { 
-    display: block;
-    margin-bottom: .5rem;
-  }
-
-  .text-muted {
-    color: #6c757d !important;
-  }
-
-  .form-text {
-    display: block;
-    margin-top: .25rem;
-  }
-
-  small {
-    font-size: 80%;
-    font-weight: 400;
-  }
-
-  /* from https://www.w3schools.com/css/css_rwd_mediaqueries.asp */
-  /* For desktop: */
-  .col-1 {width: 8.33%;}
-  .col-2 {width: 16.66%;}
-  .col-3 {width: 25%;}
-  .col-4 {width: 33.33%;}
-  .col-5 {width: 41.66%;}
-  .col-6 {width: 50%;}
-  .col-7 {width: 58.33%;}
-  .col-8 {width: 66.66%;}
-  .col-9 {width: 75%;}
-  .col-10 {width: 83.33%;}
-  .col-11 {width: 91.66%;}
-  .col-12 {width: 100%;}
-
-  @media only screen and (max-width: 768px) {
-    /* For mobile phones: */
-    [class*="col-"] {
-      width: 100%;
-    }
-  }
-
-  .float-right { 
-    float: right;
-  }
-
+.float-right { 
+  float: right;
 }

@@ -42,7 +42,7 @@ class TimeSplitter
 
   def create_time_entry(issue, time_entry)
     time_entry.update!(
-     issue: issue
+     issue: issue,
      project: issue.project
     )
     TimerSessionTimeEntry.create!(

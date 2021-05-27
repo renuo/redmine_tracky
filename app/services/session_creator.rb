@@ -11,7 +11,7 @@ class SessionCreator
       timer_start: timer_start_value,
       comments: @params[:comments],
       user: @user,
-      timer_end: params[:timer_end].presence
+      timer_end: @params[:timer_end].presence
     )
     logger.error 'Was not able to create timer session' unless timer_session.persisted? && logger
 
@@ -19,10 +19,6 @@ class SessionCreator
   end
 
   private
-
-  def update_with_timer_end?
-    @params[:timer_end].present?
-  end
 
   def timer_start_value
     @params[:timer_start].presence || Time.zone.now
