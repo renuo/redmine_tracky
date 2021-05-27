@@ -18,7 +18,7 @@ class TimeSplitter
   private
 
   def base_time_entry
-    hours_for_entry = @timer_session.splittable_hours.zero? ? 0.01 : @timer_session.splittable_hours
+    hours_for_entry = @timer_session.splittable_hours.zero? ? SettingsManager.min_hours_to_record : @timer_session.splittable_hours
     split_hours = hours_for_entry / @issues.count.to_f
     time_entry = TimeEntry.new(
       comments: @timer_session.comments,
@@ -41,9 +41,10 @@ class TimeSplitter
   end
 
   def create_time_entry(issue, time_entry)
-    time_entry.issue_id = issue.id
-    time_entry.project_id = issue.project_id
-    time_entry.save!
+    time_entry.update!(
+     issue: issue
+     project: issue.project
+    )
     TimerSessionTimeEntry.create!(
       time_entry: time_entry,
       timer_session: @timer_session

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TimerSession < RedmineTrackyApplicationRecord
-  MIN_HOURS = 0.01
   has_many :timer_session_issues, dependent: :destroy
   has_many :timer_session_time_entries, dependent: :destroy
 
@@ -38,6 +37,8 @@ class TimerSession < RedmineTrackyApplicationRecord
     time_entries.sum(:hours)
   end
 
+  private
+
   def start_and_end_present
     errors.add(:timer_start, :blank) if timer_start.blank?
     errors.add(:timer_end, :blank) if timer_end.blank?
@@ -62,15 +63,15 @@ class TimerSession < RedmineTrackyApplicationRecord
   def limit_recorded_hours
     return if timer_start.blank? || timer_end.blank?
 
-    day_limit
-    session_limit
+    validate_day_limit
+    validate_session_limit
   end
 
   def enough_time
-    errors.add(:timer_start, :too_short) unless (splittable_hours / issues.count) >= MIN_HOURS
+    errors.add(:timer_start, :too_short) unless (splittable_hours / issues.count) >= SettingsManager.min_hours_to_record
   end
 
-  def day_limit
+  def validate_day_limit
     return unless (
       splittable_hours + TimerSession.recorded_on(
         user,
@@ -81,7 +82,7 @@ class TimerSession < RedmineTrackyApplicationRecord
     errors.add(:timer_start, :limit_reached_day)
   end
 
-  def session_limit
+  def validate_session_limit
     return unless splittable_hours > SettingsManager.max_hours_recorded_per_session.to_f
 
     errors.add(:timer_start, :limit_reached_session)

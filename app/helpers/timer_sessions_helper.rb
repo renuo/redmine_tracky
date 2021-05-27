@@ -27,17 +27,13 @@ module TimerSessionsHelper
   def format_block_date(date)
     current_date = Time.zone.now.to_date
     if current_date == date || current_date.yesterday == date || current_date.tomorrow == date
-      format_relative_date(date, current_date)
+      return I18n.t('timer_sessions.relative_times.tomorrow') if date == current_date.tomorrow
+      return I18n.t('timer_sessions.relative_times.yesterday') if date == current_date.yesterday
+
+      I18n.t('timer_sessions.relative_times.today')
     else
       I18n.l(date, format: I18n.t('timer_sessions.formats.date_with_year'))
     end
-  end
-
-  def format_relative_date(date, current_date)
-    return I18n.t('timer_sessions.relative_times.tomorrow') if date == current_date.tomorrow
-    return I18n.t('timer_sessions.relative_times.yesterday') if date == current_date.yesterday
-
-    I18n.t('timer_sessions.relative_times.today')
   end
 
   def format_time_entry_information(time_entry)

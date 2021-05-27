@@ -1,38 +1,40 @@
-.mb-3 {
-  margin-bottom: 1rem !important;
-}
+.redmine-tracky {
+  .mb-3 {
+    margin-bottom: 1rem !important;
+  }
 
-.mt-3 {
-  margin-top: 1rem !important;
-}
+  .mt-3 {
+    margin-top: 1rem !important;
+  }
 
-.error-block {
-  border-style: solid;
-  border-color: red;
-  border-width: 1.5px;
-}
+  .error-block {
+    border-style: solid;
+    border-color: red;
+    border-width: 1.5px;
+  }
 
-.timer-sessions-table {
-  border-collapse:collapse;
-}
+  .timer-sessions-table {
+    border-collapse:collapse;
+  }
 
-.timer-sessions-table > td {
-    text-align: left;
-    margin-left: 5px;
-}
+  .timer-sessions-table > td {
+      text-align: left;
+      margin-left: 5px;
+  }
 
-.text-center {
-  text-align: center;
-}
+  .text-center {
+    text-align: center;
+  }
 
-.space-between {
-  display: flex;
-  -moz-box-pack: justify;
-  justify-content: space-between;
-  -moz-box-align: center;
-  align-items: center;
-}
+  .space-between {
+    display: flex;
+    -moz-box-pack: justify;
+    justify-content: space-between;
+    -moz-box-align: center;
+    align-items: center;
+  }
 
-.h3 {
-  font-size: 3rem;
+  .h3 {
+    font-size: 3rem;
+  }
 }

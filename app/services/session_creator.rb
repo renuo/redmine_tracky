@@ -10,11 +10,11 @@ class SessionCreator
     timer_session = TimerSession.create(
       timer_start: timer_start_value,
       comments: @params[:comments],
-      user: @user
+      user: @user,
+      timer_end: params[:timer_end].presence
     )
-
     logger.error 'Was not able to create timer session' unless timer_session.persisted? && logger
-    timer_session.update(timer_end: @params[:timer_end]) if update_with_timer_end?
+
     timer_session
   end
 

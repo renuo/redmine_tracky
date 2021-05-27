@@ -1,12 +1,14 @@
-require File.expand_path("../../application_system_test_case", __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../application_system_test_case', __dir__)
 
 class TimerSessionsManagementTest < ApplicationSystemTestCase
   fixtures :projects, :users, :email_addresses, :roles, :members, :member_roles,
-             :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
-             :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
-             :watchers, :journals, :journal_details, :versions,
-             :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions,
-             :time_entries
+           :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
+           :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
+           :watchers, :journals, :journal_details, :versions,
+           :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions,
+           :time_entries
 
   setup do
     log_user('admin', 'admin')
@@ -19,13 +21,13 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   end
 
   test 'index' do
-    @timer_sessions.each do | timer_session |
+    @timer_sessions.each do |timer_session|
       assert has_content?(timer_session.comments)
     end
   end
 
   test 'filter' do
-    @timer_sessions.each do | timer_session |
+    @timer_sessions.each do |timer_session|
       assert has_content?(timer_session.comments)
     end
   end
@@ -57,7 +59,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   end
 
   test 'discrepancy in time sum' do
-    @timer_sessions.last.time_entries.each do | time_entry |
+    @timer_sessions.last.time_entries.each do |time_entry|
       time_entry.update(hours: 0.01)
     end
     visit timer_sessions_path

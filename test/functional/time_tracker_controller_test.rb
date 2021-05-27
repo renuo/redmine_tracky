@@ -1,4 +1,6 @@
-require File.expand_path('../../test_helper', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../test_helper', __dir__)
 
 SimpleCov.command_name 'test:functionals'
 
@@ -41,7 +43,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_start: Time.zone.now - 1.hour,
       timer_end: Time.zone.now,
       comments: 'What a great working session',
-      issue_ids: ['1'],
+      issue_ids: ['1']
     } }, xhr: true
 
     assert_response 200
@@ -52,11 +54,11 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_start: Time.zone.now,
       timer_end: Time.zone.now - 1.hour,
       comments: 'What a great working session',
-      issue_ids: ['1'],
+      issue_ids: ['1']
     } }, xhr: true
 
     assert_response 200
-    refute TimerSession.last.finished?
+    assert_not TimerSession.last.finished?
     assert response.body.include?(I18n.t('activerecord.errors.models.timer_session.attributes.timer_start.after_end'))
   end
 
@@ -65,17 +67,17 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_start: Time.zone.now - 1.hour,
       timer_end: Time.zone.now,
       comments: 'What a great working session',
-      issue_ids: ['100'],
+      issue_ids: ['100']
     } }, xhr: true
 
     assert_response 200
   end
-  
+
   test 'stop _ valid params' do
     post :start, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
       comments: 'What a great working session',
-      issue_ids: ['1'],
+      issue_ids: ['1']
     } }, xhr: true
 
     assert_response 200
@@ -90,11 +92,11 @@ class TimeTrackerControllerTest < ActionController::TestCase
     post :start, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
       comments: 'What a great working session',
-      issue_ids: ['1'],
+      issue_ids: ['1']
     } }, xhr: true
 
-    post :stop, params: { cancel: 'true' ,timer_session: {
-      timer_start: Time.zone.now - 1.hour,
+    post :stop, params: { cancel: 'true', timer_session: {
+      timer_start: Time.zone.now - 1.hour
     } }, xhr: true
 
     assert_response 200
@@ -105,7 +107,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
     post :start, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
       comments: 'What a great working session',
-      issue_ids: ['1'],
+      issue_ids: ['1']
     } }, xhr: true
 
     post :update, params: { timer_session: {
@@ -119,14 +121,14 @@ class TimeTrackerControllerTest < ActionController::TestCase
     post :start, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
       comments: 'What a great working session',
-      issue_ids: ['1'],
+      issue_ids: ['1']
     } }, xhr: true
 
     post :stop, params: { timer_session: {
-      timer_end: Time.zone.now - 2.hour
+      timer_end: Time.zone.now - 2.hours
     } }, xhr: true
 
     assert_response 200
-    refute TimerSession.last.finished?
+    assert_not TimerSession.last.finished?
   end
 end

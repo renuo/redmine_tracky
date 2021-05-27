@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('../test_helper', __dir__)
 
 class TimeRebalancerTest < ActiveSupport::TestCase
@@ -41,14 +43,14 @@ class TimeRebalancerTest < ActiveSupport::TestCase
     timer_before_change = @timer_session.time_entries.first.hours
     TimeRebalancer.new(@timer_session.issue_ids, @timer_session).rebalance_entries
 
-    assert_equal (@timer_session.splittable_hours.to_f / @timer_session.issue_ids.length.to_f).round(2),
-      TimeEntry.find(
-      @timer_session.time_entries.first.id
-    ).hours.round(2)
+    assert_equal (@timer_session.splittable_hours.to_f / @timer_session.issue_ids.length).round(2),
+                 TimeEntry.find(
+                   @timer_session.time_entries.first.id
+                 ).hours.round(2)
   end
 
   test '#rebalance_entries - issues not changed - comments changed' do
-    @timer_session.update(comments: "Different comment")
+    @timer_session.update(comments: 'Different comment')
     TimeRebalancer.new(@timer_session.issue_ids, @timer_session).rebalance_entries
 
     assert_equal 'Different comment', TimeEntry.find(
@@ -60,7 +62,7 @@ class TimeRebalancerTest < ActiveSupport::TestCase
     issue_id = @issue.id
     assert_equal 1, TimerSessionTimeEntry.count
     assert_equal 1, TimerSessionIssue.count
-    
+
     TimeRebalancer.new([@issue.id.to_s], @timer_session).force_rebalance
 
     assert_equal 1, TimerSessionTimeEntry.count

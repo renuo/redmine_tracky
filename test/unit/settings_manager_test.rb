@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require File.expand_path('../test_helper', __dir__)
 
 class SettingsManagerTest < ActiveSupport::TestCase
-
   test '#rounding_for_displayed_hours - default' do
     assert_equal SettingsManager.rounding_for_displayed_hours, 2
   end

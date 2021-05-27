@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('../test_helper', __dir__)
 
 SimpleCov.command_name 'test:units'
@@ -23,10 +25,9 @@ class TimerSessionsFilterTest < ActiveSupport::TestCase
       timer_session_id: @timer_session.id
     )
 
-    @other_session= FactoryBot.create(:timer_session,
+    @other_session = FactoryBot.create(:timer_session,
                                        user: User.find(2),
-                                       timer_start: Time.zone.now - 15.days
-                                     )
+                                       timer_start: Time.zone.now - 15.days)
     TimerSessionIssue.create!(
       issue_id: @issue.id,
       timer_session_id: @other_session.id

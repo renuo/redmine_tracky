@@ -1,14 +1,15 @@
-require File.expand_path("../../application_system_test_case", __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../application_system_test_case', __dir__)
 
 SimpleCov.command_name 'test:system'
 
 class TimerManagementTest < ApplicationSystemTestCase
   fixtures :projects, :users, :email_addresses, :roles, :members, :member_roles,
-             :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
-             :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
-             :watchers, :journals, :journal_details, :versions,
-             :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions
-
+           :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
+           :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
+           :watchers, :journals, :journal_details, :versions,
+           :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions
 
   setup do
     log_user('admin', 'admin')
@@ -52,7 +53,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     timer_session.reload
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
-    refute TimerSession.last.finished?
+    assert_not TimerSession.last.finished?
     find('[data-timer-stop-button]').click
     assert has_content?(timer_session.comments)
     assert TimerSession.last.finished?
@@ -71,6 +72,6 @@ class TimerManagementTest < ApplicationSystemTestCase
     find('[data-timer-stop-button]').click
     assert has_content?(timer_session.comments)
     assert_equal(time.strftime(I18n.t('timer_sessions.formats.datetime_format')),
-      TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))
+                 TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))
   end
 end

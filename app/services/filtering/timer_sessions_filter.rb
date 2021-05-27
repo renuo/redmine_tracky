@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Filtering
   class TimerSessionsFilter < BaseFilter
     include Filtering::TimerSessions

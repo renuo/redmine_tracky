@@ -1,4 +1,6 @@
-require File.expand_path('../../test_helper', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../test_helper', __dir__)
 
 class TimerSessionsControllerTest < ActionController::TestCase
   tests TimerSessionsController
@@ -41,18 +43,18 @@ class TimerSessionsControllerTest < ActionController::TestCase
   end
 
   test 'index - with filter' do
-    get(:index, params: { 
-      filter: {
-        min_date: Time.zone.now.to_date + 10.days
-      }
-    })
+    get(:index, params: {
+          filter: {
+            min_date: Time.zone.now.to_date + 10.days
+          }
+        })
     assert_response 200
-    refute response.body.include?(@issue.subject)
-    refute response.body.include?(@timer_session.splittable_hours.round(2).to_s)
+    assert_not response.body.include?(@issue.subject)
+    assert_not response.body.include?(@timer_session.splittable_hours.round(2).to_s)
   end
 
   test 'update' do
-    put(:update,params: {id: @timer_session.id,timer_session: { comments: 'NEW IPA TOPIC'}}, xhr: true)
+    put(:update, params: { id: @timer_session.id, timer_session: { comments: 'NEW IPA TOPIC' } }, xhr: true)
 
     assert_response 200
     assert @timer_session.comments, 'NEW IPA TOPIC'
@@ -60,7 +62,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
 
   test 'update with invalid data' do
     comments = @timer_session.comments
-    put(:update,params: {id: @timer_session.id,timer_session: { comments: ''}}, xhr: true)
+    put(:update, params: { id: @timer_session.id, timer_session: { comments: '' } }, xhr: true)
 
     assert_response 200
     assert_equal @timer_session.comments, comments
@@ -70,7 +72,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
     delete(
       :destroy,
       params: {
-        id: @timer_session.id,
+        id: @timer_session.id
       }
     )
 
@@ -78,7 +80,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
   end
 
   test '#edit' do
-    get :edit, params: {id: @timer_session.id}, xhr: true
+    get :edit, params: { id: @timer_session.id }, xhr: true
 
     assert_response 200
   end
@@ -86,11 +88,10 @@ class TimerSessionsControllerTest < ActionController::TestCase
   test '#report' do
     post(
       :report,
-      params: {  work_report_query: {
+      params: { work_report_query: {
         date: Time.zone.now.to_date,
         period: 'week'
-        }
-      }
+      } }
     )
 
     assert_response 302
@@ -100,17 +101,17 @@ class TimerSessionsControllerTest < ActionController::TestCase
     post(
       :rebalance,
       params: {
-        id: @timer_session.id,
+        id: @timer_session.id
       }
     )
 
     assert_response 302
     assert_equal @timer_session.reload.time_entries.first.hours.round(2),
-      @timer_session.hours.round(2)
+                 @timer_session.hours.round(2)
   end
 
   test 'time_error' do
-    get(:time_error, params: { id: @timer_session.id}, xhr: true)
+    get(:time_error, params: { id: @timer_session.id }, xhr: true)
     assert_response 200
     assert response.body.include?(I18n.t('resolution_options.options',
                                          scope: 'timer_sessions.messaging.errors.discrepancy_in_time_sum'))

@@ -1,4 +1,6 @@
-require File.expand_path('../../test_helper', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../test_helper', __dir__)
 
 class TimerSessionsHelperTest < ActionView::TestCase
   tests TimerSessionsHelper
@@ -20,33 +22,30 @@ class TimerSessionsHelperTest < ActionView::TestCase
     assert_equal format_worked_hours(0.5), '0.50 h'
   end
 
-
   test '#select_options_for_work_period' do
-    assert_equal [["Day", :day], ["Week", :week], ["Month", :month], ["Year", :year]],
-      select_options_for_work_period
+    assert_equal [['Day', :day], ['Week', :week], ['Month', :month], ['Year', :year]],
+                 select_options_for_work_period
   end
 
   test '#format_block_date' do
-    assert_equal "Today", format_block_date(Time.zone.now.to_date)
+    assert_equal 'Today', format_block_date(Time.zone.now.to_date)
   end
 
   test '#format_block_date - non relative date' do
     assert_equal I18n.l(Time.zone.now.to_date + 2.days, format: I18n.t('timer_sessions.formats.date_with_year')),
-      format_block_date(Time.zone.now.to_date + 2.days)
+                 format_block_date(Time.zone.now.to_date + 2.days)
   end
-  
+
   test '#format_time_entry_information' do
-    assert_equal "#1: Cannot print recipes - 4.25 h",
-      format_time_entry_information(TimeEntry.first)
+    assert_equal '#1: Cannot print recipes - 4.25 h',
+                 format_time_entry_information(TimeEntry.first)
   end
 
   test '#sum_work_hours' do
     assert_equal 'Total Hours: 1.00 h', sum_work_hours([FactoryBot.create(:timer_session,
-                                       :with_issues,
-                                       :with_time_entries,
-                                       user: User.current
-                                      )])
-
+                                                                          :with_issues,
+                                                                          :with_time_entries,
+                                                                          user: User.current)])
   end
 
   test '#issue_link_list' do
