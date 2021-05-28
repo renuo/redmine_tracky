@@ -1,4 +1,4 @@
-class CreateTimerSessions < ActiveRecord::Migration[6.1]
+class CreateTimerSessions < ActiveRecord::Migration[5.2]
   def change
     create_table :timer_sessions do |t|
       t.integer :user_id, null: false
