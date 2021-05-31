@@ -58,7 +58,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
     } }, xhr: true
 
     assert_response 200
-    assert_not TimerSession.last.finished?
+    assert TimerSession.count, 0
     assert response.body.include?(I18n.t('activerecord.errors.models.timer_session.attributes.timer_start.after_end'))
   end
 
