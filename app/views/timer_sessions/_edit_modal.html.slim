@@ -7,17 +7,10 @@
           = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
           - if SettingsManager.visible_hints
             small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-          div[data-update-issue-selection-container]
-            - timer_session.issues.each do |issue|
-              .issue-container
-                label[for="timer_session_issue_id_#{issue.id}"]
-                  = issue.subject
-                input[id="timer_session_issue_id_#{issue.id}" readonly
-                  hidden
-                  name='timer_session[issue_ids][]'
-                  value=issue.id]
-                .input-group-text[data-update-issue-deletion-action]
-                  i.icon-only.icon-del
+          hr
+          = render 'shared/ticker_issue_list.html.slim', timer_session: timer_session,
+            data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container'
+    hr.mb-3
     = f.text_field :comments, data: { timer_comment_input: '' },
       placeholder: t('timer_sessions.messaging.comments_placeholder')
     br
@@ -38,5 +31,5 @@
     .mb-3
 
     .buttons
-      = link_to_function l(:button_cancel), 'hideModal(this);'
+      = link_to_function l(:button_cancel), 'hideModal(this);', class: 'btn btn-primary'
       = f.submit t('timer_sessions.edit.update'), data: { modal_update_button: '' }

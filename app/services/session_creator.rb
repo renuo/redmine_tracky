@@ -21,7 +21,11 @@ class SessionCreator
   private
 
   def timer_start_value
-    @params[:timer_start].presence || Time.zone.now
+    @params[:timer_start].presence || user_time_zone.now
+  end
+
+  def user_time_zone
+    @user.time_zone || Time.zone
   end
 
   def logger

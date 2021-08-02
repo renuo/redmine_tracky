@@ -54,7 +54,7 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   def start_before_end_date
     return if timer_start.blank? || timer_end.blank?
-    return if timer_start.before? timer_end
+    return if timer_end > timer_start
 
     errors.add(:timer_start, :after_end)
     errors.add(:timer_end, :before_start)

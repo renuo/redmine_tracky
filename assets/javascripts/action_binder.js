@@ -13,6 +13,7 @@ export default class ActionBinder {
             IssueCompleter.bind();
             TimerUpdater.bind();
             HoursTracker.bind();
+            IssueListHandler.bind();
         });
     }
 

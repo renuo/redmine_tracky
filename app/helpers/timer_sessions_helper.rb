@@ -52,10 +52,14 @@ module TimerSessionsHelper
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
   end
+  
+  def issue_information(issue)
+    "#{issue.id}: #{issue.subject}"
+  end
 
   def issue_link_list(issues)
     issues.map do |issue|
-      link_to issue.subject, issue_path(issue)
+      link_to issue_information(issue), issue_path(issue)
     end.join(', ')
   end
 end
