@@ -49,6 +49,6 @@ class TimerSessionsHelperTest < ActionView::TestCase
   end
 
   test '#issue_link_list' do
-    assert_equal '<a href="/issues/1">Cannot print recipes</a>', issue_link_list([Issue.first])
+    assert_equal ['<a href="/issues/1">Cannot print recipes</a>'], issue_link_list([Issue.first])
   end
 end
