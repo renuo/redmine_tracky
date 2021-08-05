@@ -42,7 +42,7 @@ class TimeTrackerController < TrackyController
   def handle_finished_timer_session
     @timer_session.update(finished: true)
     if @timer_session.valid?
-      split_time_and_respond_with_success(@current_timer_session)
+      split_time_and_respond_with_success(@timer_session)
     else
       render :start, layout: false
     end
@@ -67,7 +67,7 @@ class TimeTrackerController < TrackyController
   private
 
   def split_time_and_respond_with_success(timer_session)
-    time_splitter = TimeSplitter.new(@current_timer_session)
+    time_splitter = TimeSplitter.new(timer_session)
     time_splitter.create_time_entries
     flash[:notice] = l(:notice_successful_update)
     render :stop, layout: false
