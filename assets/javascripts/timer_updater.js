@@ -19,23 +19,23 @@ export default class TimerUpdater {
     }
 
     updateStartTime() {
-        $('[data-timer-start-input]').off('change');
-        $('[data-timer-start-input]').on('change', () => {
-            const element = $(event.target);
-            const inputValue = element.val();
+        $('[data-timer-start-input]').off('blur');
+        $('[data-timer-start-input]').on('blur', () => {
+            const element = event.target
+
             new TimerUpdater().sendUpdate({
-                timer_start: inputValue
+                timer_start: element.value
             });
         });
     }
 
     updateEndTime() {
-        $('[data-timer-end-input]').off('change');
-        $('[data-timer-end-input]').on('change', () => {
-            const element = $(event.target);
-            const inputValue = element.datetimepicker('getValue');
+        $('[data-timer-end-input]').off('blur');
+        $('[data-timer-end-input]').on('blur', () => {
+            const element = event.target;
+
             new TimerUpdater().sendUpdate({
-                timer_end: inputValue
+                timer_end: element.value
             });
         });
     }
@@ -55,8 +55,8 @@ export default class TimerUpdater {
     }
 
     updateComment() {
-        $('[data-timer-comment-input]').off('change');
-        $('[data-timer-comment-input]').on('change', () => {
+        $('[data-timer-comment-input]').off('blur');
+        $('[data-timer-comment-input]').on('blur', () => {
             const element = $(event.target);
             const inputValue = element.val();
             this.sendUpdate({
