@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
+  MAX_SUBJECT_LENGTH = 25
+
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
   end
@@ -54,12 +56,17 @@ module TimerSessionsHelper
   end
   
   def issue_information(issue)
-    "#{issue.id}: #{issue.subject}"
+    subject = issue.subject
+    "#{issue.id}: #{subject[0..MAX_SUBJECT_LENGTH]}#{subject_label_trail(subject)}"
+  end
+
+  def subject_label_trail(subject)
+    return '...' if subject.length > MAX_SUBJECT_LENGTH
   end
 
   def issue_link_list(issues)
     issues.map do |issue|
       link_to issue_information(issue), issue_path(issue)
-    end.join(', ')
+    end
   end
 end

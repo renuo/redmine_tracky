@@ -31,5 +31,6 @@
     .mb-3
 
     .buttons
-      = link_to_function l(:button_cancel), 'hideModal(this);', class: 'btn btn-primary'
       = f.submit t('timer_sessions.edit.update'), data: { modal_update_button: '' }
+      br.mt-3
+      = link_to_function l(:button_cancel), 'hideModal(this);', class: 'primary-cancel-button'

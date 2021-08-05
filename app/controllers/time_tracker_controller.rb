@@ -42,9 +42,7 @@ class TimeTrackerController < TrackyController
   def handle_finished_timer_session
     @timer_session.update(finished: true)
     if @timer_session.valid?
-      time_splitter = TimeSplitter.new(@timer_session)
-      time_splitter.create_time_entries
-      render :stop, layout: false
+      split_time_and_respond_with_success(@current_timer_session)
     else
       render :start, layout: false
     end
@@ -57,15 +55,30 @@ class TimeTrackerController < TrackyController
 
   def handle_stop
     if @current_timer_session.update(
-      timer_end: @current_timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || Time.zone.now,
+      timer_end: default_end_time_for_timer(@current_timer_session),
       finished: true
     )
-      time_splitter = TimeSplitter.new(@current_timer_session)
-      time_splitter.create_time_entries
-      render :stop, layout: false
+      split_time_and_respond_with_success(@current_timer_session)
     else
       render :update, layout: false
     end
+  end
+
+  private
+
+  def split_time_and_respond_with_success(timer_session)
+    time_splitter = TimeSplitter.new(@current_timer_session)
+    time_splitter.create_time_entries
+    flash[:notice] = l(:notice_successful_update)
+    render :stop, layout: false
+  end
+
+  def default_end_time_for_timer(current_timer_session)
+    (current_timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now).asctime
+  end
+
+  def user_time_zone
+    @current_user.time_zone || Time.zone
   end
 
   def set_current_user
