@@ -74,7 +74,7 @@ class TimeTrackerController < TrackyController
   end
 
   def default_end_time_for_timer(current_timer_session)
-    (current_timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now).asctime
+    (current_timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now.ascitime)
   end
 
   def user_time_zone
