@@ -5,7 +5,7 @@ module Filtering
     include Filtering::TimerSessions
 
     attribute :min_date, :date, default: Time.zone.now - 1.week
-    attribute :max_date, :date, default: Time.zone.now
+    attribute :max_date, :date, default: Time.zone.now.at_end_of_day
 
     private
 
