@@ -22,29 +22,21 @@
             - if SettingsManager.visible_hints
               small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
             hr
-            div[data-issue-selection-container]
-              - active_timer_session.issues.each do |issue|
-                .issue-container
-                  label[for="timer_session_issue_id_#{issue.id}"]
-                    = issue.subject
-                  input[id="timer_session_issue_id_#{issue.id}" readonly
-                    hidden
-                    name='timer_session[issue_ids][]'
-                    value=issue.id]
-                  .input-group-text[data-issue-deletion-action]
-                    i.icon-only.icon-del
+            = render 'shared/ticker_issue_list.html.slim', timer_session: active_timer_session,
+            data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container'
       .mb-3
       .row
-        .col
+        .col-12
           = f.text_field :comments, data: { timer_comment_input: '' },
             placeholder: t('timer_sessions.messaging.comments_placeholder'),
-            required: active_timer_session.persisted?
+            required: active_timer_session.persisted?, class: 'w-100'
           - if SettingsManager.visible_hints
             small.form-text.text-muted = t('timer_sessions.messaging.comments_hint')
       br
       .times-container
         .col
-          = f.text_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+          .w-100
+          = f.text_field :timer_start, class: 'datetime-picker w-100', data: { timer_start_input: '' },
             placeholder: t('timer_sessions.timer.date_placeholder'),
             required: active_timer_session.persisted?,
             value: active_timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
@@ -52,7 +44,7 @@
             small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
         br
         .col
-          = f.text_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+          = f.text_field :timer_end, class: 'datetime-picker w-100', data: { timer_end_input: '' },
             placeholder: t('timer_sessions.timer.date_placeholder'),
             required: active_timer_session.persisted?,
             value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))

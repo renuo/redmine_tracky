@@ -1,26 +1,27 @@
-# This will guess the User class
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :timer_session do
     timer_start { Time.zone.now - 1.hour }
     timer_end { Time.zone.now }
     sequence(:comments) { |n| "Working on - #{n} - tickets!" }
     finished { true }
-    user {  }
+    user {}
 
     trait :with_issues do
-      after(:create) do | timer_session |
+      after(:create) do |timer_session|
         TimerSessionIssue.create!(
-          timer_session_id: timer_session.id,
-          issue_id: Issue.first.id
+          timer_session: timer_session,
+          issue: Issue.first
         )
       end
     end
-    
+
     trait :with_time_entries do
-      after(:create) do | timer_session |
+      after(:create) do |timer_session|
         TimerSessionTimeEntry.create!(
-          timer_session_id: timer_session.id,
-          time_entry_id: TimeEntry.first.id
+          timer_session: timer_session,
+          time_entry: TimeEntry.first
         )
       end
     end

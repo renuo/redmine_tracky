@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('../test_helper', __dir__)
 
 class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
@@ -15,7 +17,7 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
 
   setup do
     User.current = User.find(1)
-    @timer_sessions = [1, 2, 3].map do | id |
+    @timer_sessions = [1, 2, 3].map do |id|
       timer_session = FactoryBot.create(:timer_session, user: User.current)
       TimerSessionTimeEntry.create!(
         timer_session_id: timer_session.id,
@@ -27,7 +29,7 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
       )
       timer_session
     end
-    @timer_sessions.each do | timer_session |
+    @timer_sessions.each do |timer_session|
       timer_session.time_entries.update(hours: timer_session.splittable_hours)
     end
   end

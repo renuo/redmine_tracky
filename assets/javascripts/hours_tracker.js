@@ -1,5 +1,4 @@
 export default class HoursTracker {
-
     static bind() {
         if (!$('[data-timer-id]').val()) {
             return;
@@ -88,7 +87,15 @@ export default class HoursTracker {
     }
 
     setTitle(time) {
-        document.title = `${window.RedmineTracky.documentTitle} - ${time}`;
+        const components = [window.RedmineTracky.documentTitle, this.workDescription(), time];
+        document.title = components.filter(el => {
+          return el != null && el != '';
+        }).join(' - ');
+    }
+
+    workDescription() {
+        const trackingSubject = $('[data-timer-comment-input]').val();
+        return trackingSubject;
     }
 
     formatTimer(timerObject) {

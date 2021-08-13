@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class TimeRebalancer
-  MIN_HOURS = 0.01
-
   def initialize(issues, timer_session)
     @issues = issues
     @timer_session = timer_session
@@ -39,7 +37,7 @@ class TimeRebalancer
 
   def update_times
     new_time = @timer_session.splittable_hours / @timer_session.issue_ids.count
-    @timer_session.errors.add(:timer_start, :too_short) if new_time < 0.01
+    @timer_session.errors.add(:timer_start, :too_short) if new_time < SettingsManager.min_hours_to_record
     return unless @timer_session.valid?
 
     @timer_session.time_entries.each do |time_entry|
@@ -77,7 +75,6 @@ class TimeRebalancer
   end
 
   def rebuild_connection
-    issue_connector = IssueConnector.new(@issues, @timer_session)
-    issue_connector.run
+    IssueConnector.new(@issues, @timer_session).run
   end
 end

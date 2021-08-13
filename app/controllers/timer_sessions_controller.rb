@@ -29,6 +29,7 @@ class TimerSessionsController < TrackyController
     @timer_session = TimerSession.find(params[:id])
     TimeRebalancer.new(@timer_session.issue_ids,
                        @timer_session).force_rebalance
+    flash[:notice] = l(:notice_successful_update)
     redirect_to timer_sessions_path
   end
 
@@ -36,6 +37,7 @@ class TimerSessionsController < TrackyController
     timer_session = TimerSession.find(params[:id])
     TimerEntityCleaner.new(timer_session).run
     timer_session.destroy
+    flash[:notice] = l(:notice_successful_delete)
     redirect_to timer_sessions_path
   end
 
@@ -54,6 +56,7 @@ class TimerSessionsController < TrackyController
     if @timer_session.update(timer_session_params)
       TimeRebalancer.new(timer_session_params[:issue_ids],
                          @timer_session).rebalance_entries
+      flash[:notice] = l(:notice_successful_update)
       render (@timer_session.valid? ? :update_redirect : :update), layout: false
     else
       render :update, layout: false
