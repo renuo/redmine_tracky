@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require File.expand_path('../test_helper', __dir__)
 
 class DisplayDateFormatBuilderTest < ActiveSupport::TestCase
-
   test 'format for same date' do
     formatter = DisplayDateFormatBuilder.new(
       Time.zone.local(2001, 2, 3, 4, 5, 6),

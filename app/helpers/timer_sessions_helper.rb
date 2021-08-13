@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
+  MAX_SUBJECT_LENGTH = 25
+
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
   end
@@ -27,17 +29,13 @@ module TimerSessionsHelper
   def format_block_date(date)
     current_date = Time.zone.now.to_date
     if current_date == date || current_date.yesterday == date || current_date.tomorrow == date
-      format_relative_date(date, current_date)
+      return I18n.t('timer_sessions.relative_times.tomorrow') if date == current_date.tomorrow
+      return I18n.t('timer_sessions.relative_times.yesterday') if date == current_date.yesterday
+
+      I18n.t('timer_sessions.relative_times.today')
     else
       I18n.l(date, format: I18n.t('timer_sessions.formats.date_with_year'))
     end
-  end
-
-  def format_relative_date(date, current_date)
-    return I18n.t('timer_sessions.relative_times.tomorrow') if date == current_date.tomorrow
-    return I18n.t('timer_sessions.relative_times.yesterday') if date == current_date.yesterday
-
-    I18n.t('timer_sessions.relative_times.today')
   end
 
   def format_time_entry_information(time_entry)
@@ -56,10 +54,19 @@ module TimerSessionsHelper
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
   end
+  
+  def issue_information(issue)
+    subject = issue.subject
+    "#{issue.id}: #{subject[0..MAX_SUBJECT_LENGTH]}#{subject_label_trail(subject)}"
+  end
+
+  def subject_label_trail(subject)
+    return '...' if subject.length > MAX_SUBJECT_LENGTH
+  end
 
   def issue_link_list(issues)
     issues.map do |issue|
-      link_to issue.subject, issue_path(issue)
-    end.join(', ')
+      link_to issue_information(issue), issue_path(issue)
+    end
   end
 end

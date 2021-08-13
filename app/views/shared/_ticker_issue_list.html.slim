@@ -1,0 +1,17 @@
+div*{ container_data_anker => '' }
+  table
+    - timer_session.issues.each do |issue|
+      tr
+      .issue-container
+        label[for="timer_session_issue_id_#{issue.id}"]
+          td
+            b = link_to issue.id, issue_path(issue.id)
+          td
+            = issue.subject
+          td
+            span.text-danger.input-group-text*{ data_anker => '' }
+              i.icon-only.icon-del
+            input[id="timer_session_issue_id_#{issue.id}" readonly
+              hidden
+              name='timer_session[issue_ids][]'
+              value=issue.id]

@@ -14,7 +14,6 @@ Redmine::Plugin.register :redmine_tracky do
 
   requires_redmine version_or_higher: '4.0.0'
 
-
   project_module :redmine_tracky do
     permission :view_polls, polls: :index
     permission :vote_polls, polls: :vote
@@ -24,7 +23,8 @@ Redmine::Plugin.register :redmine_tracky do
     'displayed_hours_rounding' => 2,
     'max_hours_recorded_per_day' => 24,
     'max_hours_recorded_per_session' => 24,
-    'visible_hints' => true
+    'visible_hints' => true,
+    'min_hours_to_record' => 0.01
   }
 
   # Suggestions and examples for init.rb taken from:
@@ -38,10 +38,10 @@ Redmine::Plugin.register :redmine_tracky do
   settings default: default_settings, partial: 'settings/redmine_tracky_settings'
 
   menu :application_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
-    caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
+       caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
 
   menu :top_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
-    caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
+       caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
 
   project_module :timer_sessions do
     permission :manage_timer_sessions, {
@@ -66,15 +66,15 @@ Redmine::Plugin.register :redmine_tracky do
     }, require: :loggedin
 
     permission :query_report, {
-      timer_sessions: %i[report],
+      timer_sessions: %i[report]
     }, require: :loggedin
 
     permission :edit_timer_sessions, {
-      timer_sessions: %i[update patch edit time_error rebalance],
+      timer_sessions: %i[update patch edit time_error rebalance]
     }, require: :loggedin
 
-    permission :delete_timer_sessions,{
-      timer_sessions: %i[destroy],
+    permission :delete_timer_sessions, {
+      timer_sessions: %i[destroy]
     }, require: :loggedin
   end
 end

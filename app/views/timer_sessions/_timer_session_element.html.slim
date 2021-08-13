@@ -1,6 +1,9 @@
 tr[class=('error-block' if @non_matching_timer_sessions[timer_session.id])]
-  td == issue_link_list(timer_session.issues)
-  td[colspan='3'] = timer_session.comments
+  td.td-px-0
+    - issue_link_list(timer_session.issues).each do |issue_link|
+      = issue_link
+      br
+  td = timer_session.comments
   td = format_session_time(timer_session.timer_start, timer_session.timer_end)
   td = format_worked_hours(timer_session.splittable_hours)
   td

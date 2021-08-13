@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Taken from Renuo - Hillary Project
 module Filtering
   class BaseFilter

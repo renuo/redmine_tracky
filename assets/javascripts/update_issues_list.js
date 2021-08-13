@@ -34,13 +34,14 @@ export default class UpdateIssuesList {
     static buildNewIssueElement(id, label) {
         return $(`
         <div class="issue-container">
-					<label for='timer_session_issue_id_${id}'>${label}</label>
+					<label for='timer_session_issue_id_${id}'>${label}
+					<span class="input-group-text text-danger" ${UpdateIssuesList.issueDeletionButton()}="">
+						<i class="icon-only icon-del"></i>
+					</span>
           <input hidden data-issue-element='${id}'
 					id='timer_session_issue_id_${id}'
-          class="ml-10 form-control" readonly name="${IssueListHandler.elementID()}[]" value="${id}"/>
-					<div class="input-group-text" ${IssueListHandler.issueDeletionButton()}="">
-						<i class="icon-only icon-del"></i>
-					</div>
+          class="ml-10 form-control" readonly name="${UpdateIssuesList.elementID()}[]" value="${id}"/>
+          </label>
         </div>
     `);
     }

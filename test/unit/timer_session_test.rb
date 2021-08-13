@@ -1,9 +1,10 @@
-require File.expand_path('../../test_helper', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../test_helper', __dir__)
 
 class TimerSessionTest < ActiveSupport::TestCase
-
   fixtures :projects, :users, :email_addresses, :user_preferences, :members, :member_roles, :roles,
-            :issues,
+           :issues,
            :time_entries
 
   setup do
@@ -22,7 +23,7 @@ class TimerSessionTest < ActiveSupport::TestCase
 
   test '#session_finished?' do
     assert_equal @timer_session.session_finished?, true
-    
+
     @timer_session.timer_end = nil
     assert_equal @timer_session.session_finished?, false
   end
@@ -36,24 +37,24 @@ class TimerSessionTest < ActiveSupport::TestCase
   test 'comment_present' do
     assert @timer_session.valid?
     @timer_session.comments = nil
-    refute @timer_session.valid?
+    assert_not @timer_session.valid?
   end
 
   test 'issues_selected' do
     assert @timer_session.valid?
     @timer_session.issues.destroy_all
-    refute @timer_session.valid?
+    assert_not @timer_session.valid?
   end
 
   test 'start_before_end_date' do
     assert @timer_session.valid?
     @timer_session.timer_start = @timer_session.timer_end
-    refute @timer_session.valid?
+    assert_not @timer_session.valid?
   end
 
   test 'limit_recorded_hours' do
     assert @timer_session.valid?
     @timer_session.update(timer_end: Time.zone.now + 2.days)
-    refute @timer_session.valid?
+    assert_not @timer_session.valid?
   end
 end
