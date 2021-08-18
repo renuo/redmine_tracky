@@ -52,7 +52,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     find('[data-timer-session-continue-button]', match: :first).click
     assert_equal 4, TimerSession.count
     assert_equal 4, TimerSessionIssue.count
-    assert_equal TimerSession.first.comment, TimerSession.last.comment
+    assert_equal TimerSession.first.comments, TimerSession.last.comments
   end
 
   test 'destroy' do
