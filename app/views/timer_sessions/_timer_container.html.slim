@@ -10,19 +10,20 @@
       = f.hidden_field :id, data: { timer_id: '' }
       = error_messages_for active_timer_session
       - if active_timer_session.timer_start
-        .text-center
+        .text-center.mb-3
           div[data-hours-timer]
             h1
-              span#hours-clock
+              span#hours-clock.left-text
+                | ??:??
       .row
         .issue-container
           .box
+            = render 'shared/ticker_issue_list.html.slim', timer_session: active_timer_session,
+            data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container'
+            hr
             = f.text_field :issue_id, label: false, required: active_timer_session.persisted?
             - if SettingsManager.visible_hints
               small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-            hr
-            = render 'shared/ticker_issue_list.html.slim', timer_session: active_timer_session,
-            data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container'
       .mb-3
       .row
         .col-12

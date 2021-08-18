@@ -4,12 +4,12 @@
     .row
       .update-issue-container
         .box
+          = render 'shared/ticker_issue_list.html.slim', timer_session: timer_session,
+            data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container'
+          hr
           = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
           - if SettingsManager.visible_hints
             small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-          hr
-          = render 'shared/ticker_issue_list.html.slim', timer_session: timer_session,
-            data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container'
     hr.mb-3
     = f.text_field :comments, data: { timer_comment_input: '' },
       placeholder: t('timer_sessions.messaging.comments_placeholder')

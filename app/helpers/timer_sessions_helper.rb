@@ -46,10 +46,7 @@ module TimerSessionsHelper
   def sum_work_hours(timer_sessions)
     total_hours = number_with_precision(
       timer_sessions
-      .sum do |timer_session|
-        number_with_precision(timer_session.splittable_hours,
-                              precision: precision_for_display_hours).to_f
-      end,
+      .sum(&:splittable_hours),
       precision: precision_for_display_hours
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
