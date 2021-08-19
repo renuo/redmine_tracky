@@ -35,6 +35,7 @@ class TimeSplitter
   # Accessed on: 07.05.2021
   def default_activity(time_entry)
     time_entry.activity ||= TimeEntryActivity.default
+    time_entry.activity ||= TimeEntryActivity.where(name: 'Development').first
     time_entry.activity ||= TimeEntryActivity.where(name: 'Entwicklung').first
     time_entry.activity ||= TimeEntryActivity.where(parent_id: nil, project_id: nil).first
     time_entry
