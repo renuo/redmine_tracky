@@ -15,6 +15,7 @@ export default class TimerUpdater {
     setupUpdaters() {
         this.updateComment();
         this.updateStartTime();
+        this.updateAbsoluteTime();
         this.updateEndTime();
     }
 
@@ -25,6 +26,17 @@ export default class TimerUpdater {
 
             new TimerUpdater().sendUpdate({
                 timer_start: element.value
+            });
+        });
+    }
+
+    updateAbsoluteTime() {
+        $('[data-timer-absolute-time-input]').off('blur');
+        $('[data-timer-absolute-time-input]').on('blur', () => {
+            const element = event.target;
+
+            new TimerUpdater().sendUpdate({
+                absolute_time: element.value
             });
         });
     }

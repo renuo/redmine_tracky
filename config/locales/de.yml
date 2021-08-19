@@ -6,6 +6,7 @@ de:
         timer_start: Start der Arbeitszeit
         timer_end: Ende der Arbeitszeit
         comments: Beschreibung der geleisteten Arbeit
+        absolute_time: Absolut erfasste Zeit
       work_report_query:
         date: Auswertungsdatum
         period: Auswertungsperiode
@@ -48,6 +49,9 @@ de:
       timer_end_hint: Wenn du dieses Feld mein Stoppen leer lässt, wird die aktuelle Zeit verwendet
       issue_list_hint: Falls du mehr als ein Issue auswählst, splitten wir die Zeit auf die Issues aufgeteilt
       no_time_entries_found: Es wurden keine Zeiteinträge gefunden!
+      timer_absolute_time_hint: |- 
+        Wenn du dieses Field füllst, wird der aktuelle Startzeitpunkt verschoben um die absolut gesetzte Dauer der Erfassung zu erhalten.
+        Sollte kein Endzeitpunkt gegeben sein, wird die aktuelle Zeit verwendet.
       errors:
         permission:
           not_allowed: Du hast keine Berechtigung um diese Aktion auszufüren!
@@ -68,6 +72,7 @@ de:
       stop: Stop
       cancel: Abbrechen
       date_placeholder: 'dd.mm.yyyy hh:mm'
+      absolute_time_placeholder: '0.75'
       current: "Aktuelle Arbeitserfassung: "
     index:
       title: Tracky

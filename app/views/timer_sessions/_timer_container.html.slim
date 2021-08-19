@@ -50,6 +50,11 @@
             value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
           - if SettingsManager.visible_hints
             small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
+      - if f.object.persisted?
+        = f.text_field :absolute_time, class: 'w-100', data: { timer_absolute_time_input: '' },
+          placeholder: t('timer_sessions.timer.absolute_time_placeholder')
+        - if SettingsManager.visible_hints
+          small.form-text.text-muted = t('timer_sessions.messaging.timer_absolute_time_hint')
       .mb-3
       - if timer_session
         div[data-ending-action-buttons]

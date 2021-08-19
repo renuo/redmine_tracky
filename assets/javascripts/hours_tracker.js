@@ -57,11 +57,9 @@ export default class HoursTracker {
         return timerObject;
     }
 
-    // TODO: rewrite and implement cleaner
     tickTimer(timerObject) {
         const updateTime = () => {
             const [difference, tick] = this.timeDifference();
-            console.log(difference);
             this.displayTimer(difference);
         };
 
