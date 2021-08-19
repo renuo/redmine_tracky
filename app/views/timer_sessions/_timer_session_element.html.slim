@@ -5,7 +5,7 @@ tr[class=('error-block' if @non_matching_timer_sessions[timer_session.id])]
       br
   td = timer_session.comments
   td = format_session_time(timer_session.timer_start, timer_session.timer_end)
-  td = format_worked_hours(timer_session.recorded_hours)
+  td = format_worked_hours(timer_session.splittable_hours)
   td
     = link_to timer_sessions_continue_path(timer_session),
       method: :post,

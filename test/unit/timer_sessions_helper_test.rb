@@ -46,7 +46,6 @@ class TimerSessionsHelperTest < ActionView::TestCase
         :with_issues,
         :with_time_entries,
         user: User.current)
-    p timer_session.recorded_hours
     assert_equal 'Total Hours: 1.00 h', sum_work_hours([timer_session])
   end
 
