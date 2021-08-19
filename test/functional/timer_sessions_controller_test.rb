@@ -60,6 +60,13 @@ class TimerSessionsControllerTest < ActionController::TestCase
     assert @timer_session.comments, 'NEW IPA TOPIC'
   end
 
+  test 'continue' do
+    start_timer_sessions_count = TimerSession.all.count
+    post(:continue, params: { id: @timer_session.id })
+    assert_response 302
+    assert TimerSession.all.count, start_timer_sessions_count + 1
+  end
+
   test 'update with invalid data' do
     comments = @timer_session.comments
     put(:update, params: { id: @timer_session.id, timer_session: { comments: '' } }, xhr: true)

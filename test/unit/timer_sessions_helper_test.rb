@@ -42,10 +42,12 @@ class TimerSessionsHelperTest < ActionView::TestCase
   end
 
   test '#sum_work_hours' do
-    assert_equal 'Total Hours: 1.00 h', sum_work_hours([FactoryBot.create(:timer_session,
-                                                                          :with_issues,
-                                                                          :with_time_entries,
-                                                                          user: User.current)])
+    timer_session = FactoryBot.create(:timer_session,
+        :with_issues,
+        :with_time_entries,
+        user: User.current)
+    p timer_session.recorded_hours
+    assert_equal 'Total Hours: 1.00 h', sum_work_hours([timer_session])
   end
 
   test '#issue_link_list' do
