@@ -11,6 +11,7 @@ en:
         timer_start: Start of session
         timer_end: End of session
         comments: Description of your work
+        absolute_time: Absolute hours of work
       work_report_query:
         date: Query Date
         period: Query Period
@@ -53,6 +54,9 @@ en:
       timer_end_hint: If you leave this empty on stop, the current time is used
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
       no_time_entries_found: No time entries found
+      timer_absolute_time_hint: |- 
+        If you set this value it will re-arange the start time of the session to match the absolute duration from the current end time.
+        If no end time is given it will use the current time.
       errors:
         permission:
           no_access: You are not allowed to access this action
@@ -72,6 +76,7 @@ en:
       stop: Stop
       cancel: Cancel
       date_placeholder: 'dd.mm.yyyy hh:mm'
+      absolute_time_placeholder: '0.75'
       current: 'Current Timer:'
     index:
       title: Tracky

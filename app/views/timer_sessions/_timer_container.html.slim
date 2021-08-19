@@ -10,19 +10,20 @@
       = f.hidden_field :id, data: { timer_id: '' }
       = error_messages_for active_timer_session
       - if active_timer_session.timer_start
-        .text-center
+        .text-center.mb-3
           div[data-hours-timer]
             h1
-              span#hours-clock
+              span#hours-clock.left-text
+                | ??:??
       .row
         .issue-container
           .box
+            = render 'shared/ticker_issue_list.html.slim', timer_session: active_timer_session,
+            data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container'
+            hr
             = f.text_field :issue_id, label: false, required: active_timer_session.persisted?
             - if SettingsManager.visible_hints
               small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-            hr
-            = render 'shared/ticker_issue_list.html.slim', timer_session: active_timer_session,
-            data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container'
       .mb-3
       .row
         .col-12
@@ -49,6 +50,11 @@
             value: active_timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
           - if SettingsManager.visible_hints
             small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
+      - if f.object.persisted?
+        = f.text_field :absolute_time, class: 'w-100', data: { timer_absolute_time_input: '' },
+          placeholder: t('timer_sessions.timer.absolute_time_placeholder')
+        - if SettingsManager.visible_hints
+          small.form-text.text-muted = t('timer_sessions.messaging.timer_absolute_time_hint')
       .mb-3
       - if timer_session
         div[data-ending-action-buttons]

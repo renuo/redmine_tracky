@@ -26,7 +26,7 @@ class TimerSessionsController < TrackyController
   end
 
   def rebalance
-    @timer_session = TimerSession.find(params[:id])
+    @timer_session = user_scoped_timer_session(params[:id])
     TimeRebalancer.new(@timer_session.issue_ids,
                        @timer_session).force_rebalance
     flash[:notice] = l(:notice_successful_update)
@@ -34,7 +34,7 @@ class TimerSessionsController < TrackyController
   end
 
   def destroy
-    timer_session = TimerSession.find(params[:id])
+    timer_session = user_scoped_timer_session(params[:id])
     TimerEntityCleaner.new(timer_session).run
     timer_session.destroy
     flash[:notice] = l(:notice_successful_delete)
@@ -42,17 +42,28 @@ class TimerSessionsController < TrackyController
   end
 
   def edit
-    @timer_session = TimerSession.find(params[:id])
+    @timer_session = user_scoped_timer_session(params[:id])
     render :edit, layout: false
   end
 
   def time_error
-    @timer_session = TimerSession.find(params[:id])
+    @timer_session = user_scoped_timer_session(params[:id])
     render :time_error, layout: false
   end
 
+  def continue
+    timer_session_template = user_scoped_timer_session(params[:id])
+    linked_issues = timer_session_template.timer_session_issues
+    new_timer_session = timer_session_template.dup
+    new_timer_session.update(timer_end: nil,
+                             finished: false,
+                             timer_start: (@current_user.time_zone || Time.zone).now.asctime)
+    IssueConnector.new(linked_issues.map(&:issue_id) || [], new_timer_session).run
+    redirect_to timer_sessions_path
+  end
+
   def update
-    @timer_session = TimerSession.find(params[:id])
+    @timer_session = user_scoped_timer_session(params[:id])
     if @timer_session.update(timer_session_params)
       TimeRebalancer.new(timer_session_params[:issue_ids],
                          @timer_session).rebalance_entries
@@ -67,6 +78,10 @@ class TimerSessionsController < TrackyController
 
   def set_current_user
     @current_user = User.current
+  end
+
+  def user_scoped_timer_session(id)
+    TimerSession.created_by(@current_user).find(id)
   end
 
   def set_current_timer_session

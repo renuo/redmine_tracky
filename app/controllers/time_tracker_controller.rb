@@ -19,6 +19,10 @@ class TimeTrackerController < TrackyController
 
   def update
     @current_timer_session.update(timer_params)
+    if timer_params[:absolute_time]
+      @current_timer_session.update_with_absolute_time!(timer_params[:absolute_time])
+      @current_timer_session.absolute_time = nil
+    end
     render :update, layout: false
   end
 
@@ -93,6 +97,7 @@ class TimeTrackerController < TrackyController
     params.require(:timer_session).permit(:comments,
                                           :timer_start,
                                           :timer_end,
+                                          :absolute_time,
                                           issue_ids: [])
   end
 

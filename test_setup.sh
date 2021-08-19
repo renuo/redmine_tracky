@@ -59,3 +59,4 @@ cd $PATH_TO_REDMINE
 # bundle exec rake TEST=test/unit/role_test.rb
 bundle exec rake redmine:plugins:test:units NAME=redmine_tracky
 bundle exec rake redmine:plugins:test:functionals NAME=redmine_tracky
+bundle exec rake redmine:plugins:test:system NAME=redmine_tracky

@@ -57,19 +57,10 @@ export default class HoursTracker {
         return timerObject;
     }
 
-    // TODO: rewrite and implement cleaner
     tickTimer(timerObject) {
         const updateTime = () => {
-            timerObject.seconds += 1;
-            if (timerObject.seconds >= 60) {
-                timerObject.seconds = 0;
-                timerObject.minutes += 1;
-                if (timerObject.minutes >= 60) {
-                    timerObject.minutes = 0;
-                    timerObject.hours += 1;
-                }
-            }
-            this.displayTimer(timerObject);
+            const [difference, tick] = this.timeDifference();
+            this.displayTimer(difference);
         };
 
         window.timerInterval = setInterval(updateTime, 1000);

@@ -28,6 +28,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
     find('[data-timer-cancel-button]').click
+    page.driver.browser.switch_to.alert.accept
     assert has_content?(I18n.t('timer_sessions.timer.start'))
   end
 
