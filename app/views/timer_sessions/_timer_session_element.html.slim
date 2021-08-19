@@ -7,10 +7,11 @@ tr[class=('error-block' if @non_matching_timer_sessions[timer_session.id])]
   td = format_session_time(timer_session.timer_start, timer_session.timer_end)
   td = format_worked_hours(timer_session.splittable_hours)
   td
-    = link_to timer_sessions_continue_path(timer_session),
-      method: :post,
-      data: { timer_session_continue_button: '' }  do
-      .icon-only.icon-arrow-right
+    - if @permission_manager.can?(:continue, :timer_sessions)
+      = link_to timer_sessions_continue_path(timer_session),
+        method: :post,
+        data: { timer_session_continue_button: '' }  do
+        .icon-only.icon-arrow-right
     - if @permission_manager.can?(:edit, :timer_sessions)
       = link_to edit_timer_session_path(timer_session), data: { timer_session_edit_button: '' },
         remote: true do
