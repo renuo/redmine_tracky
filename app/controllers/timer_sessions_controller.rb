@@ -36,16 +36,18 @@ class TimerSessionsController < TrackyController
     @timer_session = user_scoped_timer_session(params[:id])
     TimeRebalancer.new(@timer_session.issue_ids,
                        @timer_session).force_rebalance
-    flash[:notice] = l(:notice_successful_update)
-    redirect_to timer_sessions_path
+    redirect_response(@timer_session, timer_sessions_path) do
+      flash[:notice] = l(:notice_successful_update)
+    end
   end
 
   def destroy
     timer_session = user_scoped_timer_session(params[:id])
     TimerEntityCleaner.new(timer_session).run
     timer_session.destroy
-    flash[:notice] = l(:notice_successful_delete)
-    redirect_to timer_sessions_path
+    redirect_response(@timer_session, timer_sessions_path) do
+      flash[:notice] = l(:notice_successful_delete)
+    end
   end
 
   def edit
@@ -77,7 +79,8 @@ class TimerSessionsController < TrackyController
                              finished: false,
                              timer_start: (@current_user.time_zone || Time.zone).now.asctime)
     IssueConnector.new(linked_issues.map(&:issue_id) || [], new_timer_session).run
-    redirect_to timer_sessions_path
+
+    redirect_response(@timer_session, timer_sessions_path)
   end
 
   def update

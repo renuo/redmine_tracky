@@ -69,7 +69,7 @@ class TimeTrackerController < TrackyController
     time_splitter = TimeSplitter.new(timer_session)
     time_splitter.create_time_entries
 
-    layout_response(@current_timer_session, :stop)
+    layout_response(timer_session, :stop)
   end
 
   def default_end_time_for_timer(current_timer_session)

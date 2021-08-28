@@ -53,4 +53,22 @@ class TrackyController < ApplicationController
       format.html
     end
   end
+
+  def redirect_response(timer_session, path)
+    yield if block_given?
+    respond_to do |format|
+      format.api do
+        render json: formatted_api_response(
+          timer_session,
+          200
+        )
+      end
+
+      format.js
+
+      format.html do
+        redirect_to path
+      end
+    end
+  end
 end
