@@ -46,7 +46,7 @@ bundle exec rails db:create
 bundle exec rake db:migrate
 
 # run plugin database migrations
-bundle exec rake redmine:plugins:migrate
+bundle exec rake redmine:plugins:redmine_tracky:install
 
 # install redmine database
 #bundle exec rake redmine:load_default_data REDMINE_LANG=en
