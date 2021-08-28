@@ -17,14 +17,14 @@ class TimerSessionEntryComponent < ViewComponent::Base
   end
 
   def can_destroy_entry?
-    permission_manager.can?(:destroy, :timer_session_entrys)
+    permission_manager.can?(:destroy, :timer_sessions)
   end
 
   def can_edit_entry?
-    permission_manager.can?(:edit, :timer_session_entrys)
+    permission_manager.can?(:edit, :timer_sessions)
   end
 
   def can_continue_entry?
-    permission_manager.can?(:continue, :timer_session_entrys)
+    permission_manager.can?(:continue, :timer_sessions)
   end
 end
