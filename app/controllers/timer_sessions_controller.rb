@@ -2,6 +2,7 @@
 
 class TimerSessionsController < TrackyController
   before_action :set_current_timer_session
+  accept_api_auth %i[index rebalance destroy edit continue update]
 
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries)
@@ -10,6 +11,19 @@ class TimerSessionsController < TrackyController
     @timer_sessions = apply_filter(@timer_sessions_in_range)
                       .order(timer_start: :desc)
                       .group_by { |entry| entry.timer_start&.to_date }
+
+    respond_to do |format|
+      format.api do
+        render json: {
+          timer_sessions: @timer_session.to_json,
+          current_timer_session: @current_timer_session&.to_json,
+          status_code: 200
+        }
+      end
+
+      format.html
+      format.js
+    end
   end
 
   def report
@@ -36,12 +50,12 @@ class TimerSessionsController < TrackyController
 
   def edit
     @timer_session = user_scoped_timer_session(params[:id])
-    render :edit, layout: false
+    layout_response(@timer_session, :edit)
   end
 
   def time_error
     @timer_session = user_scoped_timer_session(params[:id])
-    render :time_error, layout: false
+    layout_response(@timer_session, :time_error)
   end
 
   def load_non_matching_timer_sessions(timer_sessions)
@@ -71,10 +85,11 @@ class TimerSessionsController < TrackyController
     if @timer_session.update(timer_session_params)
       TimeRebalancer.new(timer_session_params[:issue_ids],
                          @timer_session).rebalance_entries
-      flash[:notice] = l(:notice_successful_update)
-      render (@timer_session.valid? ? :update_redirect : :update), layout: false
+      layout_response(@timer_session, @timer_session.valid? ? :update_redirect : :update) do
+        flash[:notice] = l(:notice_successful_update)
+      end
     else
-      render :update, layout: false
+      layout_response(@timer_session, :update)
     end
   end
 

@@ -2,6 +2,7 @@
 
 class TimeTrackerController < TrackyController
   before_action :set_current_timer_session
+  accept_api_auth %i[start stop update]
 
   def start
     start_timer
@@ -21,7 +22,8 @@ class TimeTrackerController < TrackyController
       @current_timer_session.update_with_absolute_time!(timer_params[:absolute_time])
       @current_timer_session.absolute_time = nil
     end
-    render :update, layout: false
+
+    layout_response(@current_timer_session, :update)
   end
 
   private
@@ -30,15 +32,12 @@ class TimeTrackerController < TrackyController
     @timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
     issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
     if issue_connector.run
-      if @timer_session.session_finished?
-        handle_finished_timer_session
-      else
-        render :start, layout: false
-      end
+      handle_finished_timer_session and return if @timer_session.session_finished?
     else
       @timer_session.errors.add(:issue_id, :invalid)
-      render :start, layout: false
     end
+
+    layout_response(@timer_session, :start)
   end
 
   def handle_finished_timer_session
@@ -46,13 +45,13 @@ class TimeTrackerController < TrackyController
     if @timer_session.valid?
       split_time_and_respond_with_success(@timer_session)
     else
-      render :start, layout: false
+      layout_response(@current_timer_session, :start)
     end
   end
 
   def handle_cancel
     @current_timer_session.destroy
-    render :cancel, layout: false
+    layout_response(@current_timer_session, :cancel)
   end
 
   def handle_stop
@@ -62,15 +61,15 @@ class TimeTrackerController < TrackyController
     )
       split_time_and_respond_with_success(@current_timer_session)
     else
-      render :update, layout: false
+      layout_response(@current_timer_session, :update)
     end
   end
 
   def split_time_and_respond_with_success(timer_session)
     time_splitter = TimeSplitter.new(timer_session)
     time_splitter.create_time_entries
-    flash[:notice] = l(:notice_successful_update)
-    render :stop, layout: false
+
+    layout_response(@current_timer_session, :stop)
   end
 
   def default_end_time_for_timer(current_timer_session)

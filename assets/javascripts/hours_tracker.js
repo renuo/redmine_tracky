@@ -91,7 +91,7 @@ export default class HoursTracker {
 
     formatTimer(timerObject) {
         const minutes = this.padNumber(timerObject.minutes, 2);
-        const seconds = this.padNumber(timerObject.seconds, 2);
+        const seconds = this.padNumber(Math.abs(timerObject.seconds), 2);
         if (timerObject.hours > 0) {
             return `${timerObject.hours}:${minutes}:${seconds}`;
         } else {
