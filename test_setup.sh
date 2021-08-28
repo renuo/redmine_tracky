@@ -6,6 +6,12 @@ PATH_TO_REDMINE=$TESTSPACE/redmine
 NAME_OF_PLUGIN=redmine_tracky
 PATH_TO_PLUGIN=$PWD
 REDMINE_VER=master
+RERUN=false
+
+if [ -d "$TESTSPACE" ]; then
+	echo "RERUN OF TESTS"
+	RERUN=true
+fi
 
 mkdir -p $TESTSPACE
 
@@ -31,27 +37,31 @@ fi
 
 git pull
 
-# create a link to the backlogs plugin
+# update plugin implementation
+rm -rf $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 cp -R $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 
-mv $TESTSPACE/database.yml.semaphore config/database.yml
-mv $TESTSPACE/additional_environment.rb config/
+if ! $RERUN
+then
+	echo "INSTALL DATABASE"
+	mv $TESTSPACE/database.yml.semaphore config/database.yml
+	mv $TESTSPACE/additional_environment.rb config/
 
-# install gems
-bundle install
+	# install gems
+	bundle install
 
-bundle exec rails db:create
+	bundle exec rails db:create
 
-# run redmine database migrations
-bundle exec rake db:migrate
+	# run redmine database migrations
+	bundle exec rake db:migrate
 
-# run plugin database migrations
-bundle exec rake redmine:plugins:redmine_tracky:install
+	# run plugin database migrations
+	bundle exec rake redmine:plugins:redmine_tracky:install
 
-# install redmine database
-#bundle exec rake redmine:load_default_data REDMINE_LANG=en
-
-bundle exec rake db:structure:dump
+	# install redmine database
+	#bundle exec rake redmine:load_default_data REDMINE_LANG=en
+	bundle exec rake db:structure:dump
+fi
 
 cd $PATH_TO_REDMINE
 

@@ -4,5 +4,4 @@
     b.float-right = sum_work_hours(Array.wrap(timer_sessions))
   table.list.timer-sessions-table
     tbody
-      - Array.wrap(timer_sessions).each do |timer_session|
-        = render 'timer_session_element', timer_session: timer_session
+      = render TimerSessionEntryComponent.with_collection(timer_sessions, permission_manager: @permission_manager)

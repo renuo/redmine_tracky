@@ -23,7 +23,7 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   before_save :set_recorded_hours
 
-  attr_accessor :issue_id, :absolute_time
+  attr_accessor :issue_id, :absolute_time, :discrepancy_detected
 
   def splittable_hours
     ((timer_end || Time.zone.now) - timer_start) / 1.hour
@@ -38,12 +38,11 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def update_with_absolute_time!(absolute_time)
-    absolute_recorded_time =  Float(absolute_time, exception: false)
+    absolute_recorded_time = Float(absolute_time, exception: false)
+    return unless absolute_recorded_time
 
-    if absolute_recorded_time
-      current_end_time = (timer_end || (user.time_zone || Time.zone).now.asctime).to_datetime
-      update(timer_start: current_end_time - absolute_recorded_time.hours)
-    end
+    current_start_time = (timer_end || (user.time_zone || Time.zone).now.asctime).to_datetime
+    update(timer_end: current_start_time + absolute_recorded_time.hours)
   end
 
   private

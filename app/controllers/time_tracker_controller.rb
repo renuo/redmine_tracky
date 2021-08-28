@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class TimeTrackerController < TrackyController
-  before_action :set_current_user
   before_action :set_current_timer_session
-  before_action :set_permission_manager
 
   def start
     start_timer
@@ -68,8 +66,6 @@ class TimeTrackerController < TrackyController
     end
   end
 
-  private
-
   def split_time_and_respond_with_success(timer_session)
     time_splitter = TimeSplitter.new(timer_session)
     time_splitter.create_time_entries
@@ -79,14 +75,6 @@ class TimeTrackerController < TrackyController
 
   def default_end_time_for_timer(current_timer_session)
     (current_timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now.asctime)
-  end
-
-  def user_time_zone
-    @current_user.time_zone || Time.zone
-  end
-
-  def set_current_user
-    @current_user = User.current
   end
 
   def set_current_timer_session
@@ -99,9 +87,5 @@ class TimeTrackerController < TrackyController
                                           :timer_end,
                                           :absolute_time,
                                           issue_ids: [])
-  end
-
-  def set_permission_manager
-    @permission_manager = PermissionManager.new
   end
 end

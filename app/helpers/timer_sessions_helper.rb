@@ -34,7 +34,7 @@ module TimerSessionsHelper
 
       I18n.t('timer_sessions.relative_times.today')
     else
-      I18n.l(date, format: I18n.t('timer_sessions.formats.date_with_year'))
+      I18n.l(date, format: I18n.t('timer_sessions.formats.date_with_year_and_weekday'))
     end
   end
 
@@ -51,7 +51,7 @@ module TimerSessionsHelper
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
   end
-  
+
   def issue_information(issue)
     subject = issue.subject
     "#{issue.id}: #{subject[0..MAX_SUBJECT_LENGTH]}#{subject_label_trail(subject)}"

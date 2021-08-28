@@ -63,7 +63,8 @@
               =<> t('timer_sessions.timer.stop')
               i.icon.icon-error
           - if @permission_manager.can?(:cancel, :time_tracker)
-            = f.button :cancel, type: :submit, data: { timer_cancel_button: '', confirm: l(:text_are_you_sure) }, class: "ml-3", name: :cancel do
+            = f.button :cancel, type: :submit,
+              data: { timer_cancel_button: '', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel do
               =<> t('timer_sessions.timer.cancel')
               i.icon.icon-cancel
       - elsif !timer_session && @permission_manager.can?(:start, :time_tracker)

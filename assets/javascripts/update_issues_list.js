@@ -22,7 +22,7 @@ export default class UpdateIssuesList {
 
     static removeIssue(element) {
         const parent = element.parent();
-        parent.remove();
+        parent.parent().remove();
     }
 
     static addIssue(item) {

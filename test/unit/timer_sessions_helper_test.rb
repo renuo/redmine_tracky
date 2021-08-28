@@ -32,7 +32,8 @@ class TimerSessionsHelperTest < ActionView::TestCase
   end
 
   test '#format_block_date - non relative date' do
-    assert_equal I18n.l(Time.zone.now.to_date + 2.days, format: I18n.t('timer_sessions.formats.date_with_year')),
+    assert_equal I18n.l(Time.zone.now.to_date + 2.days,
+                        format: I18n.t('timer_sessions.formats.date_with_year_and_weekday')),
                  format_block_date(Time.zone.now.to_date + 2.days)
   end
 

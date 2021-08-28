@@ -1,36 +1,38 @@
-= error_messages_for timer_session
-.edit-modal
-  = labelled_form_for(timer_session, remote: true) do |f|
-    .row
-      .update-issue-container
-        .box
-          = render 'shared/ticker_issue_list.html.slim', timer_session: timer_session,
-            data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container'
-          hr
-          = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
-          - if SettingsManager.visible_hints
-            small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
-    hr.mb-3
-    = f.text_field :comments, data: { timer_comment_input: '' },
-      placeholder: t('timer_sessions.messaging.comments_placeholder')
-    br
-    .times-container
-      .col
-        = f.text_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
-          placeholder: t('timer_sessions.timer.date_placeholder'),
-          value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
-        - if SettingsManager.visible_hints
-          small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
+.redmine-tracky
+  .edit-modal
+    = error_messages_for timer_session
+    = labelled_form_for(timer_session, remote: true) do |f|
+      .row
+        .update-issue-container
+          .box
+            = render 'shared/ticker_issue_list.html.slim', timer_session: timer_session,
+              data_anker: 'data-update-issue-deletion-action',
+              container_data_anker: 'data-update-issue-selection-container'
+            hr
+            = f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id'
+            - if SettingsManager.visible_hints
+              small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
+      hr.mb-3
+      = f.text_field :comments, data: { timer_comment_input: '' },
+        placeholder: t('timer_sessions.messaging.comments_placeholder')
       br
-      .col
-        = f.text_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
-          placeholder: t('timer_sessions.timer.date_placeholder'),
-          value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
-        - if SettingsManager.visible_hints
-          small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
-    .mb-3
+      .times-container
+        .col
+          = f.text_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+            placeholder: t('timer_sessions.timer.date_placeholder'),
+            value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
+          - if SettingsManager.visible_hints
+            small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
+        br
+        .col
+          = f.text_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+            placeholder: t('timer_sessions.timer.date_placeholder'),
+            value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
+          - if SettingsManager.visible_hints
+            small.form-text.text-muted = t('timer_sessions.messaging.timer_end_hint')
+      .mb-3
 
-    .buttons
-      = f.submit t('timer_sessions.edit.update'), data: { modal_update_button: '' }
-      br.mt-3
-      = link_to_function l(:button_cancel), 'hideModal(this);', class: 'primary-cancel-button'
+      .buttons
+        = f.submit t('timer_sessions.edit.update'), data: { modal_update_button: '' }
+        br.mt-3
+        = link_to_function l(:button_cancel), 'hideModal(this);', class: 'primary-cancel-button'

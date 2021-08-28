@@ -1,2 +1,2 @@
-rubocop
+rubocop app/**/*.rb
 brakeman
