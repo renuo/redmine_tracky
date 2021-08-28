@@ -34,14 +34,14 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
     end
   end
 
-  test '#where_time_not_adding_up - with all sessions valid' do
-    time_discrepancy_loader = TimeDiscrepancyLoader.new(TimerSession.where(user: User.find(1)))
-    assert_equal time_discrepancy_loader.where_time_not_adding_up, []
+  test '#load_with_discrepancy_state - with all sessions valid' do
+    time_discrepancy_loader = TimeDiscrepancyLoader.new(@timer_sessions)
+    assert_equal false, time_discrepancy_loader.load_with_discrepancy_state.first.discrepancy_detected
   end
 
-  test '#where_time_not_adding_up - with one session invalid' do
+  test '#load_with_discrepancy_state - with one session invalid' do
     @timer_sessions.first.time_entries.first.update(hours: 0.05)
-    time_discrepancy_loader = TimeDiscrepancyLoader.new(TimerSession.where(user: User.find(1)))
-    assert_equal 1, time_discrepancy_loader.where_time_not_adding_up.count
+    time_discrepancy_loader = TimeDiscrepancyLoader.new(@timer_sessions)
+    assert_equal true, time_discrepancy_loader.load_with_discrepancy_state.first.discrepancy_detected
   end
 end
