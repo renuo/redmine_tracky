@@ -1,15 +1,16 @@
-.redmine-tracky.w-75.mx-auto
-  h1.text-center = t('timer_sessions.index.title')
-  .wm-100.mt-3
-    div[data-timer-session-container]
-      = render 'timer_container', timer_session: @current_timer_session
-    hr
-    .wm-100
-      div[data-timer-sessions-list]
-        = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions
-    - if @permission_manager.can?(:report, :timer_sessions)
-      hr
+.redmine-tracky
+  .w-75.mx-auto
+    h1.text-center = t('timer_sessions.index.title')
+    .w-100.mt-3
       div[data-timer-session-container]
-        = render 'entries_report_query', current_report: @current_report
+        = render 'timer_container', timer_session: @current_timer_session
+      hr
+      .w-100
+        div[data-timer-sessions-list]
+          = render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions
+      - if @permission_manager.can?(:report, :timer_sessions)
+        hr
+        div[data-timer-session-container]
+          = render 'entries_report_query', current_report: @current_report
 
-  = render 'shared/assets'
+    = render 'shared/assets'
