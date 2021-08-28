@@ -23,7 +23,7 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   before_save :set_recorded_hours
 
-  attr_accessor :issue_id, :absolute_time, :discrepancy_detected
+  attr_accessor :issue_id, :absolute_time
 
   def splittable_hours
     ((timer_end || Time.zone.now) - timer_start) / 1.hour

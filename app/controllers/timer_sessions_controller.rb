@@ -6,10 +6,10 @@ class TimerSessionsController < TrackyController
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries)
                                            .finished_sessions.created_by(@current_user)
-
-    @timer_sessions = TimeDiscrepancyLoader.new(apply_filter(@timer_sessions_in_range)
-      .order(timer_start: :desc)).load_with_discrepancy_state
-                                           .group_by { |entry| entry.timer_start&.to_date }
+    load_non_matching_timer_sessions(@timer_sessions_in_range)
+    @timer_sessions = apply_filter(@timer_sessions_in_range)
+                      .order(timer_start: :desc)
+                      .group_by { |entry| entry.timer_start&.to_date }
   end
 
   def report
@@ -42,6 +42,17 @@ class TimerSessionsController < TrackyController
   def time_error
     @timer_session = user_scoped_timer_session(params[:id])
     render :time_error, layout: false
+  end
+
+  def load_non_matching_timer_sessions(timer_sessions)
+    @non_matching_timer_sessions = TimeDiscrepancyLoader.new(
+      timer_sessions
+    )
+                                                        .where_time_not_adding_up
+                                                        .pluck(:id).to_h do |timer_session_id|
+      [timer_session_id,
+       timer_session_id]
+    end
   end
 
   def continue

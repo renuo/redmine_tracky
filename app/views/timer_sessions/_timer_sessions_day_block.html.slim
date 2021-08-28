@@ -4,4 +4,7 @@
     b.float-right = sum_work_hours(Array.wrap(timer_sessions))
   table.list.timer-sessions-table
     tbody
-      = render TimerSessionEntryComponent.with_collection(timer_sessions, permission_manager: @permission_manager)
+      - timer_sessions.each do |timer_session|
+        = render TimerSessionEntryComponent.new(timer_session_entry: timer_session,
+          permission_manager: @permission_manager,
+          discrepancy_detected: @non_matching_timer_sessions[timer_session.id])

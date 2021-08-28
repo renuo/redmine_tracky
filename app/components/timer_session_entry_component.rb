@@ -5,14 +5,15 @@ class TimerSessionEntryComponent < ViewComponent::Base
 
   attr_reader :timer_session_entry, :permission_manager
 
-  def initialize(timer_session_entry:, permission_manager:)
+  def initialize(timer_session_entry:, permission_manager:, discrepancy_detected:)
     super
     @timer_session_entry = timer_session_entry
     @permission_manager = permission_manager
+    @discrepancy_detected = discrepancy_detected
   end
 
   def display_discrepancy_errors?
-    @timer_session_entry.discrepancy_detected
+    @discrepancy_detected
   end
 
   def can_destroy_entry?
