@@ -1,0 +1,17 @@
+.redmine-tracky {
+  .times-container {
+    column-count: 2;
+  }
+
+  .icon-bullet-delete {
+    background-image: url(../images/bullet_delete.png);
+  }
+
+  input:disabled,
+  button:disabled {
+    background-color: #e9ecef;
+    opacity: 1;
+    cursor: default;
+  }
+
+}

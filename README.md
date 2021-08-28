@@ -5,7 +5,12 @@ Improved time tracking for redmine
 ## Setup
 
     bundle install
-    bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+    bundle exec rake redmine:plugins:redmine_tracky:setup
+    bundle exec rake redmine:plugins:redmine_tracky:install
+
+## Installation for Redmine instance
+
+    RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
 
 ### Configuration
 
