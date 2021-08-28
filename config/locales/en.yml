@@ -73,6 +73,7 @@ en:
               or you can let the system rebalance your timer session and recreate all the entries again
     timer:
       start: Start
+      continue_last_session: Start on end of last session
       stop: Stop
       cancel: Cancel
       date_placeholder: 'dd.mm.yyyy hh:mm'

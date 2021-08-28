@@ -27,7 +27,7 @@ class TimeTrackerController < TrackyController
   private
 
   def start_timer
-    @timer_session = SessionCreator.new(@current_user, timer_params).create
+    @timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
     issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
     if issue_connector.run
       if @timer_session.session_finished?
@@ -83,6 +83,7 @@ class TimeTrackerController < TrackyController
 
   def timer_params
     params.require(:timer_session).permit(:comments,
+                                          :commit,
                                           :timer_start,
                                           :timer_end,
                                           :absolute_time,

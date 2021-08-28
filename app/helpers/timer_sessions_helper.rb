@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
-  MAX_SUBJECT_LENGTH = 25
+  MAX_SUBJECT_LENGTH = 50
 
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
@@ -40,7 +40,11 @@ module TimerSessionsHelper
 
   def format_time_entry_information(time_entry)
     issue = time_entry.issue
-    "##{issue.id}: #{issue.subject} - #{format_worked_hours(time_entry.hours)}"
+    issue_information = "##{issue.id}: #{issue.subject}"
+    [
+      issue_information,
+      format_worked_hours(time_entry.hours)
+    ].join(' - ')
   end
 
   def sum_work_hours(timer_sessions)
@@ -54,7 +58,11 @@ module TimerSessionsHelper
 
   def issue_information(issue)
     subject = issue.subject
-    "#{issue.id}: #{subject[0..MAX_SUBJECT_LENGTH]}#{subject_label_trail(subject)}"
+    issue_information = issue.id.to_s
+    [
+      issue_information,
+      "#{subject[0..(MAX_SUBJECT_LENGTH - issue_information.length)]}#{subject_label_trail(subject)}"
+    ].join(': ')
   end
 
   def subject_label_trail(subject)

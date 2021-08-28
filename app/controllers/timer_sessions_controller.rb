@@ -94,13 +94,10 @@ class TimerSessionsController < TrackyController
   end
 
   def timer_session_params
-    session_params = params.require(:timer_session).permit(:comments,
-                                                           :timer_start,
-                                                           :timer_end,
-                                                           issue_ids: [])
-    session_params.merge(
-      session_params[:issue_ids] || []
-    )
+    params.require(:timer_session).permit(:comments,
+                                          :timer_start,
+                                          :timer_end,
+                                          issue_ids: [])
   end
 
   def report_query_params

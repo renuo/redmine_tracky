@@ -39,14 +39,29 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test 'start _ with valid params' do
+    recorded_time = Time.zone.now - 1.hour
     post :start, params: { timer_session: {
-      timer_start: Time.zone.now - 1.hour,
+      timer_start: recorded_time,
       timer_end: Time.zone.now,
       comments: 'What a great working session',
       issue_ids: ['1']
-    } }, xhr: true
+    }, commit: 'start' }, xhr: true
 
     assert_response 200
+    assert TimerSession.last.timer_start, recorded_time
+  end
+
+  test 'start with contine last session' do
+    FactoryBot.create(:timer_session, user: User.find(1))
+
+    post :start, params: { timer_session: {
+      timer_end: Time.zone.now,
+      comments: 'What a great working session',
+      issue_ids: ['1']
+    }, commit: 'continue_last_session'}, xhr: true
+
+    assert_response 200
+    assert TimerSession.last.timer_start, TimerSession.first.timer_end
   end
 
   test 'start _ invalid params' do
@@ -72,6 +87,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
 
     assert_response 200
   end
+
 
   test 'stop _ valid params' do
     post :start, params: { timer_session: {

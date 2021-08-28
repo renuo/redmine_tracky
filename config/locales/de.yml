@@ -69,6 +69,7 @@ de:
               löschen oder das System die Diskrepanz ausbalancieren lassen.
     timer:
       start: Start
+      continue_last_session: Anschliessend Starten
       stop: Stop
       cancel: Abbrechen
       date_placeholder: 'dd.mm.yyyy hh:mm'
