@@ -35,7 +35,7 @@ namespace :redmine do
           puts '---'
 
           source_dir = Rails.root.join("plugins/#{@plugin}/assets/stylesheets")
-          dest_dir = Rails.root.join("public/plugin_assets/#{@plugin}/stylesheets")
+          dest_dir = Rails.root.join("plugins/#{@plugin}/assets/stylesheets")
 
           directories = Dir.glob(source_dir.join('**/*')).select {|fn| File.directory? fn }
           directories << source_dir
