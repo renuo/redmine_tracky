@@ -53,10 +53,6 @@ class TimerSession < RedmineTrackyApplicationRecord
     errors.add(:timer_end, :blank) if timer_end.blank?
   end
 
-  def comment_present
-    errors.add(:comments, :blank) if comments.blank?
-  end
-
   def issues_selected
     errors.add(:issue_id, :no_selection) if issues.count.zero?
   end
@@ -101,7 +97,6 @@ class TimerSession < RedmineTrackyApplicationRecord
     return unless finished_changed? || finished?
 
     start_and_end_present
-    comment_present
     issues_selected
     enough_time
     limit_recorded_hours
