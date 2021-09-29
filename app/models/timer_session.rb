@@ -42,7 +42,7 @@ class TimerSession < RedmineTrackyApplicationRecord
     return unless absolute_recorded_time
 
     current_start_time = (timer_end || (user.time_zone || Time.zone).now.asctime).to_datetime
-    update(timer_end: current_start_time + absolute_recorded_time.hours)
+    update!(timer_end: current_start_time + absolute_recorded_time.hours)
   end
 
   private

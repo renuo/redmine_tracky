@@ -1,15 +1,9 @@
 export default class UpdateIssuesList {
-    static issueContainer() {
-        return '[data-update-issue-selection-container]'
-    }
+    static issueContainer = () => '[data-update-issue-selection-container]';
 
-    static elementID() {
-        return 'timer_session[issue_ids]';
-    }
+    static elementID = () => 'timer_session[issue_ids]';
 
-    static issueDeletionButton() {
-        return 'data-update-issue-deletion-action';
-    }
+    static issueDeletionButton = () => return 'data-update-issue-deletion-action';
 
     static bind() {
         $(document).ready(() => {
