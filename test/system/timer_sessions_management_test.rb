@@ -40,7 +40,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   test 'update' do
     find('[data-timer-session-edit-button]', match: :first).click
     within '.edit-modal' do
-      fill_in 'timer_session_comments', with: 'Working on stuff'
+      fill_in TimerSession.human_attribute_name(:comments), with: 'Working on stuff'
       find('[data-modal-update-button]', match: :first).click
     end
     assert has_content?(@timer_sessions.last.comments)

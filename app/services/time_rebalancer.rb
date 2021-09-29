@@ -4,9 +4,12 @@ class TimeRebalancer
   def initialize(issues, timer_session)
     @issues = issues
     @timer_session = timer_session
+    validate
   end
 
   def rebalance_entries
+    return unless @timer_session.valid?
+
     if issues_changed?
       handle_issues_changed
     else
@@ -21,6 +24,10 @@ class TimeRebalancer
   end
 
   private
+
+  def validate
+    @timer_session.errors.add(:issue_id, :no_selection) if @issues.blank?
+  end
 
   def handle_issues_changed
     delete_connection_entities

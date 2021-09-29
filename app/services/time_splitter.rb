@@ -18,7 +18,12 @@ class TimeSplitter
   private
 
   def base_time_entry
-    hours_for_entry = @timer_session.splittable_hours.zero? ? SettingsManager.min_hours_to_record : @timer_session.splittable_hours
+    hours_for_entry = if @timer_session.splittable_hours.zero?
+                        SettingsManager.min_hours_to_record
+                      else
+                        @timer_session.splittable_hours
+                      end
+
     split_hours = hours_for_entry / @issues.count.to_f
     time_entry = TimeEntry.new(
       comments: @timer_session.comments,
@@ -34,17 +39,31 @@ class TimeSplitter
   # Line: 26
   # Accessed on: 07.05.2021
   def default_activity(time_entry)
-    time_entry.activity ||= TimeEntryActivity.where(name: 'Development').first
-    time_entry.activity ||= TimeEntryActivity.where(name: 'Entwicklung').first
-    time_entry.activity ||= TimeEntryActivity.default
-    time_entry.activity ||= TimeEntryActivity.where(parent_id: nil, project_id: nil).first
+    possible_activities.each do |activity|
+      time_entry.activity ||= activity unless time_entry.valid?
+    end
+
     time_entry
+  end
+
+  def possible_activities
+    [
+      TimeEntryActivity.default,
+      *TimeEntryActivity.where(
+        name: %w[Development Entwicklung]
+      ).or(
+        TimeEntryActivity.where(
+          parent_id: nil,
+          project_id: nil
+        )
+      ).to_a
+    ]
   end
 
   def create_time_entry(issue, time_entry)
     time_entry.update!(
-     issue: issue,
-     project: issue.project
+      issue: issue,
+      project: issue.project
     )
     TimerSessionTimeEntry.create!(
       time_entry: time_entry,

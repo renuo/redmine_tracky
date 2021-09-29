@@ -78,7 +78,7 @@ export default class HoursTracker {
     }
 
     setTitle(time) {
-        const components = [window.RedmineTracky.documentTitle, this.workDescription(), time];
+        const components = [this.workDescription()];
         document.title = components.filter(el => {
           return el != null && el != '';
         }).join(' - ');
