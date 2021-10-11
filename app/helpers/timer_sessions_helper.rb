@@ -3,7 +3,7 @@
 module TimerSessionsHelper
   MAX_SUBJECT_LENGTH = 75
   SECONDS_IN_MINUTE = 60
-  GAP_LIMIT = 5
+  GAP_LIMIT_IN_MINUTES = 5
 
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
@@ -71,7 +71,7 @@ module TimerSessionsHelper
     return false if time_entity.nil? || previous_time_entity.nil?
     return false if !time_entity.timer_session? || !previous_time_entity.timer_session?
 
-    ((time_entity.timer_start - previous_time_entity.timer_end) / SECONDS_IN_MINUTE) >= GAP_LIMIT
+    ((time_entity.timer_start - previous_time_entity.timer_end) / SECONDS_IN_MINUTE) >= GAP_LIMIT_IN_MINUTES
   end
 
   def issue_link_list(issues)
