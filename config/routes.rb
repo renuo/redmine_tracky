@@ -12,3 +12,5 @@ post 'timer_sessions_continue/:id', to: 'timer_sessions#continue', as: :timer_se
 post 'time_tracker/start', to: 'time_tracker#start', as: :start_time_tracker
 post 'time_tracker/stop', to: 'time_tracker#stop', as: :stop_time_tracker
 post 'time_tracker/update', to: 'time_tracker#update', as: :update_time_tracker
+
+get 'completion/issues', to: 'completion#issues'

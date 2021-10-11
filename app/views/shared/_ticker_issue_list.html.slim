@@ -5,7 +5,7 @@ div*{ container_data_anker => '' }
       .issue-container
         label[for="timer_session_issue_id_#{issue.id}"]
           td
-            b = link_to issue.id, issue_path(issue.id), target: '_blank', rel: 'noopener'
+            b = link_to "#{issue.project} - #{issue.id}:", issue_path(issue.id), target: '_blank', rel: 'noopener'
           td
             = issue.subject
           td
