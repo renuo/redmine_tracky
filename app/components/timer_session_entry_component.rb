@@ -16,6 +16,10 @@ class TimerSessionEntryComponent < ViewComponent::Base
     @discrepancy_detected
   end
 
+  def timer_session_entry?
+    @timer_session_entry.timer_session?
+  end
+
   def can_destroy_entry?
     permission_manager.can?(:destroy, :timer_sessions)
   end

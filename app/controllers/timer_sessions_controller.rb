@@ -7,15 +7,25 @@ class TimerSessionsController < TrackyController
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .finished_sessions.created_by(@current_user)
     load_non_matching_timer_sessions(@timer_sessions_in_range)
-    @timer_sessions = apply_filter(@timer_sessions_in_range)
-                      .order(timer_start: :desc)
-                      .group_by { |entry| entry.timer_start&.to_date }
+    @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
+    time_entries = time_entries_in_range(@timer_sessions)
+
+    @timer_sessions = (@timer_sessions.order(timer_start: :desc) + time_entries)
+                      .map { |time_entity| TimeEntityDecorator.new(time_entity) }
+                      .sort_by(&:start_time)
+                      .reverse
+                      .group_by(&:entry_date)
   end
 
   def report
     work_report_query = WorkReportQuery.new(report_query_params)
     result_url = WorkReportQueryBuilder.new(work_report_query).build_query
     redirect_to result_url
+  end
+
+  def time_entries_in_range(timer_sessions)
+    time_entries = TimeEntry.includes(:project).where.not(id: timer_sessions.pluck(:'time_entries.id'))
+    apply_filter(time_entries, :spent_on)
   end
 
   def rebalance
@@ -80,8 +90,8 @@ class TimerSessionsController < TrackyController
 
   private
 
-  def apply_filter(timer_sessions)
-    @filter = Filtering::TimerSessionsFilter.new(filter_params)
+  def apply_filter(timer_sessions, column)
+    @filter = Filtering::TimerSessionsFilter.new(filter_params.merge(filter_column: column))
     @filter.apply(timer_sessions)
   end
 

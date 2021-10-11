@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
-  MAX_SUBJECT_LENGTH = 50
+  MAX_SUBJECT_LENGTH = 75
 
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
@@ -50,7 +50,7 @@ module TimerSessionsHelper
   def sum_work_hours(timer_sessions)
     total_hours = number_with_precision(
       timer_sessions
-      .sum(&:splittable_hours),
+      .sum(&:recorded_hours),
       precision: precision_for_display_hours
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
