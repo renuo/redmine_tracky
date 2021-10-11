@@ -14,7 +14,7 @@ class CompletionController < TrackyController
     issues = order_issues(if search_term.present?
                             search_by_term(search_term, scope)
                           else
-                            issue_order(scope).limit(SEARCH_LIMIT)
+                            filter_closed_issues(issue_order(scope)).limit(SEARCH_LIMIT)
                           end)
 
     render json: format_issues_json(issues)
@@ -26,7 +26,7 @@ class CompletionController < TrackyController
     found_issues = []
     found_issues << scope.find_by(id: Regexp.last_match(1).to_i) if search_term =~ /\A#?(\d+)\z/
     found_issues += projects_with_issues(search_term)
-    found_issues + issue_order(scope.like(search_term)).limit(SEARCH_LIMIT)
+    found_issues + issue_order(filter_closed_issues(scope.like(search_term))).limit(SEARCH_LIMIT)
   end
 
   def projects_with_issues(search_term)
@@ -49,9 +49,13 @@ class CompletionController < TrackyController
     issues.compact.sort_by(&:id).reverse.uniq(&:id)
   end
 
+  def filter_closed_issues(issues)
+    issues.open(TICKET_OPEN_STATUS)
+  end
+
   def scoped_logins
     scope = Issue.cross_project_scope(@project, params[:scope]).visible
-    issue_includes(scope.open(TICKET_OPEN_STATUS))
+    issue_includes(scope)
   end
 
   def format_issues_json(issues)
