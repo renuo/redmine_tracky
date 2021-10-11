@@ -1,4 +1,4 @@
-tr[class=('error-block' if display_discrepancy_errors?)]
+tr[class=row_classes]
   td.td-px-0.w-40
     - issue_link_list(timer_session_entry.issues).each do |issue_link|
       = issue_link

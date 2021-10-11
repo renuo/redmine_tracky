@@ -5,11 +5,15 @@ class TimerSessionEntryComponent < ViewComponent::Base
 
   attr_reader :timer_session_entry, :permission_manager
 
-  def initialize(timer_session_entry:, permission_manager:, discrepancy_detected:)
+  def initialize(timer_session_entry:,
+                 permission_manager:,
+                 discrepancy_detected:,
+                 gap_separator: false)
     super
     @timer_session_entry = timer_session_entry
     @permission_manager = permission_manager
     @discrepancy_detected = discrepancy_detected
+    @gap_separator = gap_separator
   end
 
   def display_discrepancy_errors?
@@ -30,5 +34,12 @@ class TimerSessionEntryComponent < ViewComponent::Base
 
   def can_continue_entry?
     permission_manager.can?(:continue, :timer_sessions)
+  end
+
+  def row_classes
+    classes = []
+    classes << 'error-block' if display_discrepancy_errors?
+    classes << 'gap-marker' if @gap_separator
+    classes.join(' ')
   end
 end

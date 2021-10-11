@@ -2,3 +2,5 @@
   text-align: left !important; }
 .redmine-tracky .timer-session-table-actions {
   text-align: right !important; }
+.redmine-tracky .gap-marker {
+  border-bottom: 2px solid red;  }

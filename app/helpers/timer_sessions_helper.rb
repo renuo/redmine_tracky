@@ -2,13 +2,11 @@
 
 module TimerSessionsHelper
   MAX_SUBJECT_LENGTH = 75
+  SECONDS_IN_MINUTE = 60
+  GAP_LIMIT = 5
 
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
-  end
-
-  def format_session_time(timer_start, timer_end)
-    DisplayDateFormatBuilder.new(timer_start, timer_end).format
   end
 
   def format_worked_hours(hours)
@@ -67,6 +65,13 @@ module TimerSessionsHelper
 
   def subject_label_trail(subject)
     return '...' if subject.length > MAX_SUBJECT_LENGTH
+  end
+
+  def draw_gap_separator(time_entity, previous_time_entity)
+    return false if time_entity.nil? || previous_time_entity.nil?
+    return false if !time_entity.timer_session? || !previous_time_entity.timer_session?
+
+    ((time_entity.timer_start - previous_time_entity.timer_end) / SECONDS_IN_MINUTE) >= GAP_LIMIT
   end
 
   def issue_link_list(issues)
