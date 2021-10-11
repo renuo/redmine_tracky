@@ -46,7 +46,7 @@ class CompletionController < TrackyController
   end
 
   def order_issues(issues)
-    issues.compact.sort_by(&:id).uniq(&:id)
+    issues.compact.sort_by(&:id).reverse.uniq(&:id)
   end
 
   def scoped_logins
