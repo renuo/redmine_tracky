@@ -18,7 +18,7 @@ class TimeDiscrepancyLoader
   def build_query
     @base_query.reject do |timer_session|
       hours_to_spend = timer_session.splittable_hours
-      total_hours_recorded = timer_session.time_entries.sum(:hours)
+      total_hours_recorded = timer_session.time_entries.to_a.sum(&:hours)
       hours_to_spend.to_d.round(DECIMALS_TO_ROUND_TO) == total_hours_recorded.to_d.round(DECIMALS_TO_ROUND_TO)
     end
   end

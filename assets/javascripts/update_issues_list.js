@@ -3,7 +3,7 @@ export default class UpdateIssuesList {
 
     static elementID = () => 'timer_session[issue_ids]';
 
-    static issueDeletionButton = () => return 'data-update-issue-deletion-action';
+    static issueDeletionButton = () => 'data-update-issue-deletion-action';
 
     static bind() {
         $(document).ready(() => {
