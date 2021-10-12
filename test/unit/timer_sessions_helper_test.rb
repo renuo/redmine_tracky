@@ -40,7 +40,7 @@ class TimerSessionsHelperTest < ActionView::TestCase
         :with_issues,
         :with_time_entries,
         user: User.current)
-    assert_equal 'Total Hours: 1.00 h', sum_work_hours([timer_session])
+    assert_equal 'Total Hours: 4.25 h', sum_work_hours([timer_session])
   end
 
   test '#issue_link_list' do
