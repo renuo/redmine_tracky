@@ -24,7 +24,8 @@ class TimerSessionsController < TrackyController
   end
 
   def time_entries_in_range(timer_sessions)
-    time_entries = TimeEntry.includes(:project).where.not(id: timer_sessions.pluck(:'time_entries.id'))
+    time_entries = TimeEntry.created_by(@current_user).includes(:project)
+                            .where.not(id: timer_sessions.pluck(:'time_entries.id'))
     apply_filter(time_entries, :spent_on)
   end
 
