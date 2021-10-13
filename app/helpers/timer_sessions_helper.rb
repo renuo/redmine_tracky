@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
-  MAX_SUBJECT_LENGTH = 50
+  MAX_SUBJECT_LENGTH = 75
+  SECONDS_IN_MINUTE = 60
+  GAP_LIMIT_IN_MINUTES = 5
 
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
-  end
-
-  def format_session_time(timer_start, timer_end)
-    DisplayDateFormatBuilder.new(timer_start, timer_end).format
   end
 
   def format_worked_hours(hours)
@@ -50,7 +48,7 @@ module TimerSessionsHelper
   def sum_work_hours(timer_sessions)
     total_hours = number_with_precision(
       timer_sessions
-      .sum(&:splittable_hours),
+      .sum(&:recorded_hours),
       precision: precision_for_display_hours
     )
     I18n.t('timer_sessions.index.table.total_hours_worked', hours: total_hours)
@@ -67,6 +65,13 @@ module TimerSessionsHelper
 
   def subject_label_trail(subject)
     return '...' if subject.length > MAX_SUBJECT_LENGTH
+  end
+
+  def draw_gap_separator(time_entity, previous_time_entity)
+    return false if time_entity.nil? || previous_time_entity.nil?
+    return false if !time_entity.timer_session? || !previous_time_entity.timer_session?
+
+    ((time_entity.timer_start - previous_time_entity.timer_end) / SECONDS_IN_MINUTE) >= GAP_LIMIT_IN_MINUTES
   end
 
   def issue_link_list(issues)

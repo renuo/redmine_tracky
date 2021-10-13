@@ -1,5 +1,5 @@
 - base_scope = 'timer_sessions.messaging.errors.discrepancy_in_time_sum'
-h3 = t('body', scope: base_scope, range: format_session_time(timer_session.timer_start, timer_session.timer_end))
+h3 = t('body', scope: base_scope, range: timer_session.formated_session_time)
 .mt-3
 h4 = t('resolution_options.options', scope: base_scope)
 ul

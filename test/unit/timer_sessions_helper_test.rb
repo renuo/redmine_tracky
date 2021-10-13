@@ -11,13 +11,6 @@ class TimerSessionsHelperTest < ActionView::TestCase
     assert_equal precision_for_display_hours, 2
   end
 
-  test '#format_session_time' do
-    assert_equal format_session_time(
-      Time.zone.local(2001, 2, 3, 4, 5, 6),
-      Time.zone.local(2001, 2, 3, 4, 5, 6)
-    ), '04:05 - 04:05'
-  end
-
   test '#format_worked_hours' do
     assert_equal format_worked_hours(0.5), '0.50 h'
   end
@@ -47,7 +40,7 @@ class TimerSessionsHelperTest < ActionView::TestCase
         :with_issues,
         :with_time_entries,
         user: User.current)
-    assert_equal 'Total Hours: 1.00 h', sum_work_hours([timer_session])
+    assert_equal 'Total Hours: 4.25 h', sum_work_hours([timer_session])
   end
 
   test '#issue_link_list' do
