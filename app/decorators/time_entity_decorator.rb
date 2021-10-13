@@ -28,7 +28,7 @@ class TimeEntityDecorator < SimpleDelegator
     if timer_session?
       DisplayDateFormatBuilder.new(__getobj__.timer_start, __getobj__.timer_end).format
     else
-      entry_date
+      entry_date.strftime(DisplayDateFormatBuilder::DATE_FORMAT_WITH_YEAR)
     end
   end
 
