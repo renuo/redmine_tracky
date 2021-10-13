@@ -51,7 +51,7 @@ class TimerSessionsController < TrackyController
   end
 
   def time_error
-    @timer_session = user_scoped_timer_session(params[:id])
+    @timer_session = TimeEntityDecorator.new(user_scoped_timer_session(params[:id]))
     render :time_error, layout: false
   end
 
