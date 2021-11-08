@@ -76,7 +76,9 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def enough_time
-    errors.add(:timer_start, :too_short) unless (splittable_hours / issues.count) >= SettingsManager.min_hours_to_record
+    if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
+      errors.add(:timer_start, :too_short)
+    end
   end
 
   def validate_day_limit
