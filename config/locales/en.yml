@@ -37,6 +37,7 @@ en:
     settings:
       max_hours_recorded_per_day: Max Hours recorder per day
       max_hours_recorded_per_session: Max Hours recorded per session
+      min_hours_recorded_per_session: Min Hours recorded per session
       visible_hints: Display hints
       displayed_hours_rounding: Rounding for displayed hours
     work_report_query:
