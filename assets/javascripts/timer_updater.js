@@ -1,89 +1,90 @@
 export default class TimerUpdater {
-    static timerID() {
-        return $('[data-timer-id]').val();
+  static timerID() {
+    return $("[data-timer-id]").val();
+  }
+
+  static bind() {
+    $(document).ready(() => {
+      if (TimerUpdater.timerID() !== "") {
+        const timerUpdater = new TimerUpdater();
+        timerUpdater.setupUpdaters();
+      }
+    });
+  }
+
+  setupUpdaters() {
+    this.updateComment();
+    this.updateStartTime();
+    this.updateAbsoluteTime();
+    this.updateEndTime();
+  }
+
+  updateStartTime() {
+    $("[data-timer-start-input]").off("blur");
+    $("[data-timer-start-input]").on("blur", () => {
+      const element = event.target;
+
+      new TimerUpdater().sendUpdate({
+        timer_start: element.value,
+      });
+    });
+  }
+
+  updateAbsoluteTime() {
+    $("[data-timer-absolute-time-input]").off("blur");
+    $("[data-timer-absolute-time-input]").on("blur", () => {
+      const element = event.target;
+
+      new TimerUpdater().sendUpdate({
+        absolute_time: element.value,
+      });
+    });
+  }
+
+  updateEndTime() {
+    $("[data-timer-end-input]").off("blur");
+    $("[data-timer-end-input]").on("blur", () => {
+      const element = event.target;
+
+      new TimerUpdater().sendUpdate({
+        timer_end: element.value,
+      });
+    });
+  }
+
+  static updateIssue() {
+    if (!TimerUpdater.timerID()) {
+      return;
     }
+    const ids = $("input[name^='timer_session[issue_ids]']")
+      .map(function () {
+        return $(this).val();
+      })
+      .get() || [""];
 
-    static bind() {
-        $(document).ready(() => {
-            if (TimerUpdater.timerID() !== '') {
-                const timerUpdater = new TimerUpdater();
-                timerUpdater.setupUpdaters();
-            }
-        });
-    }
+    new TimerUpdater().sendUpdate({
+      issue_ids: ids.length ? Array.from(new Set(ids)) : [" "],
+    });
+  }
 
-    setupUpdaters() {
-        this.updateComment();
-        this.updateStartTime();
-        this.updateAbsoluteTime();
-        this.updateEndTime();
-    }
+  updateComment() {
+    $("[data-timer-comment-input]").off("blur");
+    $("[data-timer-comment-input]").on("blur", () => {
+      const element = $(event.target);
+      const inputValue = element.val();
+      this.sendUpdate({
+        comments: inputValue,
+      });
+    });
+  }
 
-    updateStartTime() {
-        $('[data-timer-start-input]').off('blur');
-        $('[data-timer-start-input]').on('blur', () => {
-            const element = event.target
-
-            new TimerUpdater().sendUpdate({
-                timer_start: element.value
-            });
-        });
-    }
-
-    updateAbsoluteTime() {
-        $('[data-timer-absolute-time-input]').off('blur');
-        $('[data-timer-absolute-time-input]').on('blur', () => {
-            const element = event.target;
-
-            new TimerUpdater().sendUpdate({
-                absolute_time: element.value
-            });
-        });
-    }
-
-    updateEndTime() {
-        $('[data-timer-end-input]').off('blur');
-        $('[data-timer-end-input]').on('blur', () => {
-            const element = event.target;
-
-            new TimerUpdater().sendUpdate({
-                timer_end: element.value
-            });
-        });
-    }
-
-    static updateIssue() {
-        if (!TimerUpdater.timerID()) {
-            return;
-        }
-        const ids = $("input[name^='timer_session[issue_ids]']").map(function() {
-            return $(this).val();
-        }).get() || [''];
-
-
-        new TimerUpdater().sendUpdate({
-            issue_ids: ids.length ? Array.from(new Set(ids)) : [' ']
-        });
-    }
-
-    updateComment() {
-        $('[data-timer-comment-input]').off('blur');
-        $('[data-timer-comment-input]').on('blur', () => {
-            const element = $(event.target);
-            const inputValue = element.val();
-            this.sendUpdate({
-                comments: inputValue
-            });
-        });
-    }
-
-    sendUpdate(updateData) {
-        $.ajax({
-            type: 'POST',
-            url: window.RedmineTracky.trackerUpdatePath,
-            data: {
-                timer_session: updateData
-            },
-        })
-    }
+  sendUpdate(updateData) {
+    $.ajax({
+      type: "POST",
+      url: window.RedmineTracky.trackerUpdatePath,
+      data: {
+        timer_session: updateData,
+      },
+    });
+  }
 }

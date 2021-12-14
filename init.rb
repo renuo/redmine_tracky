@@ -2,8 +2,6 @@
 
 require 'redmine'
 
-require 'redmine_tracky'
-
 Redmine::Plugin.register :redmine_tracky do
   name 'Tracky plugin'
   author 'Nick Anthony Flueckiger'
@@ -26,14 +24,6 @@ Redmine::Plugin.register :redmine_tracky do
     'visible_hints' => true,
     'min_hours_to_record' => 0.01
   }
-
-  # Suggestions and examples for init.rb taken from:
-  # https://github.com/alexbevi/redmine_knowledgebase/blob/master/init.rb
-  # and
-  # https://github.com/jgraichen/redmine_dashboard/blob/stable-v2/init.rb
-  #
-  # Both last accessed on: 12.05.2021
-  # Used for menu, settings, and permission
 
   settings default: default_settings, partial: 'settings/redmine_tracky_settings'
 
