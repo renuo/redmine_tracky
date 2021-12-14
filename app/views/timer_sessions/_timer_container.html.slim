@@ -22,7 +22,7 @@
             data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container'
             hr
             = f.text_field :issue_id, label: false, type: :search,
-              required: active_timer_session.persisted?
+              required: active_timer_session.persisted?, autofocus: 'autofocus'
             - if SettingsManager.visible_hints
               small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
       .mb-3
