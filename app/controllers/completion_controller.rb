@@ -12,7 +12,7 @@ class CompletionController < TrackyController
     scope = scoped_logins
 
     issues = order_issues(if search_term.present?
-                            search_by_term(search_term, scope)
+                            filter_closed_issues(search_by_term(search_term, scope))
                           else
                             filter_closed_issues(issue_order(scope)).limit(SEARCH_LIMIT)
                           end)

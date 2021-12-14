@@ -13,19 +13,19 @@
             - if SettingsManager.visible_hints
               small.form-text.text-muted = t('timer_sessions.messaging.issue_list_hint')
       hr.mb-3
-      = f.text_field :comments, data: { timer_comment_input: '' },
+      = f.text_field :comments, data: { timer_update_comment_input: '' },
         placeholder: t('timer_sessions.messaging.comments_placeholder')
       br
       .times-container
         .col
-          = f.text_field :timer_start, class: 'datetime-picker', data: { timer_start_input: '' },
+          = f.text_field :timer_start, class: 'datetime-picker', data: { timer_update_start_input: '' },
             placeholder: t('timer_sessions.timer.date_placeholder'),
             value: timer_session.timer_start&.strftime(t('timer_sessions.formats.datetime_format'))
           - if SettingsManager.visible_hints
             small.form-text.text-muted = t('timer_sessions.messaging.timer_start_hint')
         br
         .col
-          = f.text_field :timer_end, class: 'datetime-picker', data: { timer_end_input: '' },
+          = f.text_field :timer_end, class: 'datetime-picker', data: { timer_update_end_input: '' },
             placeholder: t('timer_sessions.timer.date_placeholder'),
             value: timer_session.timer_end&.strftime(t('timer_sessions.formats.datetime_format'))
           - if SettingsManager.visible_hints
