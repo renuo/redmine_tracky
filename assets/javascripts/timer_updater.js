@@ -20,8 +20,8 @@ export default class TimerUpdater {
   }
 
   updateStartTime() {
-    $("[data-timer-start-input]").off("blur");
-    $("[data-timer-start-input]").on("blur", () => {
+    $("[data-timer-start-input]").off("change");
+    $("[data-timer-start-input]").on("change", () => {
       const element = event.target;
 
       new TimerUpdater().sendUpdate({
@@ -42,8 +42,8 @@ export default class TimerUpdater {
   }
 
   updateEndTime() {
-    $("[data-timer-end-input]").off("blur");
-    $("[data-timer-end-input]").on("blur", () => {
+    $("[data-timer-end-input]").off("change");
+    $("[data-timer-end-input]").on("change", () => {
       const element = event.target;
 
       new TimerUpdater().sendUpdate({
@@ -85,6 +85,7 @@ export default class TimerUpdater {
       data: {
         timer_session: updateData,
       },
+      async: true,
     });
   }
 }
