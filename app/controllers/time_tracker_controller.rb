@@ -17,12 +17,13 @@ class TimeTrackerController < TrackyController
 
   def update
     @current_timer_session.update(timer_params)
+
     if timer_params[:absolute_time]
       @current_timer_session.update_with_absolute_time!(timer_params[:absolute_time])
       @current_timer_session.absolute_time = nil
     end
 
-    if @current_timer_session.errors.length > 0
+    if !@current_timer_session.valid?
       render :update, layout: false
     else
       head :no_content
