@@ -11,9 +11,9 @@ SimpleCov.start 'rails' do
     formatter SimpleCov::Formatter::SimpleFormatter
   else
     formatter = SimpleCov::Formatter::MultiFormatter.new([
-                                                           SimpleCov::Formatter::SimpleFormatter,
-                                                           SimpleCov::Formatter::HTMLFormatter
-                                                         ])
+      SimpleCov::Formatter::SimpleFormatter,
+      SimpleCov::Formatter::HTMLFormatter
+    ])
   end
 
   add_filter do |source_file|
