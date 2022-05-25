@@ -7,4 +7,4 @@ gem 'slim-rails'
 gem 'factory_bot_rails'
 gem 'sass'
 gem 'guard-rake'
-gem 'view_component', require: "view_component/engine"
+gem 'view_component'

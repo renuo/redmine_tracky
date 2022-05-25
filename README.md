@@ -21,6 +21,16 @@ Improved time tracking for redmine
 
 Administration => Roles & Permissions
 
+### Development
+
+#### Running
+
+    make
+
+#### Test
+
+    make test
+
 ### Run
     
     cd $REDMINE_LOCATION
