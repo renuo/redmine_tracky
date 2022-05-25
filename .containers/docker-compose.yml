@@ -49,7 +49,7 @@ services:
       retries: 10
     environment:
       MYSQL_ROOT_PASSWORD: redmine
-      MYSQL_DATABASE: "redmine_${CONTAINER_ENV}"
+      MYSQL_DATABASE: "redmine_development"
     volumes:
       - ./.data/mysql:/var/lib/mysql
 
