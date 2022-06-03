@@ -18,6 +18,3 @@ restart-s:
 
 db-setup:
 	docker-compose -f $(container_path)/docker-compose.yml exec -T redmine bash -c "bundle exec rails db:prepare && bundle exec rake redmine:plugins:migrate"
-
-clear:
-	docker-compose exec -T redmine bash -c "Rails.cache.clear | bin/rails c"

@@ -39,7 +39,7 @@ git pull
 
 # update plugin implementation
 rm -rf $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
-cp -R $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
+cp -R -f $PATH_TO_PLUGIN $PATH_TO_REDMINE/plugins/$NAME_OF_PLUGIN
 
 if ! $RERUN
 then
