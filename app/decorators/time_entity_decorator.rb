@@ -13,7 +13,7 @@ class TimeEntityDecorator < SimpleDelegator
   end
 
   def issues
-    timer_session? ? __getobj__.issues : [__getobj__.issue]
+    timer_session? ? __getobj__.relevant_issues : [__getobj__.issue]
   end
 
   def entry_date

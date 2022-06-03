@@ -1,6 +1,6 @@
 div*{ container_data_anker => '' }
   table
-    - timer_session.issues.each do |issue|
+    - timer_session.relevant_issues.each do |issue|
       tr
       .issue-container
         label[for="timer_session_issue_id_#{issue.id}"]

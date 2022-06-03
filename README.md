@@ -46,4 +46,4 @@ Administration => Roles & Permissions
 
 ## Copyright
 
-Copyright 2021 [Renuo AG](https://www.renuo.ch/), published under the MIT license.
+Copyright 2021-2022 [Renuo AG](https://www.renuo.ch/), published under the MIT license.

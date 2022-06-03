@@ -45,6 +45,14 @@ class TimerSession < RedmineTrackyApplicationRecord
     update!(timer_end: current_start_time + absolute_recorded_time.hours)
   end
 
+  def relevant_issues
+    if finished?
+      time_entries.includes(:issue).map(&:issue)
+    else
+      issues
+    end
+  end
+
   private
 
   def start_and_end_present

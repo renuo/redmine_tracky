@@ -12,13 +12,12 @@ rebuild:
 	PLUGIN_PATH=$(plugin_path) REDMINE_PATH=$(redmine_in_docker) docker-compose -f $(container_path)/docker-compose.yml up -d --build
 
 restart-s:
-	PLUGIN_PATH=$(plugin_path) REDMINE_PATH=$(redmine_in_docker) docker-compose -f $(container_path)/docker-compose.yml exec -T redmine bash -c "bin/rails restart"
+	PLUGIN_PATH=$(plugin_path) REDMINE_PATH=$(redmine_in_docker) docker-compose -f $(container_path)/docker-compose.yml kill redmine
+	PLUGIN_PATH=$(plugin_path) REDMINE_PATH=$(redmine_in_docker) docker-compose -f $(container_path)/docker-compose.yml rm -f redmine
+	make setup
 
 db-setup:
 	docker-compose -f $(container_path)/docker-compose.yml exec -T redmine bash -c "bundle exec rails db:prepare && bundle exec rake redmine:plugins:migrate"
 
-exec-plugin:
-	docker-compose exec -T redmine bash -c "cd $(plugin_in_docker) && $(command)"
-
-exec-redmine:
-	docker-compose exec -T redmine bash -c "$(command)"
+clear:
+	docker-compose exec -T redmine bash -c "Rails.cache.clear | bin/rails c"

@@ -30,9 +30,11 @@ class TimerSessionsController < TrackyController
   end
 
   def rebalance
-    @timer_session = user_scoped_timer_session(params[:id])
-    TimeRebalancer.new(@timer_session.issue_ids,
-                       @timer_session).force_rebalance
+    @timer_session = user_scoped_timer_session(params[:id]).includes(:timer_session_time_entries)
+    TimeRebalancer.new(
+      @timer_session.relevant_issues.map(&:id),
+      @timer_session
+    ).force_rebalance
     flash[:notice] = l(:notice_successful_update)
     redirect_to timer_sessions_path
   end
@@ -67,13 +69,13 @@ class TimerSessionsController < TrackyController
   end
 
   def continue
-    timer_session_template = user_scoped_timer_session(params[:id])
-    linked_issues = timer_session_template.timer_session_issues
+    timer_session_template = user_scoped_timer_session(params[:id]).includes(:timer_session_issues, :timer_session_time_entries)
+    linked_issues = timer_session_template.relevant_issues
     new_timer_session = timer_session_template.dup
     new_timer_session.update(timer_end: nil,
                              finished: false,
                              timer_start: (@current_user.time_zone || Time.zone).now.asctime)
-    IssueConnector.new(linked_issues.map(&:issue_id) || [], new_timer_session).run
+    IssueConnector.new(linked_issues.map(&:id) || [], new_timer_session).run
     redirect_to timer_sessions_path
   end
 

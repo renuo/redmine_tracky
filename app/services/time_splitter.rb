@@ -3,7 +3,7 @@
 class TimeSplitter
   def initialize(timer_session)
     @timer_session = timer_session
-    @issues = timer_session.issues
+    @issues = timer_session.relevant_issues
   end
 
   def create_time_entries
