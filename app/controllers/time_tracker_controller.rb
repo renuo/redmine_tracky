@@ -23,10 +23,10 @@ class TimeTrackerController < TrackyController
       @current_timer_session.absolute_time = nil
     end
 
-    if !@current_timer_session.valid?
-      render :update, layout: false
-    else
+    if @current_timer_session.valid?
       head :no_content
+    else
+      render :update, layout: false
     end
   end
 
@@ -73,7 +73,7 @@ class TimeTrackerController < TrackyController
   end
 
   def split_time_and_respond_with_success(timer_session)
-    time_splitter = TimeSplitter.new(timer_session)
+    time_splitter = TimeSplitter.new(timer_session, timer_session.relevant_issues)
     time_splitter.create_time_entries
     flash[:notice] = l(:notice_successful_update)
     render :stop, layout: false

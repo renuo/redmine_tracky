@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class TimeSplitter
-  def initialize(timer_session)
+  def initialize(timer_session, issues)
     @timer_session = timer_session
-    @issues = timer_session.relevant_issues
+    @issues = issues
   end
 
   def create_time_entries
@@ -35,9 +35,6 @@ class TimeSplitter
     default_activity(time_entry)
   end
 
-  # Taken from https://github.com/renuo/redmine_auto_time_entries/blob/master/lib/redmine_adapter.rb
-  # Line: 26
-  # Accessed on: 07.05.2021
   def default_activity(time_entry)
     possible_activities.each do |activity|
       time_entry.activity ||= activity unless time_entry.valid?

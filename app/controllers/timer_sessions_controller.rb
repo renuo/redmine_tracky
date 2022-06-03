@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class TimerSessionsController < TrackyController
   before_action :set_current_timer_session
 
@@ -30,7 +31,7 @@ class TimerSessionsController < TrackyController
   end
 
   def rebalance
-    @timer_session = user_scoped_timer_session(params[:id]).includes(:timer_session_time_entries)
+    @timer_session = user_scoped_timer_session(params[:id])
     TimeRebalancer.new(
       @timer_session.relevant_issues.map(&:id),
       @timer_session
@@ -69,7 +70,7 @@ class TimerSessionsController < TrackyController
   end
 
   def continue
-    timer_session_template = user_scoped_timer_session(params[:id]).includes(:timer_session_issues, :timer_session_time_entries)
+    timer_session_template = user_scoped_timer_session(params[:id])
     linked_issues = timer_session_template.relevant_issues
     new_timer_session = timer_session_template.dup
     new_timer_session.update(timer_end: nil,
@@ -123,3 +124,4 @@ class TimerSessionsController < TrackyController
     params[:filter].permit(:min_date, :max_date).to_h
   end
 end
+# rubocop:enable Metrics/ClassLength

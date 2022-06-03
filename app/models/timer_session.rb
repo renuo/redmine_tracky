@@ -48,6 +48,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   def relevant_issues
     if finished?
       time_entries.includes(:issue).map(&:issue)
+
     else
       issues
     end
@@ -84,18 +85,16 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def enough_time
-    if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
-      errors.add(:timer_start, :too_short)
-    end
+    errors.add(:timer_start, :too_short) if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
   end
 
   def validate_day_limit
     return unless (
-      splittable_hours + TimerSession.recorded_on(
-        user,
-        timer_start.to_date
-      )
-    ) > SettingsManager.max_hours_recorded_per_day.to_f
+        splittable_hours + TimerSession.recorded_on(
+          user,
+          timer_start.to_date
+        )
+      ) > SettingsManager.max_hours_recorded_per_day.to_f
 
     errors.add(:timer_start, :limit_reached_day)
   end
