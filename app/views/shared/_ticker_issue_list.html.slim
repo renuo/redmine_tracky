@@ -1,15 +1,14 @@
-div*{ container_data_anker => '' }
-  table
-    - timer_session.issues.each do |issue|
-      tr
-      .issue-container
-        label[for="timer_session_issue_id_#{issue.id}"]
+div[data-controller="list" data-issue-completion-target="listAnchor"]
+  table[data-list-target="table"]
+    tbody
+      - timer_session.relevant_issues.each do |issue|
+        tr.issue-container[data-form-target="issue" data-issue-id="#{issue.id}"]
           td
             b = link_to "#{issue.project} - #{issue.id}:", issue_path(issue.id), target: '_blank', rel: 'noopener'
           td
             = issue.subject
           td
-            span.text-danger.input-group-text*{ data_anker => '' }
+            span.text-danger.input-group-text[data-action="click->list#removeItem"]
               i.icon-only.icon-del
             input[id="timer_session_issue_id_#{issue.id}" readonly
               hidden

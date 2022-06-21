@@ -36,7 +36,7 @@ Redmine::Plugin.register :redmine_tracky do
   project_module :timer_sessions do
     permission :manage_timer_sessions, {
       timer_sessions: %i[index create continue update edit patch
-      destroy report time_error report time_error rebalance],
+                         destroy report time_error report time_error rebalance],
       time_tracker: %i[start stop update]
     }, require: :loggedin
 

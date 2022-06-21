@@ -1,0 +1,11 @@
+= f.text_field input_name, class: 'w-100',
+    data: { controller: 'flatpickr',
+      form_target: target,
+      action: 'change->form#change',
+      flatpickr_date_format: "d.m.Y H:i",
+      flatpickr_minute_Increment: 1,
+      flatpickr_enable_time: true,
+      timer_target: target},
+    placeholder: t('timer_sessions.timer.date_placeholder'),
+    required: required,
+    value: value&.strftime(t('timer_sessions.formats.datetime_format'))

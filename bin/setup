@@ -1,3 +1,3 @@
 #!/bin/sh
 
-BUNDLE_GEMFILE=DEV_Gemfile bundle install
+BUNDLE_GEMFILE=PluginGemfile bundle install

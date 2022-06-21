@@ -5,15 +5,17 @@
 require 'simplecov'
 require 'factory_bot_rails'
 
+ENV['GOOGLE_CHROME_OPTS_ARGS'] = 'headless,disable-gpu,no-sandbox,disable-dev-shm-usage'
+
 SimpleCov.coverage_dir('coverage/redmine_tracky')
 SimpleCov.start 'rails' do
   if Dir.pwd.match?(%r{plugins/redmine_tracky})
     formatter SimpleCov::Formatter::SimpleFormatter
   else
-    formatter = SimpleCov::Formatter::MultiFormatter.new([
-      SimpleCov::Formatter::SimpleFormatter,
-      SimpleCov::Formatter::HTMLFormatter
-    ])
+    formatter SimpleCov::Formatter::MultiFormatter.new([
+                                                         SimpleCov::Formatter::SimpleFormatter,
+                                                         SimpleCov::Formatter::HTMLFormatter
+                                                       ])
   end
 
   add_filter do |source_file|

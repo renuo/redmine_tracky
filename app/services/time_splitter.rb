@@ -1,16 +1,21 @@
 # frozen_string_literal: true
 
 class TimeSplitter
-  def initialize(timer_session)
+  ACTIVITIES = %(Development Entwicklung)
+
+  def initialize(timer_session, issues)
     @timer_session = timer_session
-    @issues = timer_session.issues
+    @issues = issues
   end
 
   def create_time_entries
     TimeEntry.transaction do
       time_entry = base_time_entry
       @issues.each do |issue|
-        create_time_entry(issue, time_entry.dup)
+        create_time_entry(
+          issue,
+          time_entry.dup
+        )
       end
     end
   end
@@ -35,9 +40,6 @@ class TimeSplitter
     default_activity(time_entry)
   end
 
-  # Taken from https://github.com/renuo/redmine_auto_time_entries/blob/master/lib/redmine_adapter.rb
-  # Line: 26
-  # Accessed on: 07.05.2021
   def default_activity(time_entry)
     possible_activities.each do |activity|
       time_entry.activity ||= activity unless time_entry.valid?
@@ -50,13 +52,14 @@ class TimeSplitter
     [
       TimeEntryActivity.default,
       *TimeEntryActivity.where(
-        name: %w[Development Entwicklung]
+        name: ACTIVITIES
       ).or(
         TimeEntryActivity.where(
           parent_id: nil,
           project_id: nil
         )
-      ).to_a
+      ).to_a,
+      TimeEntryActivity.first
     ]
   end
 

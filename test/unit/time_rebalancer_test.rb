@@ -17,15 +17,17 @@ class TimeRebalancerTest < ActiveSupport::TestCase
 
   setup do
     @issue = Issue.find(1)
-    @timer_session = FactoryBot.create(:timer_session,
-                                       user: User.find(2))
+    @user = User.find(2)
+    @time_entry = TimeEntry.find(1)
+    @timer_session = FactoryBot.create(:timer_session, user: @user)
+
     TimerSessionIssue.create!(
       issue_id: @issue.id,
       timer_session_id: @timer_session.id
     )
 
     TimerSessionTimeEntry.create!(
-      time_entry_id: TimeEntry.find(1).id,
+      time_entry_id: @time_entry.id,
       timer_session_id: @timer_session.id
     )
     @timer_session.reload
@@ -33,6 +35,7 @@ class TimeRebalancerTest < ActiveSupport::TestCase
 
   test '#rebalance_entries - issues changed' do
     TimeRebalancer.new([Issue.find(2).id], @timer_session).rebalance_entries
+
     @timer_session.reload
     assert_equal 1, TimerSessionIssue.count
     assert_equal [2], @timer_session.issue_ids
@@ -40,7 +43,6 @@ class TimeRebalancerTest < ActiveSupport::TestCase
 
   test '#rebalance_entries - issues not changed - times changed' do
     @timer_session.update(timer_start: Time.zone.now - 2.hours)
-    timer_before_change = @timer_session.time_entries.first.hours
     TimeRebalancer.new(@timer_session.issue_ids, @timer_session).rebalance_entries
 
     assert_equal (@timer_session.splittable_hours.to_f / @timer_session.issue_ids.length).round(2),
@@ -63,7 +65,8 @@ class TimeRebalancerTest < ActiveSupport::TestCase
     assert_equal 1, TimerSessionTimeEntry.count
     assert_equal 1, TimerSessionIssue.count
 
-    TimeRebalancer.new([@issue.id.to_s], @timer_session).force_rebalance
+    TimeRebalancer.new(@timer_session.relevant_issues.map(&:id), @timer_session).force_rebalance
+    @timer_session.reload
 
     assert_equal 1, TimerSessionTimeEntry.count
     assert_equal 1, TimerSessionIssue.count

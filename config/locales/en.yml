@@ -55,7 +55,7 @@ en:
       timer_end_hint: If you leave this empty on stop, the current time is used
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
       no_time_entries_found: No time entries found
-      timer_absolute_time_hint: |- 
+      timer_absolute_time_hint: |-
         If you set this value it will re-arange the start time of the session to match the absolute duration from the current end time.
         If no end time is given it will use the current time.
       errors:
@@ -77,13 +77,13 @@ en:
       continue_last_session: Start on end of last session
       stop: Stop
       cancel: Cancel
-      date_placeholder: 'dd.mm.yyyy hh:mm'
-      absolute_time_placeholder: '0.75'
-      current: 'Current Timer:'
+      date_placeholder: "dd.mm.yyyy hh:mm"
+      absolute_time_placeholder: "0.75"
+      current: "Current Timer:"
     index:
       title: Tracky
       table:
-        total_hours_worked: 'Total Hours: %{hours} h'
+        total_hours_worked: "Total Hours: %{hours} h"
     rebalance:
       button: Rebalance
     destroy:
@@ -96,10 +96,10 @@ en:
       yesterday: Yesterday
       tomorrow: Tomorrow
     formats:
-      date_with_year: '%d.%m.%Y'
-      date_with_year_and_weekday: '%A %d.%m.%Y'
-      date_without_year: '%d.%m'
-      datetime_format: '%d.%m.%Y %H:%M'
+      date_with_year: "%d.%m.%Y"
+      date_with_year_and_weekday: "%A %d.%m.%Y"
+      date_without_year: "%d.%m"
+      datetime_format: "%d.%m.%Y %H:%M"
       jquery_datetime_format: d.m.Y H:i
-      js_datetime_format: 'dd.MM.yyyyy HH:mm'
-      time: '%H:%M'
+      js_datetime_format: "dd.MM.yyyy HH:mm"
+      time: "%H:%M"

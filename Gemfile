@@ -4,7 +4,4 @@
 # git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'slim-rails'
-gem 'factory_bot_rails'
-gem 'sass'
-gem 'guard-rake'
 gem 'view_component'

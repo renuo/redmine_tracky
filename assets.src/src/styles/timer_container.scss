@@ -1,0 +1,12 @@
+.redmine-tracky {
+  .times-container {
+    column-count: 2;
+  }
+
+  input:disabled,
+  button:disabled {
+    background-color: #e9ecef;
+    opacity: 1;
+    cursor: default;
+  }
+}

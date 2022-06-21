@@ -26,24 +26,26 @@ Administration => Roles & Permissions
 #### Running
 
     make
-
-#### Test
-
-    make test
+    cd assets.src && npm install
+    rake provision
 
 ### Run
-    
-    cd $REDMINE_LOCATION
-    rails s
+
+    make
+    rake watch
 
 ### Dependency
 
-### Tests / Checks
+### Checks
 
-    cd $PLUGIN_LOCATION
-    bin/check
-    bin/system_check
+#### Tests
+
+    rake test
+
+#### Lints
+
+    rake lint
 
 ## Copyright
 
-Copyright 2021 [Renuo AG](https://www.renuo.ch/), published under the MIT license.
+Copyright 2021-2022 [Renuo AG](https://www.renuo.ch/), published under the MIT license.

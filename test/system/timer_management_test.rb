@@ -18,16 +18,16 @@ class TimerManagementTest < ApplicationSystemTestCase
   end
 
   test 'creation of timer' do
-    find('[data-timer-start-button]').click
+    find('[data-name="timer-start"]').click
     assert has_content?(I18n.t('timer_sessions.timer.stop'))
     assert has_content?(I18n.t('timer_sessions.timer.cancel'))
   end
 
   test 'cancelation of timer' do
-    timer_session = FactoryBot.create(:timer_session, finished: false, user: User.current)
+    FactoryBot.create(:timer_session, finished: false, user: User.current)
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
-    find('[data-timer-cancel-button]').click
+    find('[data-name="timer-cancel"]').click
     page.driver.browser.switch_to.alert.accept
     assert has_content?(I18n.t('timer_sessions.timer.start'))
   end
@@ -41,10 +41,10 @@ class TimerManagementTest < ApplicationSystemTestCase
   end
 
   test 'stopping of timer with invalid attributes' do
-    timer_session = FactoryBot.create(:timer_session, finished: false, user: User.current)
+    FactoryBot.create(:timer_session, finished: false, user: User.current)
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
-    find('[data-timer-stop-button]').click
+    find('[data-name="timer-stop"]').click
     assert has_content?(I18n.t('activerecord.errors.models.timer_session.attributes.issue_id.no_selection',
                                locale: :en))
   end
@@ -52,10 +52,11 @@ class TimerManagementTest < ApplicationSystemTestCase
   test 'stopping timer with valid attributes' do
     timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
     timer_session.reload
+
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
     assert_not TimerSession.last.finished?
-    find('[data-timer-stop-button]').click
+    find('[data-name="timer-stop"]').click
     assert has_content?(timer_session.comments)
     assert TimerSession.last.finished?
   end
@@ -70,7 +71,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_nil TimerSession.last.timer_end
     time = Time.zone.now
     fill_in 'timer_session_timer_end', with: time.strftime(I18n.t('timer_sessions.formats.datetime_format'))
-    find('[data-timer-stop-button]').click
+    find('[data-name="timer-stop"]').click
     assert has_content?(timer_session.comments)
     assert_equal(time.strftime(I18n.t('timer_sessions.formats.datetime_format')),
                  TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))

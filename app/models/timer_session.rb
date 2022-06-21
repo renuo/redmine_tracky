@@ -37,12 +37,12 @@ class TimerSession < RedmineTrackyApplicationRecord
     time_entries.sum(:hours)
   end
 
-  def update_with_absolute_time!(absolute_time)
-    absolute_recorded_time = Float(absolute_time, exception: false)
-    return unless absolute_recorded_time
-
-    current_start_time = (timer_start || (user.time_zone || Time.zone).now.asctime).to_datetime
-    update!(timer_end: current_start_time + absolute_recorded_time.hours)
+  def relevant_issues
+    if finished_was
+      time_entries.includes(:issue).map(&:issue)
+    else
+      issues
+    end
   end
 
   private
@@ -76,18 +76,16 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def enough_time
-    if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
-      errors.add(:timer_start, :too_short)
-    end
+    errors.add(:timer_start, :too_short) if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
   end
 
   def validate_day_limit
     return unless (
-      splittable_hours + TimerSession.recorded_on(
-        user,
-        timer_start.to_date
-      )
-    ) > SettingsManager.max_hours_recorded_per_day.to_f
+        splittable_hours + TimerSession.recorded_on(
+          user,
+          timer_start.to_date
+        )
+      ) > SettingsManager.max_hours_recorded_per_day.to_f
 
     errors.add(:timer_start, :limit_reached_day)
   end

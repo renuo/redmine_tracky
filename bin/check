@@ -1,5 +1,0 @@
-BUNDLE_GEMFILE=DEV_Gemfile bundle install
-cd ../../
-bundle install
-bundle exec rake redmine:plugins:test:units NAME=redmine_tracky
-bundle exec rake redmine:plugins:test:functionals NAME=redmine_tracky
