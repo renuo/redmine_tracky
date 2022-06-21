@@ -20,27 +20,27 @@ class TimeSplitterTest < ActiveSupport::TestCase
     @timer_session = FactoryBot.create(:timer_session,
                                        user: User.find(2))
     TimerSessionIssue.create!(
-      issue_id: @issue.id,
-      timer_session_id: @timer_session.id
+      issue: @issue,
+      timer_session: @timer_session
     )
   end
 
   test 'creates time entry on one issue' do
     assert_equal @timer_session.issues.count, 1
 
-    time_splitter = TimeSplitter.new(@timer_session)
+    time_splitter = TimeSplitter.new(@timer_session, @timer_session.issues)
     time_splitter.create_time_entries
     assert_equal TimerSessionTimeEntry.count, 1
   end
 
   test 'splits time entries on multiple issues' do
     TimerSessionIssue.create!(
-      issue_id: Issue.find(2).id,
-      timer_session_id: @timer_session.id
+      issue: Issue.find(2),
+      timer_session: @timer_session
     )
     assert_equal @timer_session.issues.count, 2
 
-    time_splitter = TimeSplitter.new(@timer_session)
+    time_splitter = TimeSplitter.new(@timer_session, @timer_session.issues)
     time_splitter.create_time_entries
     assert_equal 2, TimerSessionTimeEntry.count
     assert_equal 0.5, TimeEntry.last.hours

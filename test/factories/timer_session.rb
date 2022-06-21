@@ -6,7 +6,7 @@ FactoryBot.define do
     timer_end { Time.zone.now }
     sequence(:comments) { |n| "Working on - #{n} - tickets!" }
     finished { true }
-    user {}
+    user { User.current }
 
     trait :with_issues do
       after(:create) do |timer_session|

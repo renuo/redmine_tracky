@@ -2,7 +2,8 @@
 
 class TimeRebalancer
   def initialize(issues, timer_session)
-    @issues = issues
+    @issues = (issues || []).map(&:to_i)
+    @issue_ids = timer_session.relevant_issues.map(&:id).map(&:to_i)
     @timer_session = timer_session
     validate
   end
@@ -43,7 +44,7 @@ class TimeRebalancer
   end
 
   def update_times
-    new_time = @timer_session.splittable_hours / @timer_session.issue_ids.count
+    new_time = @timer_session.splittable_hours / @issues.count
     @timer_session.errors.add(:timer_start, :too_short) if new_time < SettingsManager.min_hours_to_record
     return unless @timer_session.valid?
 
@@ -69,7 +70,7 @@ class TimeRebalancer
   def issues_changed?
     return false unless @issues
 
-    (@issues - @timer_session.issue_ids).count.positive?
+    (@issues - @issue_ids).count.positive?
   end
 
   def delete_connection_entities
@@ -77,7 +78,7 @@ class TimeRebalancer
   end
 
   def rebuild_time_entries
-    time_splitter = TimeSplitter.new(@timer_session)
+    time_splitter = TimeSplitter.new(@timer_session, Issue.where(id: @issues))
     time_splitter.create_time_entries
   end
 

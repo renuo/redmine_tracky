@@ -1,15 +1,9 @@
-require:
-  - rubocop-performance
-  - rubocop-rails
-
-Rails/WhereExists:
-  Enabled: false
-
-Rails/ApplicationRecord:
-  Enabled: false
-
 Layout/LineLength:
   Max: 120
+
+Metrics/ClassLength:
+  Exclude:
+  - 'test/**/*.rb'
 
 Style/Documentation:
   Enabled: false
@@ -38,6 +32,7 @@ Metrics/BlockLength:
   Exclude:
   - 'config/environments/**/*.rb'
   - 'config/routes.rb'
+  - 'init.rb'
 
 Metrics/MethodLength:
   CountAsOne:

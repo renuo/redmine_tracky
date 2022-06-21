@@ -2,3 +2,7 @@
 
 .containers/.data
 /vendor/
+.logs
+.log
+node_modules
+yarn-error*

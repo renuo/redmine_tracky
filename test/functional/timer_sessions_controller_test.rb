@@ -14,14 +14,17 @@ class TimerSessionsControllerTest < ActionController::TestCase
            :enumerations,
            :issues, :journals, :journal_details,
            :watchers,
-           :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
+           :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values,
+           :time_entries
 
   def setup
     @issue = Issue.find(1)
+    @time_entry = TimeEntry.find(1)
+    @user = User.find(1)
     @timer_session = FactoryBot.create(:timer_session,
-                                       user: User.find(1))
-    TimerSessionIssue.create!(
-      issue_id: @issue.id,
+                                       user: @user)
+    TimerSessionTimeEntry.create!(
+      time_entry: @time_entry,
       timer_session_id: @timer_session.id
     )
 
@@ -113,8 +116,10 @@ class TimerSessionsControllerTest < ActionController::TestCase
     )
 
     assert_response 302
-    assert_equal @timer_session.reload.time_entries.first.hours.round(2),
-                 @timer_session.hours.round(2)
+
+    expected_hours = @timer_session.reload.time_entries.first.hours.round(2)
+
+    assert_equal expected_hours, @timer_session.hours.round(2)
   end
 
   test 'time_error' do

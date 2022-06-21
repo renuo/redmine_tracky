@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSourceMap": true,
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "../assets/javascripts",
+    "removeComments": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "typeRoots": ["node_modules/@types"],
+    "baseUrl": "./src",
+    "paths": {
+      "@interfaces/*": ["redmine-tracky/interfaces/*"],
+      "@controllers/*": ["redmine-tracky/controllers/*"],
+      "@services/*": ["redmine-tracky/services/*"]
+    }
+  },
+  "exclude": ["javascripts/test"],
+  "include": ["src/**/*"]
+}

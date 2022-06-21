@@ -1,8 +1,2 @@
 = render 'shared/js_variables'
-= stylesheet_link_tag 'redmine_tracky',
-  plugin: 'redmine_tracky'
-= javascript_include_tag 'luxon.min.js',
-  plugin: 'redmine_tracky'
-= javascript_include_tag 'redmine_tracky',
-  plugin: 'redmine_tracky',
-  type: 'module'
+= javascript_include_tag "redmine-tracky.js", :type => "module", :plugin => 'redmine_tracky'

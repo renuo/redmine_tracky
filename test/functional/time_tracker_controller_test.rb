@@ -58,7 +58,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_end: Time.zone.now,
       comments: 'What a great working session',
       issue_ids: ['1']
-    }, commit: 'continue_last_session'}, xhr: true
+    }, commit: 'continue_last_session' }, xhr: true
 
     assert_response 200
     assert TimerSession.last.timer_start, TimerSession.first.timer_end
@@ -71,7 +71,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_end: Time.zone.now,
       comments: 'What a great working session',
       issue_ids: ['1']
-    }, commit: 'continue_last_session'}, xhr: true
+    }, commit: 'continue_last_session' }, xhr: true
 
     assert_response 200
     assert TimerSession.last.timer_start, recorded_time
@@ -100,7 +100,6 @@ class TimeTrackerControllerTest < ActionController::TestCase
 
     assert_response 200
   end
-
 
   test 'stop _ valid params' do
     post :start, params: { timer_session: {

@@ -1,5 +1,8 @@
 test:
   adapter: postgresql
+  host: 127.0.0.1
+  password: postgres
+  username: postgres
   encoding: unicode
   pool: 5
   database: redmine_tracky_test

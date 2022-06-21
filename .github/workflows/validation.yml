@@ -1,0 +1,40 @@
+name: validation
+on:
+  - push
+jobs:
+  lint_ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7.4"
+      - name: Install gems
+        run: BUNDLE_GEMFILE=PluginGemfile bundle install
+      - name: Lint
+        run: BUNDLE_GEMFILE=PluginGemfile bundle exec rubocop -c .rubocop.yml
+  test_ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Redmine Plugin
+        uses: two-pack/redmine-plugin-test-action@v2
+        with:
+          plugin_name: redmine_tracky
+          redmine_version: v4.2
+          ruby_version: v2.7
+          database: mysql
+  check_javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - name: Install node packages
+        working-directory: ./assets.src
+        run: npm install
+      - name: Lint
+        working-directory: ./assets.src
+        run: npm run lint

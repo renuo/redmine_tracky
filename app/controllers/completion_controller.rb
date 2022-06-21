@@ -63,7 +63,9 @@ class CompletionController < TrackyController
       {
         'id' => issue.id,
         'label' => "#{issue.project} - #{issue.tracker} ##{issue.id}: #{issue.subject.to_s.truncate(255)}",
-        'value' => issue.id
+        'subject' => issue.subject.to_s.truncate(255).to_s,
+        'value' => issue.id,
+        'project' => issue.project.to_s
       }
     end
   end
