@@ -15,7 +15,7 @@ Improved time tracking for Redmine
     bundle install
     bundle exec rake redmine:plugins:redmine_tracky:install
 
-## Installation for Redmine instance
+## Production Setup
 
     git clone https://github.com/renuo/redmine_tracky ./plugins/redmine_tracky/
     RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
