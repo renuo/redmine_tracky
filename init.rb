@@ -5,10 +5,10 @@ require 'redmine'
 Redmine::Plugin.register :redmine_tracky do
   name 'Tracky plugin'
   author 'Nick Anthony Flueckiger'
-  description 'Time tracking plugin for redmine'
+  description 'Time tracking plugin for Redmine'
   version '0.0.1'
   url 'https://github.com/renuo/redmine-tracky'
-  author_url 'https://github.com/Liberty'
+  author_url 'https://github.com/Liberatys'
 
   requires_redmine version_or_higher: '4.0.0'
 
