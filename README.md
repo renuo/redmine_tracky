@@ -7,7 +7,7 @@ Improved time tracking for redmine
     git clone https://github.com/redmine/redmine
     cd redmine/plugins
     git clone https://github.com/renuo/redmine_tracky
-    cd ../..
+    cd ..
 
     bundle install
     bundle exec rake redmine:plugins:redmine_tracky:setup
