@@ -1,8 +1,8 @@
 # Redmine-Tracky
 
-Improved time tracking for redmine
+Improved time tracking for Redmine
 
-## Setup
+## Development Setup
 
     git clone https://github.com/redmine/redmine
     cd redmine/plugins
@@ -17,6 +17,7 @@ Improved time tracking for redmine
 
 ## Installation for Redmine instance
 
+    git clone https://github.com/renuo/redmine_tracky ./plugins/redmine_tracky/
     RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
 
 ### Configuration
