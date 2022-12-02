@@ -8,6 +8,7 @@ Improved time tracking for redmine
     cd redmine/plugins
     git clone https://github.com/renuo/redmine_tracky
     cd ..
+    ln -s plugins/redmine_tracky/.tool-versions .tool-versions # if you use asdf for env mgmt
 
     bundle install
     bundle exec rake redmine:plugins:redmine_tracky:setup
