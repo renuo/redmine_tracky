@@ -4,6 +4,7 @@ import { FormData } from '@interfaces/form-data';
 
 export default class extends Controller {
     readonly startTarget!: Element;
+    declare readonly hasStopButtonTarget: boolean
     readonly endTarget!: Element;
     readonly absolutInputTarget!: Element;
     readonly descriptionTarget!: Element;
@@ -11,7 +12,7 @@ export default class extends Controller {
 
     private connected = false;
 
-    static targets = ['description', 'start', 'end', 'issue', 'absolutInput'];
+    static targets = ['description', 'start', 'stopButton', 'end', 'issue', 'absolutInput'];
 
     public connect(): void {
         this.connected = true;
@@ -71,7 +72,7 @@ export default class extends Controller {
     }
 
     private dispatchUpdate(form: FormData) {
-        if ($('[data-ending-action-buttons]').length) {
+        if (this.hasStopButtonTarget) {
             $.ajax({
                 type: "POST",
                 url: window.RedmineTracky.trackerUpdatePath,
