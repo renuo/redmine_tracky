@@ -9,7 +9,7 @@ export default class extends Controller {
     readonly descriptionTarget!: Element;
     readonly issueTargets!: Array<Element>;
 
-    private connected: boolean = false;
+    private connected = false;
 
     static targets = ['description', 'start', 'end', 'issue', 'absolutInput'];
 
