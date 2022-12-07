@@ -6,7 +6,7 @@ export default class extends Controller {
 
     static targets = ['table'];
 
-    addItem(item: CompletionResult): void {
+    public addItem(item: CompletionResult): void {
         const tbody = this.tableTarget.getElementsByTagName('tbody')[0];
         tbody.appendChild(
             this.buildItem(
@@ -15,7 +15,7 @@ export default class extends Controller {
         );
     }
 
-    removeItem(event: Event): void {
+    public removeItem(event: Event): void {
         const { target } = event;
         const row: Element = (target as Element).closest('[data-form-target="issue"]') as Element;
         row.remove();

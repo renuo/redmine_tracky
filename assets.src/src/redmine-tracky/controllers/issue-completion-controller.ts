@@ -23,7 +23,6 @@ export default class extends Controller {
 
     private listenForInput() {
         this.cleanup();
-
         observeAutocompleteField(
             this.inputTarget.id,
             function (request: any, callback: any) {
@@ -61,7 +60,7 @@ export default class extends Controller {
 
     private cleanup() {
         this.clearInput();
-        $(".ui-autocomplete").remove();
-        $(".ui-helper-hidden-accessible").remove();
+        $(".ui-autocomplete").hide();
+        $(".ui-helper-hidden-accessible").hide();
     }
 }

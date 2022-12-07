@@ -9,10 +9,16 @@ export default class extends Controller {
     readonly descriptionTarget!: Element;
     readonly issueTargets!: Array<Element>;
 
+    private connected: boolean = false;
+
     static targets = ['description', 'start', 'end', 'issue', 'absolutInput'];
 
     public connect(): void {
+        this.connected = true;
+    }
 
+    public disconnect(): void {
+        this.connected = false;
     }
 
     public absoluteTime(event: Event): void {
@@ -36,11 +42,15 @@ export default class extends Controller {
     }
 
     public issueTargetConnected(_: Element) {
-        this.change();
+        if (this.connected) {
+            this.change();
+        }
     }
 
     public issueTargetDisconnected(_: Element) {
-        this.change();
+        if (this.connected) {
+            this.change();
+        }
     }
 
     public change(): void {
@@ -61,14 +71,16 @@ export default class extends Controller {
     }
 
     private dispatchUpdate(form: FormData) {
-        $.ajax({
-            type: "POST",
-            url: window.RedmineTracky.trackerUpdatePath,
-            data: {
-                timer_session: form,
-            },
-            async: true,
-        });
+        if ($('[data-ending-action-buttons]').length) {
+            $.ajax({
+                type: "POST",
+                url: window.RedmineTracky.trackerUpdatePath,
+                data: {
+                    timer_session: form,
+                },
+                async: true,
+            });
+        }
     }
 
     private valueForInput(element: Element): any {
@@ -76,9 +88,6 @@ export default class extends Controller {
     }
 
     private convertToDateTime(value: string): DateTime {
-        console.log(
-            window.RedmineTracky.datetimeFormatJavascript
-        );
         return DateTime.fromFormat(
             value,
             window.RedmineTracky.datetimeFormatJavascript
