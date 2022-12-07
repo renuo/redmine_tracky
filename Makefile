@@ -7,6 +7,9 @@ redmine_in_docker = /usr/src/redmine
 
 setup:
 	docker compose up -d
-
 rebuild:
 	docker compose up -d --build
+seed:
+	docker compose exec redmine rake db:seed
+test:
+	docker compose exec rake test

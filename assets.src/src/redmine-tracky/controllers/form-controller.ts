@@ -4,15 +4,22 @@ import { FormData } from '@interfaces/form-data';
 
 export default class extends Controller {
     readonly startTarget!: Element;
+    declare readonly hasStopButtonTarget: boolean
     readonly endTarget!: Element;
     readonly absolutInputTarget!: Element;
     readonly descriptionTarget!: Element;
     readonly issueTargets!: Array<Element>;
 
-    static targets = ['description', 'start', 'end', 'issue', 'absolutInput'];
+    private connected = false;
+
+    static targets = ['description', 'start', 'stopButton', 'end', 'issue', 'absolutInput'];
 
     public connect(): void {
+        this.connected = true;
+    }
 
+    public disconnect(): void {
+        this.connected = false;
     }
 
     public absoluteTime(event: Event): void {
@@ -36,11 +43,15 @@ export default class extends Controller {
     }
 
     public issueTargetConnected(_: Element) {
-        this.change();
+        if (this.connected) {
+            this.change();
+        }
     }
 
     public issueTargetDisconnected(_: Element) {
-        this.change();
+        if (this.connected) {
+            this.change();
+        }
     }
 
     public change(): void {
@@ -61,14 +72,16 @@ export default class extends Controller {
     }
 
     private dispatchUpdate(form: FormData) {
-        $.ajax({
-            type: "POST",
-            url: window.RedmineTracky.trackerUpdatePath,
-            data: {
-                timer_session: form,
-            },
-            async: true,
-        });
+        if (this.hasStopButtonTarget) {
+            $.ajax({
+                type: "POST",
+                url: window.RedmineTracky.trackerUpdatePath,
+                data: {
+                    timer_session: form,
+                },
+                async: true,
+            });
+        }
     }
 
     private valueForInput(element: Element): any {
@@ -76,9 +89,6 @@ export default class extends Controller {
     }
 
     private convertToDateTime(value: string): DateTime {
-        console.log(
-            window.RedmineTracky.datetimeFormatJavascript
-        );
         return DateTime.fromFormat(
             value,
             window.RedmineTracky.datetimeFormatJavascript

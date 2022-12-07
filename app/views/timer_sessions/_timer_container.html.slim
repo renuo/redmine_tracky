@@ -54,7 +54,7 @@
       - if timer_session
         div[data-ending-action-buttons]
           - if @permission_manager.can?(:stop, :time_tracker)
-            = f.button :stop, type: :submit, data: { name: 'timer-stop' }, name: :stop do
+            = f.button :stop, type: :submit, data: { name: 'timer-stop', form_target: 'stopButton' }, name: :stop do
               =<> t('timer_sessions.timer.stop')
               i.icon.icon-error
           - if @permission_manager.can?(:cancel, :time_tracker)
