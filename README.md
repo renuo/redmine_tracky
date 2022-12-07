@@ -32,6 +32,14 @@ Administration => Roles & Permissions
     cd assets.src && npm install
     rake provision
 
+#### Seed
+
+    make seed
+
+#### Rebuild Containers
+
+    make rebuild
+
 ### Run
 
     make
