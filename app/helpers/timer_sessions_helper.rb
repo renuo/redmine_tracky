@@ -3,7 +3,7 @@
 module TimerSessionsHelper
   MAX_SUBJECT_LENGTH = 75
   SECONDS_IN_MINUTE = 60
-  GAP_LIMIT_IN_MINUTES = 5
+  GAP_LIMIT_IN_MINUTES = 1
 
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
