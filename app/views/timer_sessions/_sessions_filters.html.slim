@@ -1,9 +1,0 @@
-.box.mb-3
-  = labelled_form_for @filter, as: :filter, url: timer_sessions_path, method: :get do |f|
-    .times-container
-      .col
-        = f.date_field :min_date
-      .col
-        = f.date_field :max_date
-    .mt-3
-    = f.submit t('timer_sessions.filters.filter')

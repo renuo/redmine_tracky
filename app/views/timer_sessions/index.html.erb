@@ -1,0 +1,19 @@
+<div class="redmine-tracky">
+  <div class="w-75 mx-auto">
+    <h1 class="text-center"><%= t('timer_sessions.index.title') %></h1>
+    <div class="w-100 mt-3" data-timer-session-container>
+      <%= render 'timer_container', timer_session: @current_timer_session %>
+      <hr>
+      <div class="w-100" data-timer-sessions-list>
+        <%= render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions %>
+      </div>
+      <% if @permission_manager.can?(:report, :timer_sessions) %>
+        <hr>
+        <div class="w-100" data-timer-session-container>
+          <%= render 'entries_report_query', current_report: @current_report %>
+        </div>
+      <% end %>
+    </div>
+    <%= render 'shared/assets' %>
+  </div>
+</div>

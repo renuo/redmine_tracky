@@ -1,0 +1,10 @@
+<div class="box">
+  <% current_report_query = current_report || WorkReportQuery.new %>
+  <%= form_with model: current_report_query, url: timer_sessions_report_path, method: :get do |f| %>
+    <%= f.date_field :date, value: Time.zone.now.to_date %>
+    <%= f.select :period, select_options_for_work_period %>
+    <div class="mt-3">
+      <%= f.submit t('timer_sessions.work_report_query.buttons.submit') %>
+    </div>
+  <% end %>
+</div>
