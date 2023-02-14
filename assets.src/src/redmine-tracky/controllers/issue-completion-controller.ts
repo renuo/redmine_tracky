@@ -4,7 +4,7 @@ import ListController from '@controllers/list-controller';
 
 declare function observeAutocompleteField(id: string,
     selector: Function,
-    { select: Function }: any
+    options: { select: Function },
 ): any;
 
 export default class extends Controller {
