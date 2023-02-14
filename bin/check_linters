@@ -1,3 +1,2 @@
 BUNDLE_GEMFILE=PluginGemfile bundle exec rubocop app/**/*.rb -A
-BUNDLE_GEMFILE=PluginGemfile bundle exec slim-lint app/views/ -c .slim-lint.yml
 BUNDLE_GEMFILE=PluginGemfile bundle exec brakeman

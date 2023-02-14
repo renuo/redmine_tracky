@@ -1,9 +1,7 @@
-gem 'slim-rails'
 gem 'view_component'
 
 group :development, :test do
   gem 'bullet'
-  gem 'slim_lint', require: false
   gem 'factory_bot_rails'
   gem 'brakeman'
 end
