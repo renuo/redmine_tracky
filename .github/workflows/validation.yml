@@ -22,7 +22,7 @@ jobs:
         with:
           plugin_name: redmine_tracky
           redmine_version: v4.2
-          ruby_version: v2.7
+          ruby_version: "2.7.6"
           database: mysql
   check_javascript:
     runs-on: ubuntu-latest
