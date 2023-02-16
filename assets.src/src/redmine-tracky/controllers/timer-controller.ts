@@ -9,8 +9,12 @@ export default class extends Controller {
     readonly labelTarget!: Element;
     readonly timeDiffFields: DurationUnits = ['hours', 'minutes', 'seconds'];
     readonly timeDiffFormat: string = "hh:mm:ss";
+    readonly timezoneValue!: number;
 
     static targets = ['start', 'end', 'label', 'description'];
+    static values = {
+        timezone: Number
+    };
 
     connect(): void {
         const start = (this.startTarget as HTMLInputElement).value;
@@ -55,8 +59,8 @@ export default class extends Controller {
         const startDateTime = this.convertToDateTime((this.startTarget as HTMLInputElement).value);
         const endDateTime = this.convertToDateTime((this.endTarget as HTMLInputElement).value);
 
-        const duration: Duration = (endDateTime.isValid ? endDateTime : DateTime.local()).diff(
-            startDateTime.isValid ? startDateTime : DateTime.local(),
+        const duration: Duration = (endDateTime.isValid ? endDateTime : this.adjustedDateTime()).diff(
+            startDateTime.isValid ? startDateTime : this.adjustedDateTime(),
             this.timeDiffFields
         );
 
@@ -87,5 +91,10 @@ export default class extends Controller {
         return components.filter(el => {
             return el != null && el != '';
         }).join(' - ');
+    }
+
+    private adjustedDateTime(): DateTime {
+        const localOffset = DateTime.local().offset / 60;
+        return DateTime.local().plus({ hours: (localOffset-this.timezoneValue)*-1 });
     }
 }
