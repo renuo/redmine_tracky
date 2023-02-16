@@ -20,11 +20,11 @@ import FormController from '@controllers/form-controller';
 import TimerController from '@controllers/timer-controller';
 import ListController from '@controllers/list-controller';
 import IssueCompletionController from '@controllers/issue-completion-controller';
-import Flatpickr from 'stimulus-flatpickr';
+import FlatpickrController from '@controllers/flatpickr-controller';
 
 window.Stimulus = Application.start();
 window.Stimulus.register("form", FormController);
 window.Stimulus.register("timer", TimerController);
 window.Stimulus.register("list", ListController);
 window.Stimulus.register("issue-completion", IssueCompletionController);
-window.Stimulus.register('flatpickr', Flatpickr)
+window.Stimulus.register('flatpickr', FlatpickrController)
