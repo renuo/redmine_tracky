@@ -2,9 +2,10 @@ import { Controller } from "@hotwired/stimulus";
 import { CompletionResult } from '@interfaces/completion-result';
 import ListController from '@controllers/list-controller';
 
+// https://github.com/redmine/redmine/blob/4.2-stable/public/javascripts/application.js#L637-L648
 declare function observeAutocompleteField(id: string,
     selector: Function,
-    { select: Function }: any
+    options: { select: Function },
 ): any;
 
 export default class extends Controller {
