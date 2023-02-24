@@ -19,20 +19,18 @@ class SettingsManagerTest < ActiveSupport::TestCase
     assert_equal SettingsManager.visible_hints, true
   end
 
-  context 'with settings' do
-    test '#max_hours_recorded_per_day - value' do
-      SettingsManager.max_hours_recorded_per_day = '8'
-      assert_equal SettingsManager.max_hours_recorded_per_day, 8
-    end
+  test '#max_hours_recorded_per_day - value' do
+    SettingsManager.max_hours_recorded_per_day = '8'
+    assert_equal SettingsManager.max_hours_recorded_per_day, 8
+  end
 
-    test '#max_hours_recorded_per_session - value' do
-      SettingsManager.max_hours_recorded_per_session = '8'
-      assert_equal SettingsManager.max_hours_recorded_per_session, 8
-    end
+  test '#max_hours_recorded_per_session - value' do
+    SettingsManager.max_hours_recorded_per_session = '8'
+    assert_equal SettingsManager.max_hours_recorded_per_session, 8
+  end
 
-    test '#min_hours_to_record - value' do
-      SettingsManager.min_hours_to_record = '1'
-      assert_equal SettingsManager.min_hours_to_record, 1
-    end
+  test '#min_hours_to_record - value' do
+    SettingsManager.min_hours_to_record = '1'
+    assert_equal SettingsManager.min_hours_to_record, 1
   end
 end
