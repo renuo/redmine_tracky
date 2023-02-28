@@ -5,6 +5,12 @@ module TimerSessionsHelper
   SECONDS_IN_MINUTE = 60
   GAP_LIMIT_IN_MINUTES = 5
 
+  def offset_for_time_zone(current_user)
+    return 0 if current_user.nil? || current_user.preference.nil? ||
+      current_user.preference.time_zone.nil?
+    Time.zone.now.in_time_zone(current_user.preference.time_zone).utc_offset / 1.hour
+  end
+
   def precision_for_display_hours
     SettingsManager.rounding_for_displayed_hours
   end

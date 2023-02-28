@@ -7,6 +7,14 @@ class TimerSessionsHelperTest < ActionView::TestCase
 
   fixtures :issues, :time_entries
 
+  test '#offset_for_time_zone' do
+    db_user = User.where.not(preference: nil).first
+    test_user = db_user.dup
+    test_user.preference = db_user.preference.dup
+    test_user.preference.time_zone = 'Berlin'
+    assert_equal offset_for_time_zone(test_user), 1
+  end
+
   test '#precision_for_display_hours' do
     assert_equal precision_for_display_hours, 2
   end
