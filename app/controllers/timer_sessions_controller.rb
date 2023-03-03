@@ -16,6 +16,7 @@ class TimerSessionsController < TrackyController
                       .sort_by(&:start_time)
                       .reverse
                       .group_by(&:entry_date)
+    @timer_offset = offset_for_time_zone(@current_user)
   end
 
   def report
@@ -122,6 +123,12 @@ class TimerSessionsController < TrackyController
     return {} unless params[:filter].is_a?(ActionController::Parameters)
 
     params[:filter].permit(:min_date, :max_date).to_h
+  end
+
+  def offset_for_time_zone(current_user)
+    return 0 unless current_user&.preference&.time_zone
+
+    Time.zone.now.in_time_zone(current_user.preference.time_zone).utc_offset / 1.hour
   end
 end
 # rubocop:enable Metrics/ClassLength
