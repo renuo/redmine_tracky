@@ -37,10 +37,6 @@ export default class extends Controller {
         const updateTime = () => {
             const diff: string = this.timeDifference();
 
-            this.updateTab(
-                diff,
-                (this.descriptionTarget as HTMLInputElement).value
-            );
             this.updateTimer(
                 diff,
             );
@@ -76,25 +72,15 @@ export default class extends Controller {
         );
     }
 
-    private updateTab(time: string, description: string): void {
-        document.title = this.formatValues(time, description);
-    }
-
     private updateTimer(time: string): void {
         $(this.labelTarget).text(
             time
         );
     }
-
-    private formatValues(time: string, description: string): string {
-        const components = [time, description];
-        return components.filter(el => {
-            return el != null && el != '';
-        }).join(' - ');
-    }
-
+    
     private adjustedDateTime(): DateTime {
         const localOffset = DateTime.local().offset / 60;
         return DateTime.local().plus({ hours: (localOffset-this.timezoneValue)*-1 });
     }
+
 }
