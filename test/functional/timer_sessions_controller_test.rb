@@ -45,6 +45,13 @@ class TimerSessionsControllerTest < ActionController::TestCase
     assert response.body.include?(@timer_session.splittable_hours.round(2).to_s)
   end
 
+  test 'index with different server time zone' do
+    @user.preference.update(time_zone: 'Tijuana')
+    get(:index)
+    assert_response 200
+    assert response.body.include?('data-timer-timezone-value="-8"')
+  end
+
   test 'index - with filter' do
     get(:index, params: {
           filter: {

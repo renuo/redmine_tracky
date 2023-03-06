@@ -13,15 +13,15 @@ class SettingsManager
     end
 
     def max_hours_recorded_per_day
-      settings_object['max_hours_recorded_per_day'] || DEFAULT_MAX_HOURS_PER_DAY
+      settings_object['max_hours_recorded_per_day']&.to_i || DEFAULT_MAX_HOURS_PER_DAY
     end
 
     def max_hours_recorded_per_session
-      settings_object['max_hours_recorded_per_session'] || DEFAULT_MAX_HOURS_PER_SESSION
+      settings_object['max_hours_recorded_per_session']&.to_i || DEFAULT_MAX_HOURS_PER_SESSION
     end
 
     def min_hours_to_record
-      settings_object['min_hours_to_record'] || MIN_HOURS_TO_RECORD
+      settings_object['min_hours_to_record']&.to_i || MIN_HOURS_TO_RECORD
     end
 
     def visible_hints
