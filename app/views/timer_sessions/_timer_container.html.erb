@@ -1,4 +1,4 @@
-<div class="box" data-controller="form timer">
+<div class="box" data-controller="form timer" data-timer-timezone-value="<%=@timer_offset%>">
   <div class="timer-container">
     <% active_timer_session = timer_session || TimerSession.new %>
     <%= labelled_form_for(active_timer_session,
