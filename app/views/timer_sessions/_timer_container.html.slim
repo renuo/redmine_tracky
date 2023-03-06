@@ -1,4 +1,5 @@
-.box[data-controller="form timer"]
+.box[data-controller="form timer"
+  data-timer-timezone-value="#{@timer_offset}"]
   .timer-container
     ruby:
       active_timer_session = timer_session || TimerSession.new
