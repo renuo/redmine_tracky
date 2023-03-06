@@ -17,3 +17,7 @@
     <%= render 'shared/assets' %>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  document.title = "<%= j "#{I18n.t('timer_sessions.index.title')} - Redmine" %>";
+<% end %>
