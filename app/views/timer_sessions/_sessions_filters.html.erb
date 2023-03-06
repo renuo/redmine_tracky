@@ -1,0 +1,15 @@
+<div class="box mb-3">
+  <%= labelled_form_for @filter, as: :filter, url: timer_sessions_path, method: :get do |f| %>
+    <div class="times-container">
+      <div class="col">
+        <%= f.date_field :min_date %>
+      </div>
+      <div class="col">
+        <%= f.date_field :max_date %>
+      </div>
+    </div>
+    <div class="mt-3">
+      <%= f.submit t('timer_sessions.filters.filter') %>
+    </div>
+  <% end %>
+</div>
