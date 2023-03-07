@@ -1,0 +1,6 @@
+<%= render 'sessions_filters' %>
+<% timer_sessions_by_day.to_a.each do |date, timer_session_day| %>
+  <%= render 'timer_sessions_day_block',
+    date: date,
+    timer_sessions: timer_session_day %>
+<% end %>

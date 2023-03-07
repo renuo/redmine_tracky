@@ -1,0 +1,22 @@
+<div data-controller="list" data-issue-completion-target="listAnchor">
+  <table data-list-target="table">
+    <tbody>
+      <% timer_session.relevant_issues.each do |issue| %>
+        <tr class="issue-container" data-form-target="issue" data-issue-id="<%= issue.id %>">
+          <td>
+            <b><%= link_to "#{issue.project} - #{issue.id}:", issue_path(issue.id), target: '_blank', rel: 'noopener' %></b>
+          </td>
+          <td>
+            <%= issue.subject %>
+          </td>
+          <td>
+            <span class="text-danger input-group-text" data-action="click->list#removeItem">
+              <i class="icon-only icon-del"></i>
+            </span>
+            <%= hidden_field_tag 'timer_session[issue_ids][]', issue.id, id: "timer_session_issue_id_#{issue.id}", readonly: true %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

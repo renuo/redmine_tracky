@@ -1,0 +1,20 @@
+<div class="box">
+  <div class="space-between mb-3">
+    <b><%= format_block_date(date) %></b>
+    <b class="float-right"><%= sum_work_hours(Array.wrap(timer_sessions)) %></b>
+  </div>
+
+  <table class="list timer-sessions-table">
+    <tbody>
+      <% timer_sessions.each_with_index do |time_entity, index| %>
+        <% previous_time_entity = timer_sessions[index + 1] %>
+        <%= render TimerSessionEntryComponent.new(
+          timer_session_entry: time_entity,
+          permission_manager: @permission_manager,
+          discrepancy_detected: @non_matching_timer_sessions[time_entity.id],
+          gap_separator: draw_gap_separator(time_entity, previous_time_entity)
+        ) %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

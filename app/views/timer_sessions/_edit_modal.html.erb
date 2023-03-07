@@ -1,0 +1,43 @@
+<div class="redmine-tracky" data-controller="issue-completion">
+  <div class="edit-modal">
+    <%= error_messages_for timer_session %>
+    <%= labelled_form_for(timer_session, remote: true) do |f| %>
+      <div class="row">
+        <div class="update-issue-container">
+          <div class="box">
+            <%= render 'shared/ticker_issue_list.html', timer_session: timer_session, data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container' %>
+            <hr>
+            <%= f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id', type: :search, data: { issue_completion_target: 'input' } %>
+            <% if SettingsManager.visible_hints %>
+              <small class="form-text text-muted"><%= t('timer_sessions.messaging.issue_list_hint') %></small>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <hr class="mb-3">
+      <%= f.text_field :comments, data: { timer_update_comment_input: '' }, placeholder: t('timer_sessions.messaging.comments_placeholder') %>
+      <br>
+      <div class="times-container">
+        <div class="col">
+          <%= render 'shared/time_entry_input', f: f, input_name: :timer_start, value: timer_session.timer_start, required: true, target: 'start' %>
+          <% if SettingsManager.visible_hints %>
+            <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_start_hint') %></small>
+          <% end %>
+        </div>
+        <br>
+        <div class="col">
+          <%= render 'shared/time_entry_input', f: f, input_name: :timer_end, value: timer_session.timer_end, required: true, target: 'end' %>
+          <% if SettingsManager.visible_hints %>
+            <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_end_hint') %></small>
+          <% end %>
+        </div>
+      </div>
+      <div class="mb-3"></div>
+      <div class="buttons">
+        <%= f.submit t('timer_sessions.edit.update'), data: { modal_update_button: '' } %>
+        <br class="mt-3">
+        <%= link_to_function l(:button_cancel), 'hideModal(this);', class: 'primary-cancel-button' %>
+      </div>
+    <% end %>
+  </div>
+</div>
