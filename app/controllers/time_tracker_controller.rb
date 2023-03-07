@@ -7,16 +7,7 @@ class TimeTrackerController < TrackyController
     @timer_offset = TimerSessionsController.offset_for_time_zone(@current_user)
     partial_to_render = :start
 
-    if @timer_session.nil?
-      @timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
-      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
-
-      if issue_connector.run
-        partial_to_render = handle_finished_timer_session(@timer_session) if @timer_session.session_finished?
-      else
-        @timer_session.errors.add(:issue_id, :invalid)
-      end
-    end
+    handle_nil_start if @timer_session.nil?
 
     render partial_to_render, layout: false
   end
@@ -42,6 +33,17 @@ class TimeTrackerController < TrackyController
   end
 
   private
+
+  def handle_nil_start
+    @timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
+    issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
+
+    if issue_connector.run
+      partial_to_render = handle_finished_timer_session(@timer_session) if @timer_session.session_finished?
+    else
+      @timer_session.errors.add(:issue_id, :invalid)
+    end
+  end
 
   def handle_finished_timer_session(timer_session)
     timer_session.update(finished: true)
