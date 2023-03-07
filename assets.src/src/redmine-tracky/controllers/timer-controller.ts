@@ -17,6 +17,7 @@ export default class extends Controller {
     };
 
     connect(): void {
+        console.log(this.timezoneValue);
         const start = (this.startTarget as HTMLInputElement).value;
         const end = (this.endTarget as HTMLInputElement).value;
         if (start && end) {
@@ -80,7 +81,7 @@ export default class extends Controller {
     
     private adjustedDateTime(): DateTime {
         const localOffset = DateTime.local().offset / 60;
-        return DateTime.local().plus({ hours: (localOffset-this.timezoneValue)*-1 });
+        return DateTime.local().minus({ hours: localOffset-this.timezoneValue });
     }
 
 }
