@@ -4,6 +4,7 @@ class TimeTrackerController < TrackyController
   before_action :set_timer_session
 
   def start
+    @timer_offset = TimerSessionsController.offset_for_time_zone(@current_user)
     partial_to_render = :start
 
     if @timer_session.nil?
