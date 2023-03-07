@@ -96,7 +96,7 @@ class TimerSessionsController < TrackyController
   def self.offset_for_time_zone(current_user)
     return 0 unless current_user&.preference&.time_zone
 
-    Time.zone.now.in_time_zone(current_user.preference.time_zone).utc_offset / 1.hour
+    Time.zone.now.in_time_zone(current_user.preference.time_zone).utc_offset / 1.minute
   end
 
   private

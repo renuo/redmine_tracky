@@ -79,8 +79,8 @@ export default class extends Controller {
     }
     
     private adjustedDateTime(): DateTime {
-        const localOffset = DateTime.local().offset / 60;
-        return DateTime.local().minus({ hours: localOffset-this.timezoneValue });
+        const localOffset = DateTime.local().offset;
+        return DateTime.local().minus({ minutes: localOffset-this.timezoneValue });
     }
 
 }
