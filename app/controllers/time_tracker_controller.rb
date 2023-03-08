@@ -31,6 +31,8 @@ class TimeTrackerController < TrackyController
   end
 
   def update
+    return if @timer_session.nil?
+
     @timer_session.update(timer_params)
 
     if @timer_session.valid?
