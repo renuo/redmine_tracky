@@ -5,7 +5,7 @@ class TimeTrackerController < TrackyController
 
   # rubocop:disable Metrics/AbcSize
   def start
-    @timer_offset = offset_for_time_zone(@current_user)
+    @timer_offset = offset_for_time_zone
     partial_to_render = :start
 
     if @timer_session.nil?

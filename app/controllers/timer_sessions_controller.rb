@@ -16,7 +16,7 @@ class TimerSessionsController < TrackyController
                       .sort_by(&:start_time)
                       .reverse
                       .group_by(&:entry_date)
-    @timer_offset = offset_for_time_zone(@current_user)
+    @timer_offset = offset_for_time_zone
   end
 
   def report
