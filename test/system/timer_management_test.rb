@@ -70,7 +70,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     )
     visit timer_sessions_path
     assert_nil TimerSession.last.timer_end
-    time = Time.zone.now + 1.hour
+    time = Time.zone.now
     fill_in 'timer_session_timer_end', with: time.strftime(I18n.t('timer_sessions.formats.datetime_format'))
     find('[data-name="timer-stop"]').click
     assert has_content?(timer_session.comments)
