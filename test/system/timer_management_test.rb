@@ -14,6 +14,7 @@ class TimerManagementTest < ApplicationSystemTestCase
   setup do
     log_user('admin', 'admin')
     User.current = User.find(1)
+    # User.current.preference.update(time_zone: 'Tijuana')
     visit timer_sessions_path
   end
 
@@ -69,7 +70,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     )
     visit timer_sessions_path
     assert_nil TimerSession.last.timer_end
-    time = Time.zone.now
+    time = Time.zone.now + 1.hour
     fill_in 'timer_session_timer_end', with: time.strftime(I18n.t('timer_sessions.formats.datetime_format'))
     find('[data-name="timer-stop"]').click
     assert has_content?(timer_session.comments)

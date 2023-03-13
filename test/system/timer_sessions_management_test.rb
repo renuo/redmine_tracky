@@ -13,6 +13,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   setup do
     log_user('admin', 'admin')
     User.current = User.find(1)
+    # User.current.preference.update(time_zone: 'Tijuana')
     @timer_sessions = FactoryBot.create_list(:timer_session, 3,
                                              :with_issues,
                                              :with_time_entries,
