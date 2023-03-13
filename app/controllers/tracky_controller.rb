@@ -30,7 +30,6 @@ class TrackyController < ApplicationController
   def offset_for_time_zone
     return 0 unless @current_user&.preference&.time_zone.present?
 
-
     Time.zone.now.in_time_zone(@current_user.preference.time_zone).utc_offset / 1.minute
   end
 end
