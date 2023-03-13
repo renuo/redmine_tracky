@@ -49,7 +49,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
     @user.preference.update(time_zone: 'Tijuana')
     get(:index)
     assert_response 200
-    assert_match(/data-timer-timezone-value="-[78]"/, response.body)
+    assert_match(/data-timer-timezone-value="-4[28]0"/, response.body)
   end
 
   test 'index - with filter' do

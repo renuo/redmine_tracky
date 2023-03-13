@@ -14,6 +14,7 @@ class TimerManagementTest < ApplicationSystemTestCase
   setup do
     log_user('admin', 'admin')
     User.current = User.find(1)
+    # User.current.preference.update(time_zone: 'Tijuana')
     visit timer_sessions_path
   end
 
