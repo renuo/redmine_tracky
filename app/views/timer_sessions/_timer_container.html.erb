@@ -50,22 +50,22 @@
               <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_start_hint') %></small>
             <% end %>
           </div>
-          <br>
         </div>
+        <br>
         <div class="col">
           <%= render 'shared/time_entry_input', f: f, input_name: :timer_end, value: active_timer_session.timer_end, required: active_timer_session.persisted?, target: 'end' %>
           <% if SettingsManager.visible_hints %>
             <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_end_hint') %></small>
           <% end %>
         </div>
-        <% if f.object.persisted? %>
-          <%= f.text_field :absolute_time, class: 'w-100', data: { form_target: 'absolutInput', action: 'change->form#absoluteTime' }, placeholder: t('timer_sessions.timer.absolute_time_placeholder') %>
-          <% if SettingsManager.visible_hints %>
-            <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_absolute_time_hint') %></small>
-          <% end %>
-        <% end %>
-        <div class="mb-3"></div>
       </div>
+      <% if f.object.persisted? %>
+        <%= f.text_field :absolute_time, class: 'w-100', data: { form_target: 'absolutInput', action: 'change->form#absoluteTime' }, placeholder: t('timer_sessions.timer.absolute_time_placeholder') %>
+        <% if SettingsManager.visible_hints %>
+          <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_absolute_time_hint') %></small>
+        <% end %>
+      <% end %>
+      <div class="mb-3"></div>
       <% if timer_session %>
         <div data-ending-action-buttons>
           <% if @permission_manager.can?(:stop, :time_tracker) %>
