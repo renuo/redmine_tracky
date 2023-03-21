@@ -18,6 +18,11 @@ export default class extends Controller {
 
     connect(): void {
         const start = (this.startTarget as HTMLInputElement).value;
+        if (start) {
+            document.title = '⏱️ Tracky'
+        } else {
+            document.title = '❌ Tracky'
+        }
         const end = (this.endTarget as HTMLInputElement).value;
         if (start && end) {
             const diff: string = this.timeDifference();
