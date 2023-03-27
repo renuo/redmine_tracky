@@ -12,4 +12,6 @@ RUN apt-get update -qqy && \
     apt-get -qy install google-chrome-stable && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
+RUN bundle config --delete without
+
 CMD ["rails", "server", "-b", "0.0.0.0"]

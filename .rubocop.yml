@@ -8,6 +8,9 @@ Metrics/ClassLength:
 Style/Documentation:
   Enabled: false
 
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either
+
 Style/MixinUsage:
   Exclude:
   - 'bin/setup'
