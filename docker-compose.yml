@@ -23,6 +23,7 @@ services:
       - ./.docker/redmine/seeds.rb:/usr/src/redmine/db/seeds.rb
       - ./.docker/redmine/configuration.yml:/usr/src/redmine/config/configuration.yml
       - ./.docker/redmine/database.yml:/usr/src/redmine/config/database.yml
+      - ./.docker/redmine/development.rb:/usr/src/redmine/config/environments/development.rb
       - ./.docker/redmine/additional_environment.rb:/usr/src/redmine/config/additional_environment.rb
   mysql:
     image: mariadb:10.5.8

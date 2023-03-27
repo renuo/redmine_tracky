@@ -48,16 +48,18 @@ task :reset do
   puts "The env '#{rails_env}' has been reset."
 end
 
+desc 'Install dependencies.'
+task :install_dependencies do
+  puts 'Installing dev packages...'
+  sh 'docker compose exec redmine bundle config --delete without'
+  sh 'docker compose exec redmine bundle install'
+end
+
 desc 'Provision the environment.'
 task :provision do
-  puts 'Installing dev packages...'
-  sleep(2)
-  sh 'docker compose exec redmine bundle config set with "default dev test"'
-  sh 'docker compose exec redmine bundle install'
+  Rake::Task[:install_dependencies].invoke
 
   puts 'Preparing database...'
-
-  sleep(2)
   sh 'docker compose exec redmine rake db:seed'
 
   puts <<~RESULT
