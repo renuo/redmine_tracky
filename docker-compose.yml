@@ -43,7 +43,7 @@ services:
     volumes:
       - ./.docker/mysql/init:/docker-entrypoint-initdb.d
   node:
-    image: node:16.x-redmine-tracky
+    image: node:18.x-redmine-tracky
     container_name: redmine-tracky-node
     hostname: node
     build: .docker/node
