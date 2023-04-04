@@ -51,6 +51,7 @@ end
 desc 'Install dependencies.'
 task :install_dependencies do
   puts 'Installing dev packages...'
+  sh 'docker compose exec redmine bundle config --delete without'
   sh 'docker compose exec redmine bundle install'
 end
 
