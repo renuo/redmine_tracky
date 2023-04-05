@@ -70,7 +70,7 @@ class TimeRebalancer
   def issues_changed?
     return false unless @issues
 
-    (@issues - @issue_ids).count.positive?
+    @issues.count != @issue_ids.count
   end
 
   def delete_connection_entities
