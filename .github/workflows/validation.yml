@@ -2,28 +2,23 @@ name: validation
 on:
   - push
 jobs:
-  lint_ruby:
+  test_ruby:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7.7"
+          ruby-version: "3.1.2"
+      - name: Setup Redmine
+        run: make && rake install_dependencies
       - name: Install gems
         run: BUNDLE_GEMFILE=PluginGemfile bundle install
       - name: Lint
         run: BUNDLE_GEMFILE=PluginGemfile bundle exec rubocop -c .rubocop.yml
-  test_ruby:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test Redmine Plugin
-        uses: two-pack/redmine-plugin-test-action@v2
-        with:
-          plugin_name: redmine_tracky
-          redmine_version: v4.2
-          ruby_version: v2.7
-          database: mysql
+      - name: Run tests
+        run: BUNDLE_GEMFILE=PluginGemfile bundle exec rake test_ruby
   check_javascript:
     runs-on: ubuntu-latest
     steps:
