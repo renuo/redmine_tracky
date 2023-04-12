@@ -14,7 +14,7 @@ jobs:
       - name: Setup Redmine
         run: make && rake install_dependencies
       - name: Install gems
-        run: BUNDLE_GEMFILE=PluginGemfile bundle install; gem install rubocop; 
+        run: BUNDLE_GEMFILE=PluginGemfile bundle install
       - name: Lint
         run: bundle exec rubocop -c .rubocop.yml
       - name: Run tests
