@@ -23,7 +23,7 @@
     "esbuild-wasm": "^0.14.54",
     "eslint": "^8.37.0",
     "mocha": "^10.2.0",
-    "sass": "^1.59.3",
+    "sass": "^1.62.0",
     "sass-loader": "^13.2.2",
     "style-loader": "^3.3.2",
     "ts-loader": "^9.4.2",
