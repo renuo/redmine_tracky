@@ -41,6 +41,21 @@ class TimeRebalancerTest < ActiveSupport::TestCase
     assert_equal [2], @timer_session.issue_ids
   end
 
+  test '#rebalance_entries - remove an issue' do
+    TimeRebalancer.new([Issue.find(2).id, Issue.find(1).id], @timer_session).rebalance_entries
+
+    @timer_session.reload
+    assert_equal 2, TimerSessionIssue.count
+    assert_includes @timer_session.issue_ids, 1
+    assert_includes @timer_session.issue_ids, 2
+
+    TimeRebalancer.new([Issue.find(2).id], @timer_session).rebalance_entries
+
+    @timer_session.reload
+    assert_equal 1, TimerSessionIssue.count
+    assert_equal [2], @timer_session.issue_ids
+  end
+
   test '#rebalance_entries - issues not changed - times changed' do
     @timer_session.update(timer_start: Time.zone.now - 2.hours)
     TimeRebalancer.new(@timer_session.issue_ids, @timer_session).rebalance_entries
