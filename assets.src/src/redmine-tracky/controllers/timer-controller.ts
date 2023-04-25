@@ -78,6 +78,7 @@ export default class extends Controller {
     }
 
     private updateTimer(time: string): void {
+        time = time.split(':').map((t) => t.padStart(2, '0')).join(':')
         $(this.labelTarget).text(
             this.handleNegativeTime(time)
         );
