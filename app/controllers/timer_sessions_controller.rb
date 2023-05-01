@@ -7,7 +7,7 @@ class TimerSessionsController < TrackyController
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .where(user: @current_user)
                                            .finished_sessions
-    @non_matching_timer_session_ids = non_matching_timer_sessions(@timer_sessions_in_range).pluck(:id)
+    @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(@timer_sessions_in_range).pluck(:id)
     @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
     time_entries = time_entries_in_range(@timer_sessions)
 
@@ -57,10 +57,6 @@ class TimerSessionsController < TrackyController
   def time_error
     @timer_session = TimeEntityDecorator.new(user_scoped_timer_session(params[:id]))
     render :time_error, layout: false
-  end
-
-  def non_matching_timer_sessions(timer_sessions)
-    TimeDiscrepancyLoader.new(timer_sessions).where_time_not_adding_up
   end
 
   def continue
