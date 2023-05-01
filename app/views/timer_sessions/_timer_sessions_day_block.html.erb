@@ -11,7 +11,7 @@
         <%= render TimerSessionEntryComponent.new(
           timer_session_entry: time_entity,
           permission_manager: @permission_manager,
-          discrepancy_detected: @non_matching_timer_sessions[time_entity.id],
+          discrepancy_detected: @non_matching_timer_session_ids.include?(time_entity.id),
           gap_separator: draw_gap_separator(time_entity, previous_time_entity)
         ) %>
       <% end %>

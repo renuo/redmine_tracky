@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
 class TimerSessionsController < TrackyController
   before_action :set_current_timer_session
 
@@ -8,7 +7,7 @@ class TimerSessionsController < TrackyController
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .where(user: @current_user)
                                            .finished_sessions
-    load_non_matching_timer_sessions(@timer_sessions_in_range)
+    @non_matching_timer_session_ids = non_matching_timer_sessions(@timer_sessions_in_range).pluck(:id)
     @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
     time_entries = time_entries_in_range(@timer_sessions)
 
@@ -60,15 +59,8 @@ class TimerSessionsController < TrackyController
     render :time_error, layout: false
   end
 
-  def load_non_matching_timer_sessions(timer_sessions)
-    @non_matching_timer_sessions = TimeDiscrepancyLoader.new(
-      timer_sessions
-    )
-                                                        .where_time_not_adding_up
-                                                        .pluck(:id).to_h do |timer_session_id|
-      [timer_session_id,
-       timer_session_id]
-    end
+  def non_matching_timer_sessions(timer_sessions)
+    TimeDiscrepancyLoader.new(timer_sessions).where_time_not_adding_up
   end
 
   def continue
@@ -126,4 +118,3 @@ class TimerSessionsController < TrackyController
     params[:filter].permit(:min_date, :max_date).to_h
   end
 end
-# rubocop:enable Metrics/ClassLength
