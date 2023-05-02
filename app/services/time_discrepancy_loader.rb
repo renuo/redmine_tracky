@@ -3,7 +3,8 @@
 class TimeDiscrepancyLoader
   DECIMALS_TO_ROUND_TO = 2
 
-  def self.uneven_timer_sessions(scope = TimerSession.all)
+  # `scope` is an AR collection proxy for TimerSession
+  def self.uneven_timer_sessions(scope)
     scope.joins(:time_entries)
          .group(:id, :timer_start, :timer_end)
          .having(<<~SQL)
