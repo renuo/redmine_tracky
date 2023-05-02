@@ -13,11 +13,8 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   validate :validate_session_attributes, on: :update
 
-  scope :active_session, ->(user_id) { where(user_id: user_id, finished: false) }
-
+  scope :active_sessions, -> { where(finished: false) }
   scope :finished_sessions, -> { where(finished: true) }
-
-  scope :created_by, ->(user) { where(user_id: user.id) }
 
   scope :recorded_on, ->(user, date) { where(user_id: user.id, timer_start: date).sum(:hours) }
 

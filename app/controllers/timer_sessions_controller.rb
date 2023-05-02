@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
 class TimerSessionsController < TrackyController
   before_action :set_current_timer_session
 
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
-                                           .finished_sessions.created_by(@current_user)
-    load_non_matching_timer_sessions(@timer_sessions_in_range)
+                                           .where(user: @current_user)
+                                           .finished_sessions
+    @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(@timer_sessions_in_range).pluck(:id)
     @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
     time_entries = time_entries_in_range(@timer_sessions)
 
@@ -59,17 +59,6 @@ class TimerSessionsController < TrackyController
     render :time_error, layout: false
   end
 
-  def load_non_matching_timer_sessions(timer_sessions)
-    @non_matching_timer_sessions = TimeDiscrepancyLoader.new(
-      timer_sessions
-    )
-                                                        .where_time_not_adding_up
-                                                        .pluck(:id).to_h do |timer_session_id|
-      [timer_session_id,
-       timer_session_id]
-    end
-  end
-
   def continue
     timer_session_template = user_scoped_timer_session(params[:id])
     linked_issues = timer_session_template.relevant_issues
@@ -101,11 +90,11 @@ class TimerSessionsController < TrackyController
   end
 
   def user_scoped_timer_session(id)
-    TimerSession.created_by(@current_user).find(id)
+    TimerSession.where(user: @current_user).find(id)
   end
 
   def set_current_timer_session
-    @current_timer_session = TimerSession.active_session(@current_user.id).first
+    @current_timer_session = TimerSession.active_sessions.find_by(user: @current_user)
   end
 
   def timer_session_params
@@ -125,4 +114,3 @@ class TimerSessionsController < TrackyController
     params[:filter].permit(:min_date, :max_date).to_h
   end
 end
-# rubocop:enable Metrics/ClassLength
