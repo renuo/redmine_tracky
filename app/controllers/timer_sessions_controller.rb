@@ -5,8 +5,8 @@ class TimerSessionsController < TrackyController
 
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
-                                           .where(user: @current_user)
-                                           .finished_sessions
+                                           .finished
+                                           .created_by(@current_user)
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(@timer_sessions_in_range).pluck(:id)
     @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
     time_entries = time_entries_in_range(@timer_sessions)
@@ -94,7 +94,7 @@ class TimerSessionsController < TrackyController
   end
 
   def set_current_timer_session
-    @current_timer_session = TimerSession.active_sessions.find_by(user: @current_user)
+    @current_timer_session = TimerSession.active.find_by(user: @current_user)
   end
 
   def timer_session_params

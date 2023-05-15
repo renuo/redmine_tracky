@@ -85,7 +85,7 @@ class TimeTrackerController < TrackyController
   end
 
   def set_timer_session
-    @timer_session = TimerSession.active_sessions.find_by(user: @current_user)
+    @timer_session = TimerSession.active.find_by(user: @current_user)
   end
 
   def timer_params
