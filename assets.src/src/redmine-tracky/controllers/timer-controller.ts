@@ -78,9 +78,17 @@ export default class extends Controller {
     }
 
     private updateTimer(time: string): void {
+        time = time.split(':').map((t) => t.padStart(2, '0')).join(':')
         $(this.labelTarget).text(
-            time
+            this.handleNegativeTime(time)
         );
+    }
+
+    private handleNegativeTime(time: string): string {
+        if (time.startsWith('-')) {
+            return `-${time.replace(/-/g, '')}`;
+        }
+        return time;
     }
     
     private adjustedDateTime(): DateTime {
