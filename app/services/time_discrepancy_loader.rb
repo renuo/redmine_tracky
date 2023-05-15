@@ -3,23 +3,30 @@
 class TimeDiscrepancyLoader
   DECIMALS_TO_ROUND_TO = 2
 
-  # base_query ==> Expected to be TimerSession.where(user_id: user.id)
-  def initialize(base_query)
-    @base_query = base_query
+  # `scope` is an AR collection proxy for TimerSession
+  def self.uneven_timer_sessions(scope)
+    scope.joins(:time_entries)
+         .group(:id, :timer_start, :timer_end)
+         .having(
+           <<~SQL
+             CAST(SUM(time_entries.hours)
+             AS DECIMAL(10, #{DECIMALS_TO_ROUND_TO}))
+             !=
+             CAST((#{time_difference_expr}) / 3600.0
+             AS DECIMAL(10, #{DECIMALS_TO_ROUND_TO}))
+           SQL
+         )
   end
 
-  def where_time_not_adding_up
-    build_query
-  end
-
-  private
-
-  # TODO: rewrite to be in SQL rather than ruby
-  def build_query
-    @base_query.reject do |timer_session|
-      hours_to_spend = timer_session.splittable_hours
-      total_hours_recorded = timer_session.time_entries.to_a.sum(&:hours)
-      hours_to_spend.to_d.round(DECIMALS_TO_ROUND_TO) == total_hours_recorded.to_d.round(DECIMALS_TO_ROUND_TO)
+  def self.time_difference_expr
+    if using_postgresql?
+      'EXTRACT(EPOCH FROM timer_sessions.timer_end) - EXTRACT(EPOCH FROM timer_sessions.timer_start)'
+    else
+      'TIMESTAMPDIFF(SECOND, timer_sessions.timer_start, timer_sessions.timer_end)'
     end
+  end
+
+  def self.using_postgresql?
+    ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
   end
 end
