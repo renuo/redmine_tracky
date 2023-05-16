@@ -7,6 +7,8 @@ class TrackyController < ApplicationController
   before_action :verify_permission!
   skip_before_action :verify_authenticity_token
 
+  helper_method :offset_for_time_zone
+
   def verify_permission!
     return unless User.current
     return if permission_manager.can?(action_name.to_sym, controller_name.to_sym)

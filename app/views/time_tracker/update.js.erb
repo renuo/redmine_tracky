@@ -1,5 +1,5 @@
-<% @timer_session.validate %>
+<% @current_timer_session.validate %>
 
 document.querySelector('[data-timer-session-container]').innerHTML =
   ("<%= j(render 'timer_sessions/timer_container',
-          timer_session: @timer_session) %>")
+          timer_session: @current_timer_session) %>")
