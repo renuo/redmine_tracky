@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 
 class TimeTrackerController < TrackyController
-  before_action :set_timer_session
-
   # rubocop:disable Metrics/AbcSize
   def start
     @timer_offset = offset_for_time_zone
     partial_to_render = :start
 
-    if @timer_session.nil?
-      @timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
-      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @timer_session)
+    if @current_timer_session.nil?
+      @current_timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
+      issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @current_timer_session)
 
       if issue_connector.run
-        partial_to_render = handle_finished_timer_session(@timer_session) if @timer_session.session_finished?
+        partial_to_render = handle_finished_timer_session(@current_timer_session) if @current_timer_session.session_finished?
       else
-        @timer_session.errors.add(:issue_id, :invalid)
+        @current_timer_session.errors.add(:issue_id, :invalid)
       end
     end
 
@@ -24,19 +22,19 @@ class TimeTrackerController < TrackyController
   # rubocop:enable Metrics/AbcSize
 
   def stop
-    if @timer_session.nil?
+    if @current_timer_session.nil?
       render :stop, layout: false
     elsif params[:cancel].nil?
-      handle_stop(@timer_session)
+      handle_stop(@current_timer_session)
     else
-      handle_cancel(@timer_session)
+      handle_cancel(@current_timer_session)
     end
   end
 
   def update
-    @timer_session.update(timer_params)
+    @current_timer_session.update(timer_params)
 
-    if @timer_session.valid?
+    if @current_timer_session.valid?
       head :no_content
     else
       render :update, layout: false
@@ -82,10 +80,6 @@ class TimeTrackerController < TrackyController
 
   def default_end_time_for_timer(timer_session)
     (timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now.asctime)
-  end
-
-  def set_timer_session
-    @timer_session = TimerSession.active.find_by(user: @current_user)
   end
 
   def timer_params

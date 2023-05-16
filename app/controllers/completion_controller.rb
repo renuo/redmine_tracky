@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class CompletionController < TrackyController
-  skip_before_action :verify_permission!
-
+class CompletionController < ApplicationController
   SEARCH_LIMIT = 10
   PROJECT_RESULTS_LIMIT = 10
   TICKET_OPEN_STATUS = true

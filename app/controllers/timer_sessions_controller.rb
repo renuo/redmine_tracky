@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class TimerSessionsController < TrackyController
-  before_action :set_current_timer_session
-
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .finished
@@ -91,10 +89,6 @@ class TimerSessionsController < TrackyController
 
   def user_scoped_timer_session(id)
     TimerSession.where(user: @current_user).find(id)
-  end
-
-  def set_current_timer_session
-    @current_timer_session = TimerSession.active.find_by(user: @current_user)
   end
 
   def timer_session_params
