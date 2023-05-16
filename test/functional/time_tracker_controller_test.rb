@@ -145,6 +145,14 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_equal 'NEW COMMENT', TimerSession.last.comments
   end
 
+  test 'update _ without running session' do
+    post :update, params: { timer_session: {
+      comments: 'NEW COMMENT'
+    } }, xhr: true
+
+    assert_response 200
+  end
+
   test 'stop _ invalid params' do
     post :start, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
