@@ -2,9 +2,12 @@
 
 class TrackyController < ApplicationController
   before_action :set_current_user
+  before_action :set_current_timer_session
   before_action :permission_manager
   before_action :verify_permission!
   skip_before_action :verify_authenticity_token
+
+  helper_method :offset_for_time_zone
 
   def verify_permission!
     return unless User.current
@@ -15,6 +18,10 @@ class TrackyController < ApplicationController
 
   def set_current_user
     @current_user = User.current
+  end
+
+  def set_current_timer_session
+    @current_timer_session = TimerSession.active.find_by(user: @current_user)
   end
 
   def user_time_zone

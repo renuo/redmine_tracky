@@ -34,7 +34,7 @@ class SessionCreator
   end
 
   def start_of_last_session
-    TimerSession.finished_sessions.order(timer_end: :desc).find_by(user: @user)&.timer_end
+    TimerSession.finished.created_by(@user).order(timer_end: :desc)&.first&.timer_end
   end
 
   def user_time_zone

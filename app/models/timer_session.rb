@@ -13,10 +13,11 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   validate :validate_session_attributes, on: :update
 
-  scope :active_sessions, -> { where(finished: false) }
-  scope :finished_sessions, -> { where(finished: true) }
+  scope :active, -> { where(finished: false) }
+  scope :finished, -> { where(finished: true) }
 
-  scope :recorded_on, ->(user, date) { where(user_id: user.id, timer_start: date).sum(:hours) }
+  scope :created_by, ->(user) { where(user: user) }
+  scope :recorded_on, ->(date) { where(timer_start: date) }
 
   validate :start_before_end_date
 
@@ -80,10 +81,7 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   def validate_day_limit
     return unless (
-        splittable_hours + TimerSession.recorded_on(
-          user,
-          timer_start.to_date
-        )
+        splittable_hours + TimerSession.created_by(user).recorded_on(timer_start.to_date).sum(:hours)
       ) > SettingsManager.max_hours_recorded_per_day.to_f
 
     errors.add(:timer_start, :limit_reached_day)
