@@ -8,7 +8,7 @@ class TimeTrackerController < TrackyController
       render :update, layout: false and return
     end
 
-    @current_timer_session = SessionCreator.new(@current_user, timer_params, timer_params[:commit]).create
+    @current_timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
 
     # Go to start page if timer session is not valid
     unless @current_timer_session.valid?
