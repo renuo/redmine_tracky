@@ -5,5 +5,7 @@ gem 'view_component'
 group :development, :test do
   gem 'bullet'
   gem 'factory_bot_rails'
+  gem 'rubocop', '~> 1.26.0'
+  gem 'rubocop-performance', '~> 1.13.0'
   gem 'brakeman'
 end
