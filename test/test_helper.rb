@@ -4,6 +4,7 @@
 
 require 'simplecov'
 require 'factory_bot_rails'
+require 'webdrivers'
 
 ENV['GOOGLE_CHROME_OPTS_ARGS'] = 'headless,disable-gpu,no-sandbox,disable-dev-shm-usage'
 
