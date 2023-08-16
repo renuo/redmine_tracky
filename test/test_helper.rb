@@ -7,6 +7,8 @@ require 'factory_bot_rails'
 
 ENV['GOOGLE_CHROME_OPTS_ARGS'] = 'headless,disable-gpu,no-sandbox,disable-dev-shm-usage'
 
+Webdrivers::Chromedriver.required_version = '114.0.5735.90' # TODO: remove as soon as https://www.redmine.org/issues/37558 is fixed
+
 SimpleCov.coverage_dir('coverage/redmine_tracky')
 SimpleCov.start 'rails' do
   if Dir.pwd.match?(%r{plugins/redmine_tracky})
