@@ -7,9 +7,12 @@ RUN apt update -qq > /dev/null \
   && apt install -qqy curl build-essential wget gnupg2 make vim less > /dev/null
 
 # Install chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get update -qqy && \
-    apt-get -qy install google-chrome-stable && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+# TODO: remove hardcode as soon as https://www.redmine.org/issues/37558 is fixed
+ENV CHROME_VERSION "114.0.5735.90-1"
+RUN set -ex && \
+  apt-get update -qqy && \
+  wget --no-check-certificate https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb && \
+  apt-get install -qqyf ./google-chrome-stable_${CHROME_VERSION}_amd64.deb && \
+  rm google-chrome-stable_${CHROME_VERSION}_amd64.deb
 
 CMD ["rails", "server", "-b", "0.0.0.0"]
