@@ -8,7 +8,11 @@ FactoryBot.define do
     status { IssueStatus.first }
     project { Project.first }
     tracker { Tracker.first }
-    priority { create(:issue_priority) }
+    priority { IssuePriority.first }
+  end
+
+  trait :closed do
+    status { IssueStatus.find_by(name: 'Closed') }
   end
 
   factory :issue_priority do

@@ -2,8 +2,6 @@
 
 require File.expand_path('../test_helper', __dir__)
 
-SimpleCov.command_name 'test:functionals'
-
 class CompletionControllerTest < ActionController::TestCase
   tests CompletionController
 
@@ -15,27 +13,37 @@ class CompletionControllerTest < ActionController::TestCase
            :enumerations,
            :issues
 
-  def setup
+  setup do
     @controller.logged_user = User.find(1)
     @request.session[:user_id] = 1
   end
 
-  test 'issues - search by term' do
+  test 'issues - returns matching issues for given term' do
     issue = FactoryBot.create(:issue, id: 100, subject: 'Test issue for Renuo')
 
     get :issues, params: { term: issue.subject }
 
-    assert_response 200
+    assert_response :success
     assert_equal 'application/json; charset=utf-8', response.content_type
-    assert_equal [
-                   {
-                     "id" => issue.id,
-                     "label" => "eCookbook - Bug #100: Test issue for Renuo",
-                     "subject" => "Test issue for Renuo",
-                     "value" => 100,
-                     "project" => "eCookbook"
-                   }
-                 ],
-                 JSON.parse(response.body)
+    assert_json_response_matches_issue(issue)
+  end
+
+  test 'issues - handles request without term' do
+    get :issues
+    assert_response :success
+    assert_equal 'application/json; charset=utf-8', response.content_type
+  end
+
+  private
+
+  def assert_json_response_matches_issue(issue)
+    expected = [{
+      'id' => issue.id,
+      'label' => "#{issue.project} - #{issue.tracker} ##{issue.id}: #{issue.subject}",
+      'subject' => issue.subject,
+      'value' => issue.id,
+      'project' => issue.project.to_s
+    }]
+    assert_equal expected, JSON.parse(response.body)
   end
 end
