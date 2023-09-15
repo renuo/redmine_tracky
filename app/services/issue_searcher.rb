@@ -9,10 +9,10 @@ class IssueSearcher
     issues = if search_term.present?
                search_by_term(search_term, scope)
              else
-               filter_closed_issues(issue_order(scope)).limit(SEARCH_LIMIT)
+               filter_closed_issues(scope.order(id: :desc)).limit(SEARCH_LIMIT)
              end
 
-    order_issues(issues)
+    issues.compact.uniq(&:id)
   end
 
   private
@@ -34,10 +34,6 @@ class IssueSearcher
 
   def issue_order(issue_query)
     issue_query.order(id: :desc)
-  end
-
-  def order_issues(issues)
-    issues.compact.sort_by(&:id).reverse.uniq(&:id)
   end
 
   def filter_closed_issues(issues)

@@ -35,13 +35,15 @@ class IssueSearcherTest < ActiveSupport::TestCase
     assert_equal @issues[0], @service.call(search_term, Issue.all)[0]
   end
 
-  test 'call - orders results by id' do
-    search_term = 'special Renuo issue'
-    assert_equal [@issues[1], @issues[0]], @service.call(search_term, Issue.all)
-  end
-
   test 'call - filters closed issues' do
     search_term = @issues.last.subject
     assert_equal [], @service.call(search_term, Issue.all)
+  end
+
+  test 'call - hits by id are first' do
+    second_issue = FactoryBot.create(:issue, id: 103, subject: '100th issue', project: Project.first)
+
+    search_term = '100'
+    assert_equal [@issues[0], second_issue], @service.call(search_term, Issue.all)
   end
 end
