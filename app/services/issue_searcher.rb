@@ -9,7 +9,7 @@ class IssueSearcher
     issues = if search_term.present?
                search_by_term(search_term, scope)
              else
-               filter_closed_issues(scope.order(id: :desc)).limit(SEARCH_LIMIT)
+               filter_closed_issues(scope).limit(SEARCH_LIMIT).order(id: :desc)
              end
 
     issues.compact.uniq(&:id)
