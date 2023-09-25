@@ -45,4 +45,13 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
     assert_equal 1, where_time_not_adding_up.length
     assert_kind_of TimerSession, where_time_not_adding_up.first
   end
+
+  test 'ignore small discrepancies in time sum' do
+    timer_session = FactoryBot.create_list(:timer_session, 1, :with_unrounded_time_entries, user: User.current).first
+    timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
+                                          .finished.created_by(User.current)
+    non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(timer_sessions_in_range).map(&:id)
+
+    assert non_matching_timer_session_ids.exclude?(timer_session.id)
+  end
 end
