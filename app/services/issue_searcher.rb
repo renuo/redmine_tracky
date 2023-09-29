@@ -5,11 +5,11 @@ class IssueSearcher
   PROJECT_RESULTS_LIMIT = 10
   TICKET_OPEN_STATUS = true
 
-  def call(search_term, scope)
+  def call(search_term, issues)
     issues = if search_term.present?
-               search_by_term(search_term, scope)
+               search_by_term(search_term, issues)
              else
-               filter_closed_issues(scope).limit(SEARCH_LIMIT).order(id: :desc)
+               issues.open(true).limit(SEARCH_LIMIT).order(id: :desc)
              end
 
     issues.compact.uniq(&:id)
@@ -17,17 +17,17 @@ class IssueSearcher
 
   private
 
-  def search_by_term(search_term, scope)
+  def search_by_term(search_term, issues)
     found_issues = []
-    found_issues << find_by_id(search_term, scope)
+    found_issues << find_by_id(search_term, issues)
     found_issues += hits_by_project(search_term)
-    found_issues + hits_by_subject(search_term, scope)
+    found_issues + hits_by_subject(search_term, issues)
   end
 
-  def find_by_id(search_term, scope)
+  def find_by_id(search_term, issues)
     return unless search_term =~ /\A#?(\d+)\z/
 
-    scope.find_by(id: Regexp.last_match(1).to_i)
+    issues.find_by(id: Regexp.last_match(1).to_i)
   end
 
   def hits_by_project(search_term)
@@ -41,11 +41,7 @@ class IssueSearcher
          .limit(PROJECT_RESULTS_LIMIT)
   end
 
-  def hits_by_subject(search_term, scope)
-    filter_closed_issues(scope.like(search_term)).order(id: :desc).limit(SEARCH_LIMIT)
-  end
-
-  def filter_closed_issues(issues)
-    issues.open(TICKET_OPEN_STATUS)
+  def hits_by_subject(search_term, issues)
+    issues.like(search_term).open(true).order(id: :desc).limit(SEARCH_LIMIT)
   end
 end
