@@ -23,8 +23,7 @@ project_amount.times do |project_num|
 
   # Assign members
   issue_per_project_amount.times do |issue_num|
-    status_id = rand(1..6)
-    issue = Issue.create!(
+    Issue.create!(
       subject: "Issue #{issue_num} for project #{project_num}",
       description: "Description for Issue #{issue_num} in project #{project_num}",
       tracker: Tracker.first,
