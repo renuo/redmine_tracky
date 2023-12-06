@@ -27,9 +27,10 @@ SimpleCov.start 'rails' do
   end
 
   track_files 'app/**/*.rb'
-end
 
-SimpleCov.minimum_coverage 95
+  enable_coverage :branch
+  minimum_coverage line: 95, branch: 70
+end
 
 FactoryBot.definition_file_paths = [File.expand_path('factories', __dir__)]
 FactoryBot.find_definitions
