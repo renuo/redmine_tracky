@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# # frozen_string_literal: true
-
 REDMINE_URL = 'http://localhost:3000'
 MAILHOG_URL = 'http://localhost:8025'
 
