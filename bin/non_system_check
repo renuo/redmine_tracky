@@ -1,6 +1,4 @@
-BUNDLE_GEMFILE=PluginGemfile bundle install
-cd ../../
-bundle install
-bundle exec rake redmine:plugins:test:units NAME=redmine_tracky
-echo '--------------------------------------------'
-bundle exec rake redmine:plugins:test:functionals NAME=redmine_tracky
+#!/usr/bin/env bash
+bundle exec rake test_ruby TEST=unit
+echo '------------------------------'
+bundle exec rake test_ruby TEST=functional
