@@ -4,12 +4,8 @@
 
 require 'simplecov'
 require 'factory_bot_rails'
-require 'webdrivers'
 
 ENV['GOOGLE_CHROME_OPTS_ARGS'] = 'headless,disable-gpu,no-sandbox,disable-dev-shm-usage'
-
-# TODO: remove hardcode as soon as https://www.redmine.org/issues/37558 is fixed
-Webdrivers::Chromedriver.required_version = '114.0.5735.90'
 
 SimpleCov.coverage_dir('coverage/redmine_tracky')
 SimpleCov.start 'rails' do

@@ -70,11 +70,13 @@ class TimerManagementTest < ApplicationSystemTestCase
     )
     visit timer_sessions_path
     assert_nil TimerSession.last.timer_end
-    time = Time.zone.now
-    fill_in 'timer_session_timer_end', with: time.strftime(I18n.t('timer_sessions.formats.datetime_format'))
+    time_in_user_time_zone = User.current.convert_time_to_user_timezone(Time.zone.now)
+
+    fill_in 'timer_session_timer_end',
+            with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
     find('[data-name="timer-stop"]').click
     assert has_content?(timer_session.comments)
-    assert_equal(time.strftime(I18n.t('timer_sessions.formats.datetime_format')),
+    assert_equal(time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format')),
                  TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))
   end
 end

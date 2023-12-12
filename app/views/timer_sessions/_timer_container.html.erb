@@ -20,7 +20,7 @@
       <div class="row">
         <div class="issue-container" data-controller="issue-completion">
           <div class="box">
-            <%= render 'shared/ticker_issue_list.html.erb', timer_session: active_timer_session,
+            <%= render 'shared/ticker_issue_list', timer_session: active_timer_session,
                 data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container' %>
             <hr>
             <%= f.text_field :issue_id, label: false, type: :search, data: { issue_completion_target: 'input' },
