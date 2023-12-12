@@ -1,35 +1,51 @@
 name: validation
-on:
-  - push
+
+on: push
+
 jobs:
   test_ruby:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout Redmine
+        uses: actions/checkout@v4
+        with:
+          repository: redmine/redmine
+          path: redmine
+
+      - name: Checkout Tracky
+        uses: actions/checkout@v4
+        with:
+          repository: renuo/redmine_tracky
+          path: redmine/plugins/redmine_tracky
+
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1.2"
-      - name: Setup Redmine
-        run: make && rake install_dependencies
-      - name: Install gems
-        run: BUNDLE_GEMFILE=PluginGemfile bundle install
+          ruby-version: '3.1.2'
+
+      - name: Setup Tracky
+        run: cd redmine/plugins/redmine_tracky && ./bin/setup
+
       - name: Lint
-        run: BUNDLE_GEMFILE=PluginGemfile bundle exec rubocop -c .rubocop.yml
+        run: cd redmine/plugins/redmine_tracky && rake lint_ruby
+
       - name: Run tests
-        run: BUNDLE_GEMFILE=PluginGemfile bundle exec rake test_ruby
+        run: cd redmine/plugins/redmine_tracky && rake test_ruby
+
   check_javascript:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Install node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "18"
-      - name: Install node packages
+          node-version: latest
+
+      - name: Install node modules
         working-directory: ./assets.src
         run: npm install
+
       - name: Lint
-        working-directory: ./assets.src
-        run: npm run lint
+        run: rake lint_javascript

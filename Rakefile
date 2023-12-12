@@ -1,30 +1,9 @@
 # frozen_string_literal: true
 
+# # frozen_string_literal: true
+
 REDMINE_URL = 'http://localhost:3000'
 MAILHOG_URL = 'http://localhost:8025'
-
-desc "SSH into a service. Defaults to 'redmine'."
-task :ssh do
-  rails_env = ENV.fetch('RAILS_ENV', 'development')
-  service = ENV.fetch('SERVICE', 'redmine')
-
-  sh "docker compose exec -e RAILS_ENV=#{rails_env} #{service} bash"
-end
-
-desc 'Execute a Rails command'
-task :rails do |_t, args|
-  sh "docker compose exec redmine rails #{args.extras.join(' ')}"
-end
-
-desc 'Launch MySQL'
-task :mysql do |_t, args|
-  args.with_defaults(
-    user: 'root',
-    pass: 'root',
-    rails_env: ENV.fetch('RAILS_ENV', 'development')
-  )
-  sh "docker compose exec mysql mysql -u#{args.user} -p#{args.pass} redmine_#{args.rails_env}"
-end
 
 desc 'Reset the database.'
 task :reset do
@@ -42,31 +21,16 @@ task :reset do
   commands << 'db:seed' if rails_env == 'development'
 
   commands.each do |command|
-    sh "docker compose exec -e RAILS_ENV=#{rails_env} redmine rake #{command}"
+    sh "cd ../.. && RAILS_ENV=#{rails_env} rake #{command}"
   end
 
   puts "The env '#{rails_env}' has been reset."
 end
 
-desc 'Install dependencies.'
-task :install_dependencies do
-  puts 'Installing dev packages...'
-  sh 'docker compose exec redmine bundle config --delete without'
-  sh 'docker compose exec redmine bundle install'
-end
-
-desc 'Provision the environment.'
-task :provision do
-  Rake::Task[:install_dependencies].invoke
-
-  puts 'Preparing database...'
-  sh 'docker compose exec redmine rake db:seed'
-
-  puts <<~RESULT
-    ======
-    Redmine is ready!
-    ======
-  RESULT
+desc 'Setup Tracky.'
+task :setup do
+  puts 'Setting up tracky...'
+  sh 'bin/setup'
 
   Rake::Task[:info].invoke
 end
@@ -91,6 +55,12 @@ task :info do
   INFO
 end
 
+desc 'Run code.'
+task :run do
+  # TODO: sh 'make'
+  Rake::Task['watch'].execute
+end
+
 desc 'Lint all code.'
 task :lint do
   Rake::Task['lint_ruby'].execute
@@ -99,12 +69,17 @@ end
 
 desc 'Lint Ruby code.'
 task :lint_ruby do
-  sh 'docker compose exec redmine rubocop -c plugins/redmine_tracky/.rubocop.yml plugins/redmine_tracky'
+  sh 'bundle exec rubocop -c .rubocop.yml'
 end
 
 desc 'Format Ruby code.'
 task :format do
-  sh 'docker compose exec redmine rubocop -c plugins/redmine_tracky/.rubocop.yml plugins/redmine_tracky -A'
+  sh 'bundle exec rubocop -c .rubocop.yml . -A'
+end
+
+desc 'Lint JavaScript code.'
+task :lint_javascript do
+  sh 'cd assets.src && npm run lint'
 end
 
 desc 'Test all code.'
@@ -116,25 +91,22 @@ end
 desc 'Test Ruby code.'
 task :test_ruby do
   file = ENV.fetch('TEST', nil)
-  type = ENV.fetch('TYPE', nil)
-  type = type ? ":#{type}" : nil
-
-  command =
-    if file
-      "test TEST=plugins/redmine_tracky/#{file}"
-    else
-      "redmine:plugins:test#{type} NAME=redmine_tracky"
-    end
-
-  sh "docker compose exec -e RAILS_ENV=test redmine rake #{command}"
+  file = "test/#{file}" if file
+  sh "cd ../.. && RAILS_ENV=test rake test TEST=plugins/redmine_tracky/#{file}"
 end
 
 desc 'Test JavaScript code.'
 task :test_javascript do
-  sh 'docker compose exec -w /app/assets.src node npm run test'
+  sh 'cd assets.src && echo "TODO"'
+  # TODO: sh 'npm run test'
+end
+
+desc 'Compile CSS and JS assets.'
+task :build do
+  sh 'cd assets.src && npm run build'
 end
 
 desc 'Watch and compile CSS and JS assets.'
 task :watch do
-  sh 'docker compose exec -w /app/assets.src node npm run watch'
+  sh 'cd assets.src && npm run watch'
 end
