@@ -1,8 +1,9 @@
-/coverage/
-
 .containers/.data
-/vendor/
-.logs
-.log
+assets/*
+coverage
 node_modules
+vendor
+
+.log
+.logs
 yarn-error*

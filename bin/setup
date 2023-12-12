@@ -1,3 +1,20 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# asdf
+[[ -f .tool-versions ]] && rm .tool-versions
+[[ -f ~/.tool-versions ]] && ln -s ~/.tool-versions .
 
-BUNDLE_GEMFILE=PluginGemfile bundle install
+BUNDLE_GEMFILE=PluginGemfile bundle install -j 4
+cd assets.src
+npm install
+echo '-------------assets.src-----------------'
+pwd
+echo '-------------redmine-----------------'
+cd ../..
+
+echo '------------------------------'
+pwd
+echo '------------------------------'
+cp config/database.yml.example config/database.yml
+bundle install -j 4
+rake redmine:plugins:redmine_tracky:install
+rake db:drop db:create db:migrate db:seed
