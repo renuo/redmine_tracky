@@ -3,18 +3,18 @@
 [[ -f .tool-versions ]] && rm .tool-versions
 [[ -f ~/.tool-versions ]] && ln -s ~/.tool-versions .
 
+# Install Dependencies
 BUNDLE_GEMFILE=PluginGemfile bundle install -j 4
 cd assets.src
 npm install
-echo '-------------assets.src-----------------'
-pwd
-echo '-------------redmine-----------------'
-cd ../..
+npm run build
+cd ../../..
 
-echo '------------------------------'
-pwd
-echo '------------------------------'
-cp config/database.yml.example config/database.yml
+# Configure Database
+db=plugins/redmine_tracky/.github/database.yml
+[[ -z "$GITHUB_ACTIONS" ]] && db=config/database.yml.example
+cp $db config/database.yml
+
 bundle install -j 4
+rake db:create db:migrate db:seed
 rake redmine:plugins:redmine_tracky:install
-rake db:drop db:create db:migrate db:seed

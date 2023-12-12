@@ -23,14 +23,19 @@ jobs:
         with:
           ruby-version: '3.1.2'
 
+      - name: Start MySQL and update gems
+        run: gem update --system && sudo service mysql start
+
       - name: Setup Tracky
         run: cd redmine/plugins/redmine_tracky && ./bin/setup
+        env:
+          GITHUB_ACTIONS: true
 
       - name: Lint
         run: cd redmine/plugins/redmine_tracky && rake lint_ruby
 
       - name: Run tests
-        run: cd redmine/plugins/redmine_tracky && rake test_ruby
+        run: cd redmine && rake test TEST=plugins/redmine_tracky
 
   check_javascript:
     runs-on: ubuntu-latest
