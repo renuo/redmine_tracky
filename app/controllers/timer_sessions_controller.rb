@@ -6,14 +6,7 @@ class TimerSessionsController < TrackyController
                                            .finished
                                            .created_by(@current_user)
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(@timer_sessions_in_range).pluck(:id)
-    @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
-    time_entries = time_entries_in_range(@timer_sessions)
-
-    @timer_sessions = (@timer_sessions.order(timer_start: :desc) + time_entries)
-                      .map { |time_entity| TimeEntityDecorator.new(time_entity) }
-                      .sort_by(&:start_time)
-                      .reverse
-                      .group_by(&:entry_date)
+    set_timer_sessions
     @timer_offset = offset_for_time_zone
   end
 
@@ -81,6 +74,16 @@ class TimerSessionsController < TrackyController
   end
 
   private
+
+  def set_timer_sessions
+    @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
+    time_entries = time_entries_in_range(@timer_sessions)
+    @timer_sessions = (@timer_sessions.order(timer_start: :desc) + time_entries)
+                      .map { |time_entity| TimeEntityDecorator.new(time_entity) }
+                      .sort_by(&:start_time)
+                      .reverse
+                      .group_by(&:entry_date)
+  end
 
   def apply_filter(timer_sessions, column)
     @filter = Filtering::TimerSessionsFilter.new(filter_params.merge(filter_column: column))

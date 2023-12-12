@@ -1,0 +1,20 @@
+default: &default
+  adapter: mysql2
+  host: localhost
+  username: root
+  password: root
+  encoding: utf8mb4
+  variables:
+    transaction_isolation: "READ-COMMITTED"
+
+production:
+  <<: *default
+  database: redmine
+
+development:
+  <<: *default
+  database: redmine_development
+
+test:
+  <<: *default
+  database: redmine_test
