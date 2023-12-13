@@ -17,6 +17,7 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
 
   setup do
     User.current = User.find(1)
+
     @timer_sessions = [1, 2, 3].map do |id|
       timer_session = FactoryBot.create(:timer_session, user: User.current)
       TimerSessionTimeEntry.create!(
@@ -29,8 +30,16 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
       )
       timer_session
     end
+
     @timer_sessions.each do |timer_session|
       timer_session.time_entries.update(hours: timer_session.splittable_hours)
+    end
+
+    @timer_session = FactoryBot.create(:timer_session, user: User.current)
+
+    3.times do
+      @timer_session.time_entries.create(user: User.current, project: Project.last,
+                                         hours: 1.0 / 3, spent_on: Time.zone.today)
     end
   end
 
@@ -46,12 +55,16 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
     assert_kind_of TimerSession, where_time_not_adding_up.first
   end
 
+  test 'round hours in timer session' do
+    assert_equal @timer_session.time_entries.sum(&:hours), 0.99
+    assert_equal @timer_session.hours, 1 # instead of 0.99
+  end
+
   test 'ignore small discrepancies in time sum' do
-    timer_session = FactoryBot.create_list(:timer_session, 1, :with_unrounded_time_entries, user: User.current).first
     timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                           .finished.created_by(User.current)
     non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(timer_sessions_in_range).map(&:id)
 
-    assert non_matching_timer_session_ids.exclude?(timer_session.id)
+    assert non_matching_timer_session_ids.exclude?(@timer_session.id)
   end
 end

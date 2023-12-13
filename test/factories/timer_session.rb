@@ -19,14 +19,5 @@ FactoryBot.define do
         TimerSessionTimeEntry.create!(timer_session:, time_entry: TimeEntry.first)
       end
     end
-
-    trait :with_unrounded_time_entries do
-      after(:create) do |timer_session|
-        3.times do
-          e = TimeEntry.create(user: User.current, project: Project.last, hours: 1.0 / 3, spent_on: Time.zone.today)
-          TimerSessionTimeEntry.create!(timer_session:, time_entry: e)
-        end
-      end
-    end
   end
 end
