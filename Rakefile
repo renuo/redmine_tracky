@@ -55,8 +55,7 @@ end
 
 desc 'Run code.'
 task :run do
-  # TODO: sh 'make'
-  Rake::Task['watch'].execute
+  sh 'cd ../.. && rails s'
 end
 
 desc 'Lint all code.'
@@ -95,8 +94,7 @@ end
 
 desc 'Test JavaScript code.'
 task :test_javascript do
-  sh 'cd assets.src && echo "TODO"'
-  # TODO: sh 'npm run test'
+  # TODO: sh 'cd assets.src && npm run test'
 end
 
 desc 'Compile CSS and JS assets.'
