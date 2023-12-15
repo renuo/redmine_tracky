@@ -29,6 +29,7 @@ Administration => Roles & Permissions
 * Run: `rake run`
 * Lint: `rake lint`
 * Test: `rake test`
+* Watch Assets: `rake watch`
 
 ## Copyright
 

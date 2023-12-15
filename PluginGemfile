@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'view_component'
+gem 'view_component', '~> 3.8'
 
 group :development, :test do
   gem 'bullet', '~> 7.1'
