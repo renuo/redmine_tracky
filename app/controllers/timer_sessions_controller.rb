@@ -5,7 +5,7 @@ class TimerSessionsController < TrackyController
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .finished
                                            .created_by(@current_user)
-    @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(@timer_sessions_in_range).map(&:id)
+    @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(@timer_sessions_in_range).ids
     set_timer_sessions
     @timer_offset = offset_for_time_zone
   end

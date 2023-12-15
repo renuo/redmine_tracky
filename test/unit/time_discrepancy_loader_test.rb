@@ -63,8 +63,8 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
   test 'ignore small discrepancies in time sum' do
     timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                           .finished.created_by(User.current)
-    non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_sessions(timer_sessions_in_range).map(&:id)
+    non_matching_timer_sessions = TimeDiscrepancyLoader.uneven_timer_sessions(timer_sessions_in_range)
 
-    assert non_matching_timer_session_ids.exclude?(@timer_session.id)
+    assert non_matching_timer_sessions.ids.exclude?(@timer_session.id)
   end
 end
