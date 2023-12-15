@@ -7,23 +7,23 @@ class TimeDiscrepancyLoader
   def self.uneven_timer_sessions(scope)
     scope.joins(timer_session_time_entries: :time_entry)
          .group('timer_sessions.id')
-         .having(
-           <<~SQL
-             timer_sessions.hours != CAST(SUM(time_entries.hours) AS DECIMAL(10, #{DECIMALS_TO_ROUND_TO}))
-             OR timer_sessions.hours != #{time_difference_expr} / 3600
-           SQL
-         )
-  end
-
-  def self.time_difference_expr
-    if using_postgresql?
-      '(EXTRACT(EPOCH FROM timer_sessions.timer_end) - EXTRACT(EPOCH FROM timer_sessions.timer_start))'
-    else
-      'TIMESTAMPDIFF(SECOND, timer_sessions.timer_start, timer_sessions.timer_end)'
-    end
+         .having("#{round('timer_sessions.hours')} != #{round('SUM(time_entries.hours)')}")
   end
 
   def self.using_postgresql?
     ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+  def self.round(attribute)
+    "CAST(#{attribute} AS DECIMAL(10, #{DECIMALS_TO_ROUND_TO}))"
   end
+
+  # def self.uneven_timer_session_ids(scope)
+  #   debugger
+  #   return [] if scope.empty?
+
+  #   scope.joins(timer_session_time_entries: :time_entry)
+  #        .group('timer_sessions.id')
+  #        .having("CAST(SUM(time_entries.hours) AS DECIMAL(10, #{DECIMALS_TO_ROUND_TO})) != ?",
+  #                scope.first.hours.round(DECIMALS_TO_ROUND_TO))
+  #        .ids
+  # end
 end

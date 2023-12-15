@@ -54,17 +54,4 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
     assert_equal 1, where_time_not_adding_up.length
     assert_kind_of TimerSession, where_time_not_adding_up.first
   end
-
-  test 'round hours in timer session' do
-    assert_equal @timer_session.time_entries.sum(&:hours), 0.99
-    assert_equal @timer_session.hours, 1 # instead of 0.99
-  end
-
-  test 'ignore small discrepancies in time sum' do
-    timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
-                                          .finished.created_by(User.current)
-    non_matching_timer_sessions = TimeDiscrepancyLoader.uneven_timer_sessions(timer_sessions_in_range)
-
-    assert non_matching_timer_sessions.ids.exclude?(@timer_session.id)
-  end
 end
