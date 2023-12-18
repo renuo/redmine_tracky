@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# asdf
-[[ -f .tool-versions ]] && rm .tool-versions
-[[ -f ~/.tool-versions ]] && ln -s ~/.tool-versions .
+cp -n .ruby-version ../../.ruby-version
 
 # Install Dependencies
 BUNDLE_GEMFILE=PluginGemfile bundle install -j 4
@@ -13,7 +11,7 @@ cd ../../..
 # Configure Database
 db=plugins/redmine_tracky/.github/database.yml
 [[ -z "$GITHUB_ACTIONS" ]] && db=config/database.yml.example
-cp $db config/database.yml
+cp -n $db config/database.yml
 
 bundle install -j 4
 [[ -z "$GITHUB_ACTIONS" ]] && rake db:drop
