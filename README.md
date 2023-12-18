@@ -2,6 +2,11 @@
 
 Improved time tracking for Redmine
 
+## Prerequisites
+
+* Ruby
+* MySQL or PostgreSQL
+
 ## Development Setup
 
 ```sh
@@ -12,6 +17,8 @@ cd redmine_tracky
 
 bin/setup
 ```
+
+Optional: Adjust the database file (`../../config/database.yml`)
 
 ## Production Setup
 
