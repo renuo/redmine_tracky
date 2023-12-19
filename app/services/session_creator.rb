@@ -30,7 +30,7 @@ class SessionCreator
   end
 
   def timer_start_value
-    (@params[:timer_start].presence || user_time_zone.now.asctime)
+    @params[:timer_start].presence || user_time_zone.now.asctime
   end
 
   def start_of_last_session

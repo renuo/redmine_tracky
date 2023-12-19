@@ -2,23 +2,31 @@
 
 Improved time tracking for Redmine
 
+## Prerequisites
+
+* Ruby
+* MySQL or PostgreSQL
+* npm
+
 ## Development Setup
 
-    git clone https://github.com/redmine/redmine
-    cd redmine/plugins
-    git clone https://github.com/renuo/redmine_tracky
-    cd ..
+```sh
+git clone https://github.com/redmine/redmine
+cd redmine/plugins
+git clone https://github.com/renuo/redmine_tracky
+cd redmine_tracky
 
-    ln -s plugins/redmine_tracky/.tool-versions .tool-versions # if you use asdf for env mgmt
-    cp config/database.yml.example config/database.yml # and configure your database setup
+bin/setup
+```
 
-    bundle install
-    bundle exec rake redmine:plugins:redmine_tracky:install
+Optional: Adjust the database file (`../../config/database.yml`)
 
 ## Production Setup
 
-    git clone https://github.com/renuo/redmine_tracky ./plugins/redmine_tracky/
-    RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
+```sh
+git clone https://github.com/renuo/redmine_tracky ./plugins/redmine_tracky/
+RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
+```
 
 ### Configuration
 
@@ -26,36 +34,10 @@ Administration => Roles & Permissions
 
 ### Development
 
-#### Running
-
-    make
-    cd assets.src && npm install
-    rake provision
-
-#### Seed
-
-    make seed
-
-#### Rebuild Containers
-
-    make rebuild
-
-### Run
-
-    make
-    rake watch
-
-### Dependency
-
-### Checks
-
-#### Tests
-
-    rake test
-
-#### Lints
-
-    rake lint
+* Run: `rake run`
+* Lint: `rake lint`
+* Test: `rake test`
+* Watch Assets: `rake watch`
 
 ## Copyright
 

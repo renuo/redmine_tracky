@@ -1,8 +1,5 @@
-/coverage/
-
-.containers/.data
-/vendor/
-.logs
-.log
+.bundle
+assets/*
 node_modules
+
 yarn-error*

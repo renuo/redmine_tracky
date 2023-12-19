@@ -5,7 +5,7 @@
       <div class="row">
         <div class="update-issue-container">
           <div class="box">
-            <%= render 'shared/ticker_issue_list.html', timer_session: timer_session, data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container' %>
+            <%= render 'shared/ticker_issue_list', timer_session: timer_session, data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container' %>
             <hr>
             <%= f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id', type: :search, data: { issue_completion_target: 'input' } %>
             <% if SettingsManager.visible_hints %>

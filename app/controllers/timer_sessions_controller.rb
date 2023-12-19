@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TimerSessionsController < TrackyController
+  # rubocop:disable Metrics/MethodLength
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .finished
@@ -16,6 +17,7 @@ class TimerSessionsController < TrackyController
                       .group_by(&:entry_date)
     @timer_offset = offset_for_time_zone
   end
+  # rubocop:enable Metrics/MethodLength
 
   def report
     work_report_query = WorkReportQuery.new(report_query_params)

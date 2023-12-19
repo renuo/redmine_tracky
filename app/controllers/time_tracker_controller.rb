@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
+# rubocop:disable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
 class TimeTrackerController < TrackyController
   def start
     # Early return if timer already running
@@ -83,4 +83,4 @@ class TimeTrackerController < TrackyController
     end
   end
 end
-# rubocop:enable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
+# rubocop:enable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength

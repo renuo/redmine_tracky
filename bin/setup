@@ -1,3 +1,20 @@
-#!/bin/sh
+#!/usr/bin/env bash
+cp -n .ruby-version ../../.ruby-version
 
-BUNDLE_GEMFILE=PluginGemfile bundle install
+# Install Dependencies
+BUNDLE_GEMFILE=PluginGemfile bundle install -j 4
+cd assets.src
+npm install
+npm run build
+cd ../../..
+
+# Configure Database
+db=plugins/redmine_tracky/.github/database.yml
+[[ -z "$GITHUB_ACTIONS" ]] && db=config/database.yml.example
+cp -n $db config/database.yml
+
+bundle install -j 4
+[[ -z "$GITHUB_ACTIONS" ]] && rake db:drop
+rake db:create db:migrate db:seed
+rake redmine:sample_data:seed
+rake redmine:plugins:redmine_tracky:install
