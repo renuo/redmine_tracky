@@ -29,6 +29,7 @@ GEM
       tzinfo (~> 2.0)
     base64 (0.2.0)
     bigdecimal (3.1.5)
+    brakeman (6.1.0)
     builder (3.2.4)
     bullet (7.1.4)
       activesupport (>= 3.0.0)
@@ -106,6 +107,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  brakeman (~> 6.1)
   bullet (~> 7.1)
   factory_bot_rails (~> 6.4)
   view_component (~> 3.8)
