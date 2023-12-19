@@ -16,4 +16,5 @@ cp -n $db config/database.yml
 bundle install -j 4
 [[ -z "$GITHUB_ACTIONS" ]] && rake db:drop
 rake db:create db:migrate db:seed
+rake redmine:sample_data:seed
 rake redmine:plugins:redmine_tracky:install
