@@ -6,6 +6,7 @@ Improved time tracking for Redmine
 
 * Ruby
 * MySQL or PostgreSQL
+* npm
 
 ## Development Setup
 
