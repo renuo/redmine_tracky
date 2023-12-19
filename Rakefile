@@ -67,7 +67,7 @@ end
 desc 'Lint Ruby code.'
 task :lint_ruby do
   sh 'bundle exec rubocop -c .rubocop.yml'
-  sh 'brakeman -q -z --no-summary --no-pager'
+  sh 'bundle exec brakeman -q -z --no-summary --no-pager'
 end
 
 desc 'Format Ruby code.'
