@@ -51,7 +51,7 @@ jobs:
 
       - name: Run linters
         working-directory: plugins/redmine_tracky
-        run: rake lint_ruby
+        run: rake lint
 
       - name: Run tests
         working-directory: plugins/redmine_tracky
