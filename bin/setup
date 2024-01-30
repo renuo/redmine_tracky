@@ -15,5 +15,5 @@ db=config/database.yml.example
 cp -n $db config/database.yml
 
 bundle install -j 4
-bundle exec rake db:drop db:create db:migrate db:seed redmine:sample_data:seed
+bundle exec rake db:create db:migrate db:seed redmine:sample_data:seed
 bundle exec rake redmine:plugins:redmine_tracky:install
