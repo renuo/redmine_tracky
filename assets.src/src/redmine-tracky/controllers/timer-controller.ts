@@ -41,7 +41,6 @@ export default class extends Controller {
     private startTicker(): void {
         const updateTime = () => {
             const diff: string = this.timeDifference();
-
             this.updateTimer(
                 diff,
             );
@@ -57,14 +56,12 @@ export default class extends Controller {
     }
 
     private timeDifference(): string {
-        const startDateTime = this.convertToDateTime((this.startTarget as HTMLInputElement).value);
-        const endDateTime = this.convertToDateTime((this.endTarget as HTMLInputElement).value);
+        let startDateTime = this.convertToDateTime((this.startTarget as HTMLInputElement).value);
+        let endDateTime = this.convertToDateTime((this.endTarget as HTMLInputElement).value);
+        endDateTime = endDateTime.isValid ? endDateTime : this.adjustedDateTime()
+        startDateTime = startDateTime.isValid ? startDateTime : this.adjustedDateTime()
 
-        const duration: Duration = (endDateTime.isValid ? endDateTime : this.adjustedDateTime()).diff(
-            startDateTime.isValid ? startDateTime : this.adjustedDateTime(),
-            this.timeDiffFields
-        );
-
+        const duration: Duration = (endDateTime).diff(startDateTime, this.timeDiffFields);
         const timeDiff: TimeDiff = (duration as any).values as TimeDiff || {};
 
         return timeDiffToString(timeDiff);
@@ -77,23 +74,12 @@ export default class extends Controller {
         );
     }
 
-    private updateTimer(time: string): void {
-        time = time.split(':').map((t) => t.padStart(2, '0')).join(':')
-        $(this.labelTarget).text(
-            this.handleNegativeTime(time)
-        );
+    private updateTimer(time: string) {
+        $(this.labelTarget).text(time);
     }
 
-    private handleNegativeTime(time: string): string {
-        if (time.startsWith('-')) {
-            return `-${time.replace(/-/g, '')}`;
-        }
-        return time;
-    }
-    
     private adjustedDateTime(): DateTime {
         const localOffset = DateTime.local().offset;
         return DateTime.local().minus({ minutes: localOffset-this.timezoneValue });
     }
-
 }
