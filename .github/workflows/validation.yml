@@ -3,54 +3,56 @@ name: validation
 on: push
 
 jobs:
-  test_ruby:
+  lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Redmine
         uses: actions/checkout@v4
         with:
           repository: redmine/redmine
-          path: redmine
+          ref: 5.1-stable
 
       - name: Checkout Tracky
         uses: actions/checkout@v4
         with:
           repository: renuo/redmine_tracky
-          path: redmine/plugins/redmine_tracky
+          path: plugins/redmine_tracky
 
-      - name: Install Ruby
+      - name: Cache gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: gems-${{ hashFiles('Gemfile', 'plugins/redmine_tracky/PluginGemfile.lock') }}
+
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: plugins/redmine_tracky/assets.src/node_modules
+          key: npm-${{ hashFiles('plugins/redmine_tracky/assets.src/package-lock.json') }}
+
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1.2'
 
-      - name: Start MySQL and update gems
-        run: gem update --system && sudo service mysql start
-
-      - name: Setup Tracky
-        run: cd redmine/plugins/redmine_tracky && ./bin/setup
-        env:
-          GITHUB_ACTIONS: true
-
-      - name: Lint
-        run: cd redmine/plugins/redmine_tracky && rake lint_ruby
-
-      - name: Run tests
-        run: cd redmine && rake test TEST=plugins/redmine_tracky
-
-  check_javascript:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install node
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: latest
 
-      - name: Install node modules
-        working-directory: ./assets.src
-        run: npm install
+      - name: Start MySQL
+        run: sudo service mysql start
 
-      - name: Lint
-        run: rake lint_javascript
+      - name: Setup Tracky
+        working-directory: plugins/redmine_tracky
+        run: bin/setup
+        env:
+          GITHUB_ACTIONS: true
+
+      - name: Run linters
+        working-directory: plugins/redmine_tracky
+        run: rake lint
+
+      - name: Run tests
+        working-directory: plugins/redmine_tracky
+        run: rake test
