@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 import { DateTime, DurationUnits, Duration } from 'luxon';
-import { TimeDiff, timeDiffToString } from '@interfaces/time-diff';
+import { TimeDiff } from '@interfaces/time-diff';
 
 export default class extends Controller {
-    readonly startTarget!: Element;
-    readonly endTarget!: Element;
+    readonly startTarget!: HTMLInputElement;
+    readonly endTarget!: HTMLInputElement;
     readonly descriptionTarget!: Element;
     readonly labelTarget!: Element;
     readonly timeDiffFields: DurationUnits = ['hours', 'minutes', 'seconds'];
@@ -55,16 +55,26 @@ export default class extends Controller {
         }
     }
 
-    private timeDifference(): string {
-        let startDateTime = this.convertToDateTime((this.startTarget as HTMLInputElement).value);
-        let endDateTime = this.convertToDateTime((this.endTarget as HTMLInputElement).value);
-        endDateTime = endDateTime.isValid ? endDateTime : this.adjustedDateTime()
-        startDateTime = startDateTime.isValid ? startDateTime : this.adjustedDateTime()
+    private timeDiffToString(timeDiff: TimeDiff) {
+        const sign = (timeDiff.minutes < 0 || timeDiff.seconds < 0) ? '-' : '';
+        const [hours, mins, secs] = [timeDiff.hours, timeDiff.minutes, Math.round(timeDiff.seconds)]
+                                    .map((value) => value.toString().replace('-', '').padStart(2, '0'));
+        const hoursFormat = Number(hours) > 0 ? `${hours}:` : '';
+    
+        return `${sign}${hoursFormat}${mins}:${secs}`;
+    }
 
-        const duration: Duration = (endDateTime).diff(startDateTime, this.timeDiffFields);
-        const timeDiff: TimeDiff = (duration as any).values as TimeDiff || {};
+    private dateTimeFromTarget(target: HTMLInputElement) {
+        const dateTime = this.convertToDateTime(target.value);
+        return dateTime.isValid ? dateTime : this.adjustedDateTime();
+    }
 
-        return timeDiffToString(timeDiff);
+    private timeDifference() {
+        const startDateTime = this.dateTimeFromTarget(this.startTarget);
+        const endDateTime = this.dateTimeFromTarget(this.endTarget);
+        const duration = endDateTime.diff(startDateTime, this.timeDiffFields);
+
+        return this.timeDiffToString((duration as any).values || {});
     }
 
     private convertToDateTime(value: string): DateTime {
