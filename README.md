@@ -4,27 +4,31 @@ Improved time tracking for Redmine
 
 ## Prerequisites
 
-* Ruby
-* MySQL or PostgreSQL
-* npm
+- Ruby
+- MySQL or PostgreSQL
+- npm
 
 ## Development Setup
 
 ```sh
 git clone https://github.com/redmine/redmine
-cd redmine/plugins
-git clone https://github.com/renuo/redmine_tracky
-cd redmine_tracky
+git clone https://github.com/renuo/redmine_tracky redmine/plugins/redmine_tracky
+cd redmine/plugins/redmine_tracky
 
 bin/setup
 ```
 
-Optional: Adjust the database file (`../../config/database.yml`)
+Optional: Adjust the [database file](../../config/database.yml)
 
 ## Production Setup
 
 ```sh
-git clone https://github.com/renuo/redmine_tracky ./plugins/redmine_tracky/
+git clone https://github.com/renuo/redmine_tracky plugins/redmine_tracky
+cd plugins/redmine_tracky
+
+rake build
+cd ../..
+
 RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
 ```
 
@@ -34,11 +38,11 @@ Administration => Roles & Permissions
 
 ### Development
 
-* Run: `rake run`
-* Lint: `rake lint`
-* Test: `rake test`
-* Watch Assets: `rake watch`
+- Run: `rake run`
+- Lint: `rake lint`
+- Test: `rake test`
+- Watch Assets: `rake watch`
 
 ## Copyright
 
-Copyright 2021-2023 [Renuo AG](https://www.renuo.ch/), published under the MIT license.
+Copyright 2021-2024 [Renuo AG](https://www.renuo.ch/), published under the MIT license.
