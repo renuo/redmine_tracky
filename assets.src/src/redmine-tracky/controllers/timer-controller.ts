@@ -56,12 +56,13 @@ export default class extends Controller {
     }
 
     private timeDiffToString(timeDiff: TimeDiff) {
-        const sign = (timeDiff.minutes < 0 || timeDiff.seconds < 0) ? '-' : '';
-        const [hours, mins, secs] = [timeDiff.hours, timeDiff.minutes, Math.round(timeDiff.seconds)]
-                                    .map((value) => value.toString().replace('-', '').padStart(2, '0'));
-        const hoursFormat = Number(hours) > 0 ? `${hours}:` : '';
+        const [hours, mins, secs] = [timeDiff.hours, timeDiff.minutes, Math.floor(timeDiff.seconds)];
+        const sign = (mins < 0 || secs < 0) ? '-' : '';
     
-        return `${sign}${hoursFormat}${mins}:${secs}`;
+        return sign + [hours, mins, secs]
+            .filter((v, i) => i !== 0 || v !== 0) // Remove hours if zero
+            .map((v) => v.toString().replace('-', '').padStart(2, '0'))
+            .join(':');
     }
 
     private dateTimeFromTarget(target: HTMLInputElement) {
