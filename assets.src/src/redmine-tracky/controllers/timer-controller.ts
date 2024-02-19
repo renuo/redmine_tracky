@@ -56,12 +56,13 @@ export default class extends Controller {
     }
 
     private timeDiffToString(timeDiff: TimeDiff) {
-        const [hours, mins, secs] = [timeDiff.hours, timeDiff.minutes, Math.floor(timeDiff.seconds)];
-        const sign = (mins < 0 || secs < 0) ? '-' : '';
+        const sign = (timeDiff.minutes < 0 || timeDiff.seconds < 0) ? '-' : '';
     
-        return sign + [hours, mins, secs]
+        return sign + ['hours', 'minutes', 'seconds']
+            .map((v) => timeDiff[v as keyof TimeDiff])
+            .map((v) => Math.abs(Math.floor(v)))
             .filter((v, i) => i !== 0 || v !== 0) // Remove hours if zero
-            .map((v) => v.toString().replace('-', '').padStart(2, '0'))
+            .map((v) => v.toString().padStart(2, '0'))
             .join(':');
     }
 
