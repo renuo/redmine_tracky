@@ -11,7 +11,7 @@ Improved time tracking for Redmine
 ## Development Setup
 
 ```sh
-git clone https://github.com/redmine/redmine
+git clone -b 5.1-stable https://github.com/redmine/redmine
 git clone https://github.com/renuo/redmine_tracky redmine/plugins/redmine_tracky
 cd redmine/plugins/redmine_tracky
 
