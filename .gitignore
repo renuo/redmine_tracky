@@ -1,5 +1,4 @@
 .bundle
-assets/*
 node_modules
 
 yarn-error*

@@ -24,10 +24,6 @@ Optional: Adjust the [database file](../../config/database.yml)
 
 ```sh
 git clone https://github.com/renuo/redmine_tracky plugins/redmine_tracky
-cd plugins/redmine_tracky
-
-rake build
-cd ../..
 
 RAILS_ENV=production rake redmine:plugins:redmine_tracky:install
 ```
