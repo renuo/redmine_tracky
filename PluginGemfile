@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'view_component', '~> 3.8'
 
 group :development, :test do
-  gem 'brakeman', '~> 6.1'
-  gem 'bullet', '~> 7.1'
-  gem 'factory_bot_rails', '~> 6.4'
+  gem 'brakeman'
+  gem 'bullet'
+  gem 'factory_bot_rails'
 end
