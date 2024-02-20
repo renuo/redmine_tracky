@@ -1,92 +1,77 @@
-import { Controller } from "@hotwired/stimulus"
-import { CompletionResult } from '@interfaces/completion-result';
+import { Controller } from '@hotwired/stimulus'
+import { CompletionResult } from '@interfaces/completion-result'
 
 export default class extends Controller {
-    readonly tableTarget!: Element;
+  declare readonly tableTarget: Element
 
-    static targets = ['table'];
+  static targets = ['table']
 
-    public addItem(item: CompletionResult): void {
-        const tbody = this.tableTarget.getElementsByTagName('tbody')[0];
-        tbody.appendChild(
-            this.buildItem(
-                item
-            )
-        );
-    }
+  public addItem(item: CompletionResult) {
+    const tbody = this.tableTarget.getElementsByTagName('tbody')[0]
+    tbody.appendChild(this.buildItem(item))
+  }
 
-    public removeItem(event: Event): void {
-        const { target } = event;
-        const row: Element = (target as Element).closest('[data-form-target="issue"]') as Element;
-        row.remove();
-    }
+  public removeItem(event: Event) {
+    const { target } = event
+    const row = (target as Element).closest('[data-form-target="issue"]')
+    row?.remove()
+  }
 
-    private buildItem(item: CompletionResult): Element {
-        const row = document.createElement('tr');
-        row.setAttribute('data-form-target', 'issue');
-        row.classList.add('issue-container');
-        row.setAttribute('data-issue-id', item.id.toString());
+  private buildItem(item: CompletionResult) {
+    const row = document.createElement('tr')
+    row.setAttribute('data-form-target', 'issue')
+    row.classList.add('issue-container')
+    row.setAttribute('data-issue-id', item.id.toString())
+    ;[
+      this.buildLabelColumn(item),
+      this.buildSubjectColumn(item),
+      this.buildDeletionButtonColumn(item),
+    ].forEach((element) => row.appendChild(element))
 
-        [
-            this.buildLabelColumn(item),
-            this.buildSubjectColumn(item),
-            this.buildDeletionButtonColumn(item)
-        ].forEach((element: Element) => row.appendChild(element));
+    return row
+  }
 
-        return row;
-    }
+  private buildLabelColumn(item: CompletionResult) {
+    const bold = document.createElement('b')
+    const a = document.createElement('a')
 
-    private buildLabelColumn(item: CompletionResult): Element {
-        const bold = document.createElement('b');
-        const a = document.createElement('a');
+    a.setAttribute('href', `/issues/${item.id}`)
+    a.setAttribute('target', '_blank')
+    a.setAttribute('rel', 'noopener')
 
-        a.setAttribute('href', `/issues/${item.id}`);
-        a.setAttribute('target', '_blank');
-        a.setAttribute('rel', 'noopener');
+    a.innerHTML = `${item.project} - ${item.id}: `
+    bold.appendChild(a)
 
-        a.innerHTML = `${item.project} - ${item.id}: `;
-        bold.appendChild(a);
-        return this.buildColumn([bold]);
-    }
+    return this.buildColumn([bold])
+  }
 
-    private buildSubjectColumn(item: CompletionResult): Element {
-        return this.buildColumn(
-            [
-                document.createTextNode(item.subject)
-            ]
-        )
-    }
+  private buildSubjectColumn(item: CompletionResult) {
+    return this.buildColumn([document.createTextNode(item.subject)])
+  }
 
-    private buildDeletionButtonColumn(item: CompletionResult): Element {
-        const span = document.createElement('span');
-        span.classList.add('text-danger');
-        span.classList.add('input-group-text');
-        span.setAttribute('data-action', "click->list#removeItem");
-        const icon = document.createElement('i');
-        icon.classList.add('icon-only');
-        icon.classList.add('icon-del');
-        span.appendChild(icon);
+  private buildDeletionButtonColumn(item: CompletionResult) {
+    const span = document.createElement('span')
+    const icon = document.createElement('i')
+    const input = document.createElement('input')
 
-        const input = document.createElement('input');
-        input.setAttribute('id', `timer_session_issue_id_${item.id}`);
-        input.setAttribute('readonly', '');
-        input.setAttribute('hidden', '');
-        input.setAttribute('name', 'timer_session[issue_ids][]');
-        input.setAttribute('value', item.id.toString());
+    span.classList.add('text-danger')
+    span.classList.add('input-group-text')
+    span.setAttribute('data-action', 'click->list#removeItem')
+    icon.classList.add('icon-only')
+    icon.classList.add('icon-del')
+    span.appendChild(icon)
+    input.setAttribute('id', `timer_session_issue_id_${item.id}`)
+    input.setAttribute('readonly', '')
+    input.setAttribute('hidden', '')
+    input.setAttribute('name', 'timer_session[issue_ids][]')
+    input.setAttribute('value', item.id.toString())
 
-        return this.buildColumn(
-            [
-                span,
-                input
-            ]
-        );
-    }
+    return this.buildColumn([span, input])
+  }
 
-    private buildColumn(elements: Array<Element | Text>): Element {
-        const column = document.createElement('td');
-        elements.forEach((element: Element | Text) => {
-            column.appendChild(element);
-        });
-        return column;
-    }
+  private buildColumn(elements: (Element | Text)[]) {
+    const column = document.createElement('td')
+    elements.forEach((element) => column.appendChild(element))
+    return column
+  }
 }

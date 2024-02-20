@@ -1,18 +1,16 @@
 export default class DateTimePickerRegister {
-    static bind() {
-        const dateFormat = window.RedmineTracky.datetimeFormat;
-        this.cleanup();
+  static bind() {
+    const format = window.RedmineTracky.datetimeFormat
+    this.cleanup()
 
-        $(".datetime-picker").each((index, element) => {
-            ($(element) as any).datetimepicker("destroy");
-            ($(element) as any).datetimepicker({
-                format: dateFormat,
-                step: 1,
-            });
-        });
-    }
+    $('.datetime-picker').each((_, elem) => {
+      const element = $(elem) as any
+      element.datetimepicker('destroy')
+      element.datetimepicker({ format, step: 1 })
+    })
+  }
 
-    static cleanup() {
-        $(".xdsoft_datetimepicker").remove();
-    }
+  static cleanup() {
+    $('.xdsoft_datetimepicker').remove()
+  }
 }
