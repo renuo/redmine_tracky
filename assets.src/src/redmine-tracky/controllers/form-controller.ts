@@ -1,97 +1,95 @@
-import { Controller } from "@hotwired/stimulus"
-import { DateTime, DurationUnits, Duration } from 'luxon';
-import { FormData } from '@interfaces/form-data';
+import { Controller } from '@hotwired/stimulus'
+import { DateTime } from 'luxon'
+import { FormData } from '@interfaces/form-data'
 
 export default class extends Controller {
-    readonly startTarget!: Element;
-    declare readonly hasStopButtonTarget: boolean
-    readonly endTarget!: Element;
-    readonly absolutInputTarget!: Element;
-    readonly descriptionTarget!: Element;
-    readonly issueTargets!: Array<Element>;
+  declare readonly startTarget: HTMLInputElement
+  declare readonly hasStopButtonTarget: boolean
+  declare readonly endTarget: HTMLInputElement
+  declare readonly absolutInputTarget: HTMLInputElement
+  declare readonly descriptionTarget: HTMLInputElement
+  declare readonly issueTargets: Element[]
 
-    private connected = false;
+  private connected = false
 
-    static targets = ['description', 'start', 'stopButton', 'end', 'issue', 'absolutInput'];
+  static targets = [
+    'description',
+    'start',
+    'stopButton',
+    'end',
+    'issue',
+    'absolutInput',
+  ]
 
-    public connect(): void {
-        this.connected = true;
+  public connect() {
+    this.connected = true
+  }
+
+  public disconnect() {
+    this.connected = false
+  }
+
+  public absoluteTime(_event: Event) {
+    try {
+      const value = parseFloat(this.absolutInputTarget.value)
+      const startDate = this.convertToDateTime(this.startTarget.value)
+
+      if (value && startDate.isValid) {
+        const newEndDate = startDate.plus({ hours: value })
+        this.endTarget.value = newEndDate.toFormat('dd.LL.yyyy HH:mm')
+        this.endTarget.dispatchEvent(new Event('change'))
+      }
+    } finally {
+      this.absolutInputTarget.value = ''
+    }
+  }
+
+  public issueTargetConnected(_: Element) {
+    if (this.connected) {
+      this.change()
+    }
+  }
+
+  public issueTargetDisconnected(_: Element) {
+    if (this.connected) {
+      this.change()
+    }
+  }
+
+  public change() {
+    const form: FormData = {
+      timer_start: this.startTarget.value,
+      timer_end: this.endTarget.value,
+      comments: this.descriptionTarget.value,
+      issue_ids: this.extractIssueIds() || [],
     }
 
-    public disconnect(): void {
-        this.connected = false;
+    this.dispatchUpdate(form)
+  }
+
+  private extractIssueIds(): string[] {
+    return (
+      this.issueTargets
+        .map((element) => element.getAttribute('data-issue-id') || '')
+        .filter((value) => value !== null) || []
+    )
+  }
+
+  private dispatchUpdate(form: FormData) {
+    if (this.hasStopButtonTarget) {
+      $.ajax({
+        type: 'POST',
+        url: window.RedmineTracky.trackerUpdatePath,
+        data: { timer_session: form },
+        async: true,
+      })
     }
+  }
 
-    public absoluteTime(event: Event): void {
-        try {
-            const value = parseFloat((this.absolutInputTarget as HTMLInputElement).value);
-            const startDate: DateTime = this.convertToDateTime(this.valueForInput(this.startTarget));
-
-            if (value && startDate.isValid) {
-                const newEndDate: DateTime = startDate.plus({ hours: value });
-                console.log(newEndDate);
-
-                (this.endTarget as HTMLInputElement).value = newEndDate.toFormat(
-                    'dd.LL.yyyy HH:mm'
-                );
-
-                this.endTarget.dispatchEvent(new Event('change'));
-            }
-        } finally {
-            (this.absolutInputTarget as HTMLInputElement).value = '';
-        }
-    }
-
-    public issueTargetConnected(_: Element) {
-        if (this.connected) {
-            this.change();
-        }
-    }
-
-    public issueTargetDisconnected(_: Element) {
-        if (this.connected) {
-            this.change();
-        }
-    }
-
-    public change(): void {
-        const form: FormData = {
-            timer_start: (this.startTarget as HTMLInputElement).value,
-            timer_end: (this.endTarget as HTMLInputElement).value,
-            comments: (this.descriptionTarget as HTMLInputElement).value,
-            issue_ids: this.extractIssueIds() || []
-        };
-
-        this.dispatchUpdate(form);
-    }
-
-    private extractIssueIds(): Array<string> {
-        return this.issueTargets.map((element: Element) => {
-            return element.getAttribute('data-issue-id') || '';
-        }).filter((value: string) => value !== null) || [];
-    }
-
-    private dispatchUpdate(form: FormData) {
-        if (this.hasStopButtonTarget) {
-            $.ajax({
-                type: "POST",
-                url: window.RedmineTracky.trackerUpdatePath,
-                data: {
-                    timer_session: form,
-                },
-                async: true,
-            });
-        }
-    }
-
-    private valueForInput(element: Element): any {
-        return (element as HTMLInputElement).value;
-    }
-
-    private convertToDateTime(value: string): DateTime {
-        return DateTime.fromFormat(
-            value,
-            window.RedmineTracky.datetimeFormatJavascript
-        );
-    }
+  private convertToDateTime(value: string) {
+    return DateTime.fromFormat(
+      value,
+      window.RedmineTracky.datetimeFormatJavascript,
+    )
+  }
 }

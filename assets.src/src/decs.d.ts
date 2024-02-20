@@ -1,1 +1,1 @@
-declare module "stimulus-flatpickr";
+declare module 'stimulus-flatpickr'
