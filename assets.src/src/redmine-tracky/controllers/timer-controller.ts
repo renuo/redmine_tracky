@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 import { DateTime, DurationUnits, Duration } from 'luxon';
-import { TimeDiff, timeDiffToString } from '@interfaces/time-diff';
+import { TimeDiff } from '@interfaces/time-diff';
 
 export default class extends Controller {
-    readonly startTarget!: Element;
-    readonly endTarget!: Element;
+    readonly startTarget!: HTMLInputElement;
+    readonly endTarget!: HTMLInputElement;
     readonly descriptionTarget!: Element;
     readonly labelTarget!: Element;
     readonly timeDiffFields: DurationUnits = ['hours', 'minutes', 'seconds'];
@@ -41,7 +41,6 @@ export default class extends Controller {
     private startTicker(): void {
         const updateTime = () => {
             const diff: string = this.timeDifference();
-
             this.updateTimer(
                 diff,
             );
@@ -56,18 +55,28 @@ export default class extends Controller {
         }
     }
 
-    private timeDifference(): string {
-        const startDateTime = this.convertToDateTime((this.startTarget as HTMLInputElement).value);
-        const endDateTime = this.convertToDateTime((this.endTarget as HTMLInputElement).value);
+    private timeDiffToString(timeDiff: TimeDiff) {
+        const sign = (timeDiff.minutes < 0 || timeDiff.seconds < 0) ? '-' : '';
+    
+        return sign + ['hours', 'minutes', 'seconds']
+            .map((v) => timeDiff[v as keyof TimeDiff])
+            .map((v) => Math.abs(Math.floor(v)))
+            .filter((v, i) => i !== 0 || v !== 0) // Remove hours if zero
+            .map((v) => v.toString().padStart(2, '0'))
+            .join(':');
+    }
 
-        const duration: Duration = (endDateTime.isValid ? endDateTime : this.adjustedDateTime()).diff(
-            startDateTime.isValid ? startDateTime : this.adjustedDateTime(),
-            this.timeDiffFields
-        );
+    private dateTimeFromTarget(target: HTMLInputElement) {
+        const dateTime = this.convertToDateTime(target.value);
+        return dateTime.isValid ? dateTime : this.adjustedDateTime();
+    }
 
-        const timeDiff: TimeDiff = (duration as any).values as TimeDiff || {};
+    private timeDifference() {
+        const startDateTime = this.dateTimeFromTarget(this.startTarget);
+        const endDateTime = this.dateTimeFromTarget(this.endTarget);
+        const duration = endDateTime.diff(startDateTime, this.timeDiffFields);
 
-        return timeDiffToString(timeDiff);
+        return this.timeDiffToString((duration as any).values || {});
     }
 
     private convertToDateTime(value: string): DateTime {
@@ -77,23 +86,12 @@ export default class extends Controller {
         );
     }
 
-    private updateTimer(time: string): void {
-        time = time.split(':').map((t) => t.padStart(2, '0')).join(':')
-        $(this.labelTarget).text(
-            this.handleNegativeTime(time)
-        );
+    private updateTimer(time: string) {
+        $(this.labelTarget).text(time);
     }
 
-    private handleNegativeTime(time: string): string {
-        if (time.startsWith('-')) {
-            return `-${time.replace(/-/g, '')}`;
-        }
-        return time;
-    }
-    
     private adjustedDateTime(): DateTime {
         const localOffset = DateTime.local().offset;
         return DateTime.local().minus({ minutes: localOffset-this.timezoneValue });
     }
-
 }
