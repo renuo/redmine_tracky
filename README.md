@@ -4,9 +4,10 @@ Improved time tracking for Redmine
 
 ## Prerequisites
 
-- Ruby
-- MySQL or PostgreSQL
 - npm
+- Bash [(>= 5.0)](https://www.gnu.org/software/bash/)
+- MySQL or PostgreSQL [(>= 14)](https://www.postgresql.org/download/)
+- Ruby [(= 3.1.2)](https://www.ruby-lang.org/en/downloads/)
 
 ## Development Setup
 
