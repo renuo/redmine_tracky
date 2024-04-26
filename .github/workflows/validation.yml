@@ -7,7 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        redmine-version: [4.2-stable, 5.1-stable]
+        include:
+          - redmine-version: 4.2-stable
+            ruby-version: '2.7'
+          - redmine-version: 5.1-stable
+            ruby-version: '3.2'
 
     steps:
       - name: Checkout Redmine
@@ -26,7 +30,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor/bundle
-          key: gems-${{ hashFiles('Gemfile', 'plugins/redmine_tracky/PluginGemfile.lock') }}
+          key: gems-${{ matrix.redmine-version }}-${{ hashFiles('Gemfile', 'plugins/redmine_tracky/PluginGemfile.lock') }}
 
       - name: Cache Node modules
         uses: actions/cache@v3
@@ -37,7 +41,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1.2'
+          ruby-version: ${{ matrix.ruby-version }}
 
       - name: Set up Node
         uses: actions/setup-node@v4
