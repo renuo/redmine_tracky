@@ -5,12 +5,16 @@ on: push
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        redmine-version: [4.2-stable, 5.1-stable]
+
     steps:
       - name: Checkout Redmine
         uses: actions/checkout@v4
         with:
           repository: redmine/redmine
-          ref: 5.1-stable
+          ref: ${{ matrix.redmine-version }}
 
       - name: Checkout Tracky
         uses: actions/checkout@v4
