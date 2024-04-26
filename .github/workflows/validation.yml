@@ -4,6 +4,7 @@ on: push
 
 jobs:
   lint-and-test:
+    name: lint and test (Redmine ${{ matrix.redmine-version }}, Ruby ${{ matrix.ruby-version }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
