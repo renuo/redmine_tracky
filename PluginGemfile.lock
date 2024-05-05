@@ -109,10 +109,10 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  brakeman (~> 6.1)
+  brakeman
   bullet
-  factory_bot_rails (~> 6.4)
-  view_component (~> 3.8)
+  factory_bot_rails
+  view_component
 
 BUNDLED WITH
    2.4.22

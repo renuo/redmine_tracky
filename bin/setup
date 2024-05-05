@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-cp -n .ruby-version ../../.ruby-version
 
 # Install Dependencies
 [[ -v GITHUB_ACTIONS ]] && bundle config set --local path vendor/bundle
