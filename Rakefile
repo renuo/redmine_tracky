@@ -88,9 +88,10 @@ end
 
 desc 'Test Ruby code.'
 task :test_ruby do
-  file = ENV.fetch('TEST', nil)
-  file = "test/#{file}" if file
-  sh "cd ../.. && RAILS_ENV=test rake test TEST=plugins/redmine_tracky/#{file}"
+  test_cmd = 'RAILS_ENV=test rake test TEST=plugins/redmine_tracky'
+  test_cmd += "/test/#{file}" if ENV.fetch('TEST', nil)
+
+  sh "cd ../.. && #{test_cmd}"
 end
 
 desc 'Test JavaScript code.'
