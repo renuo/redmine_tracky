@@ -50,6 +50,24 @@ class TimerManagementTest < ApplicationSystemTestCase
                                locale: :en))
   end
 
+  test 'starting of timer with invalid attributes and present issues' do
+    time_in_user_time_zone = User.current.convert_time_to_user_timezone(Time.zone.now)
+
+    fill_in 'timer_session[issue_id]', with: Issue.first.subject
+    sleep(1)
+    find('#timer_session_issue_id').send_keys(:arrow_down)
+    find('#timer_session_issue_id').send_keys(:tab)
+
+    fill_in 'timer_session_timer_start',
+            with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
+    fill_in 'timer_session_timer_end',
+            with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
+
+    subject = Issue.first.subject
+    find('[data-name="timer-start"]').click
+    assert has_content?(subject)
+  end
+
   test 'stopping timer with valid attributes' do
     timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
     timer_session.reload
