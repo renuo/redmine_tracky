@@ -17,15 +17,15 @@ class TrackyController < ApplicationController
   end
 
   def set_current_user
-    @current_user = User.current
+    User.current = User.current
   end
 
   def set_current_timer_session
-    @current_timer_session = TimerSession.active.find_by(user: @current_user)
+    @current_timer_session = TimerSession.active.find_by(user: User.current)
   end
 
   def user_time_zone
-    @current_user.time_zone || Time.zone
+    User.current.time_zone || Time.zone
   end
 
   def permission_manager
@@ -35,8 +35,8 @@ class TrackyController < ApplicationController
   private
 
   def offset_for_time_zone
-    return 0 unless @current_user&.preference&.time_zone.present?
+    return 0 unless User.current&.preference&.time_zone.present?
 
-    Time.zone.now.in_time_zone(@current_user.preference.time_zone).utc_offset / 1.minute
+    Time.zone.now.in_time_zone(User.current.preference.time_zone).utc_offset / 1.minute
   end
 end
