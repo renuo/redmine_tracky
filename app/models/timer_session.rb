@@ -19,7 +19,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   scope :created_by, ->(user) { where(user: user) }
   scope :recorded_on, ->(date) { where(timer_start: date) }
 
-  validate :start_before_end_date
+  validate :validate_start_before_end_date
 
   before_save :set_recorded_hours
 
@@ -47,20 +47,20 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   private
 
-  def start_and_end_present
+  def validate_start_and_end_present
     errors.add(:timer_start, :blank) if timer_start.blank?
     errors.add(:timer_end, :blank) if timer_end.blank?
   end
 
-  def comment_present
+  def validate_comment_present
     errors.add(:comments, :blank) if comments.blank?
   end
 
-  def issues_selected
+  def validate_issues_selected
     errors.add(:issue_id, :no_selection) if issues.count.zero?
   end
 
-  def start_before_end_date
+  def validate_start_before_end_date
     return if timer_start.blank? || timer_end.blank?
     return if timer_end > timer_start
 
@@ -68,14 +68,14 @@ class TimerSession < RedmineTrackyApplicationRecord
     errors.add(:timer_end, :before_start)
   end
 
-  def limit_recorded_hours
+  def validate_limit_recorded_hours
     return if timer_start.blank? || timer_end.blank?
 
     validate_day_limit
     validate_session_limit
   end
 
-  def enough_time
+  def validate_enough_time
     errors.add(:timer_start, :too_short) if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
   end
 
@@ -96,11 +96,11 @@ class TimerSession < RedmineTrackyApplicationRecord
   def validate_session_attributes
     return unless finished_changed? || finished?
 
-    start_and_end_present
-    comment_present
-    issues_selected
-    enough_time
-    limit_recorded_hours
+    validate_start_and_end_present
+    validate_comment_present
+    validate_issues_selected
+    validate_enough_time
+    validate_limit_recorded_hours
   end
 
   def set_recorded_hours
