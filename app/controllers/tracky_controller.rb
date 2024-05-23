@@ -3,7 +3,6 @@
 class TrackyController < ApplicationController
   before_action :set_current_user
   before_action :set_current_timer_session
-  before_action :permission_manager
   before_action :verify_permission!
   skip_before_action :verify_authenticity_token
 
@@ -11,7 +10,7 @@ class TrackyController < ApplicationController
 
   def verify_permission!
     return unless User.current
-    return if permission_manager.can?(action_name.to_sym, controller_name.to_sym)
+    return if User.current.allowed_to_globally?(action: action_name.to_sym, controller: controller_name.to_s)
 
     render_403(flash: { error: t('timer_sessions.messages.errors.permission.no_access') })
   end
@@ -26,10 +25,6 @@ class TrackyController < ApplicationController
 
   def user_time_zone
     User.current.time_zone || Time.zone
-  end
-
-  def permission_manager
-    @permission_manager ||= PermissionManager.new
   end
 
   private
