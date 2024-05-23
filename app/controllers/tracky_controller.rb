@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TrackyController < ApplicationController
-  before_action :set_current_user
   before_action :set_current_timer_session
   before_action :verify_permission!
   skip_before_action :verify_authenticity_token
@@ -13,10 +12,6 @@ class TrackyController < ApplicationController
     return if User.current.allowed_to_globally?(action: action_name.to_sym, controller: controller_name.to_s)
 
     render_403(flash: { error: t('timer_sessions.messages.errors.permission.no_access') })
-  end
-
-  def set_current_user
-    User.current = User.current
   end
 
   def set_current_timer_session
