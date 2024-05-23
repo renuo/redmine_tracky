@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import { DateTime, DurationUnits } from 'luxon'
+import { DateTime, Duration, DurationUnits } from 'luxon'
 import { TimeDiff } from '@interfaces/time-diff'
 
 export default class extends Controller {
@@ -52,17 +52,10 @@ export default class extends Controller {
   }
 
   private timeDiffToString(timeDiff: TimeDiff) {
-    const sign = timeDiff.minutes < 0 || timeDiff.seconds < 0 ? '-' : ''
-
-    return (
-      sign +
-      ['hours', 'minutes', 'seconds']
-        .map((v) => timeDiff[v as keyof TimeDiff])
-        .map((v) => Math.abs(Math.floor(v)))
-        .filter((v, i) => i !== 0 || v !== 0) // Remove hours if zero
-        .map((v) => v.toString().padStart(2, '0'))
-        .join(':')
-    )
+    const duration = Duration.fromObject(timeDiff)
+    const formattedDuration = duration.toFormat('hh:mm:ss').replaceAll('-', '')
+    const sign = Object.values(timeDiff).some((value) => value < 0) ? '-' : ''
+    return sign + formattedDuration
   }
 
   private dateTimeFromTarget(target: HTMLInputElement) {
