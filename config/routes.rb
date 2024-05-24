@@ -9,6 +9,6 @@ get 'timer_sessions_time_error/:id', to: 'timer_sessions#time_error', as: :timer
 post 'timer_sessions_rebalance/:id', to: 'timer_sessions#rebalance', as: :timer_sessions_rebalance
 post 'timer_sessions_continue/:id', to: 'timer_sessions#continue', as: :timer_sessions_continue
 
-put 'time_tracker/upsert', to: 'time_tracker#upsert', as: :upsert_time_tracker
+post 'time_tracker/upsert', to: 'time_tracker#upsert', as: :time_tracker_upsert
 
 get 'completion/issues', to: 'completion#issues'
