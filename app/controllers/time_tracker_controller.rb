@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/MethodLength
 class TimeTrackerController < TrackyController
   def upsert
     @current_timer_session = TimerSession.active.find_by(user: User.current)
 
     return start_timer unless @current_timer_session
     return cancel_timer if params[:cancel]
-    return stop_timer if timer_params[:timer_end].present?
+
+    stop_timer if timer_params[:timer_end].present?
   end
 
   private
@@ -56,7 +58,7 @@ class TimeTrackerController < TrackyController
     else
       render :update, layout: false
     end
-   end
+  end
 
   def default_end_time_for_timer(timer_session)
     timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now.asctime
@@ -72,4 +74,5 @@ class TimeTrackerController < TrackyController
     end
   end
 end
-# rubocop:enable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+# rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/AbcSize

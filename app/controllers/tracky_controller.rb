@@ -13,7 +13,6 @@ class TrackyController < ApplicationController
     render_403(flash: { error: t('timer_sessions.messages.errors.permission.no_access') })
   end
 
-
   def user_time_zone
     User.current.time_zone || Time.zone
   end

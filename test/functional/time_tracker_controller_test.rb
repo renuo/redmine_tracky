@@ -36,7 +36,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_start: recorded_time,
       comments: 'Starting a new session',
       issue_ids: ['1']
-    }}, xhr: true
+    } }, xhr: true
     assert_response 200
   end
 
@@ -47,7 +47,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_end: Time.zone.now,
       comments: 'Worked for an hour',
       issue_ids: ['1']
-    }}, xhr: true
+    } }, xhr: true
     assert_response 200
   end
 
@@ -59,7 +59,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_end: Time.zone.now,
       comments: 'Worked for an hour',
       issue_ids: ['1']
-    }}, xhr: true
+    } }, xhr: true
     assert_response 200
 
     assert TimerSession.last.timer_start, TimerSession.first.timer_end
