@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TrackyController < ApplicationController
-  before_action :set_current_timer_session
   before_action :verify_permission!
   skip_before_action :verify_authenticity_token
 
@@ -14,9 +13,6 @@ class TrackyController < ApplicationController
     render_403(flash: { error: t('timer_sessions.messages.errors.permission.no_access') })
   end
 
-  def set_current_timer_session
-    @current_timer_session = TimerSession.active.find_by(user: User.current)
-  end
 
   def user_time_zone
     User.current.time_zone || Time.zone

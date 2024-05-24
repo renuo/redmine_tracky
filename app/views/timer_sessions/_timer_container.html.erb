@@ -2,7 +2,7 @@
   <div class="timer-container">
     <% active_timer_session = timer_session || TimerSession.new %>
     <%= labelled_form_for(active_timer_session,
-        url: active_timer_session.persisted? ? stop_time_tracker_path : start_time_tracker_path,
+        url: upsert_time_tracker_path,
         method: :post,
         remote: true,
         format: :js) do |f| %>
