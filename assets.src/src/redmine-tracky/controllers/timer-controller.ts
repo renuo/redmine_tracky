@@ -26,7 +26,7 @@ export default class extends Controller {
 
     if (start && end) {
       const diff: string = this.timeDifference()
-      this.updateTimer(diff)
+      this.updateTimerLabel(diff)
     } else if (start) {
       this.startTicker()
     }
@@ -39,7 +39,7 @@ export default class extends Controller {
   private startTicker() {
     const updateTime = () => {
       const diff = this.timeDifference()
-      this.updateTimer(diff)
+      this.updateTimerLabel(diff)
     }
 
     window.TimerInterval = setInterval(updateTime, 1000)
@@ -78,7 +78,7 @@ export default class extends Controller {
     )
   }
 
-  private updateTimer(time: string) {
+  private updateTimerLabel(time: string) {
     $(this.labelTarget).text(time)
   }
 
