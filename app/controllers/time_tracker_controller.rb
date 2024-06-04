@@ -7,7 +7,7 @@ class TimeTrackerController < TrackyController
     @current_timer_session = TimerSession.active.find_by(user: User.current)
 
     return start_timer unless @current_timer_session
-    return cancel_timer if params[:cancel]
+    return cancel_timer if params[:cancel].present?
 
     stop_timer if timer_params[:timer_end].present?
   end
