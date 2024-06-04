@@ -39,7 +39,7 @@ class TimeTrackerController < TrackyController
 
   def cancel_timer
     @current_timer_session.destroy
-    render :cancel, layout: false and return
+    render :cancel, layout: false
   end
 
   def stop_timer
