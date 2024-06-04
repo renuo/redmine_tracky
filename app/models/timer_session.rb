@@ -12,7 +12,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   validates :timer_start, presence: true
 
   validate :validate_session_attributes, on: :update
-
+timer_se
   scope :active, -> { where(finished: false) }
   scope :finished, -> { where(finished: true) }
 
@@ -75,7 +75,7 @@ class TimerSession < RedmineTrackyApplicationRecord
     validate_session_limit
   end
 
-  def validate_enough_time
+  def validate_minimal_duration
     errors.add(:timer_start, :too_short) if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
   end
 
@@ -99,7 +99,7 @@ class TimerSession < RedmineTrackyApplicationRecord
     validate_start_and_end_present
     validate_comment_present
     validate_issues_selected
-    validate_enough_time
+    validate_minimal_duration
     validate_limit_recorded_hours
   end
 
