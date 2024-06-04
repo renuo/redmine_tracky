@@ -3,7 +3,7 @@
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/MethodLength
 class TimeTrackerController < TrackyController
-  def upsert
+  def create_or_update
     @current_timer_session = TimerSession.active.find_by(user: User.current)
 
     return start_timer unless @current_timer_session

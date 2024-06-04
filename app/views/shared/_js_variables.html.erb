@@ -2,7 +2,7 @@
   var RedmineTracky = RedmineTracky || {};
   RedmineTracky.datetimeFormat = "<%= j(I18n.t('timer_sessions.formats.jquery_datetime_format')) %>";
   RedmineTracky.issueCompletionPath = "<%= j(completion_issues_path) %>";
-  RedmineTracky.trackerUpdatePath = "<%= j(time_tracker_upsert_url) %>";
+  RedmineTracky.trackerUpdatePath = "<%= j(time_tracker_create_or_update_url) %>";
   RedmineTracky.datetimeFormatJavascript = "<%= j(I18n.t('timer_sessions.formats.js_datetime_format')) %>";
   RedmineTracky.documentTitle = "<%= j(I18n.t('timer_sessions.index.title')) %>";
 </script>

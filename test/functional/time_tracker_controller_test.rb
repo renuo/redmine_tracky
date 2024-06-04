@@ -23,16 +23,16 @@ class TimeTrackerControllerTest < ActionController::TestCase
     @request.session[:user_id] = 1
   end
 
-  test 'upsert without login' do
+  test 'create_or_update without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
-    post :upsert, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    post :create_or_update, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
     assert_response 403
   end
 
-  test 'upsert new session: start' do
+  test 'create_or_update new session: start' do
     recorded_time = Time.zone.now - 1.hour
-    post :upsert, params: { timer_session: {
+    post :create_or_update, params: { timer_session: {
       timer_start: recorded_time,
       comments: 'Starting a new session',
       issue_ids: ['1']
@@ -40,9 +40,9 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test 'upsert new session: stop' do
+  test 'create_or_update new session: stop' do
     recorded_time = Time.zone.now - 1.hour
-    post :upsert, params: { timer_session: {
+    post :create_or_update, params: { timer_session: {
       timer_start: recorded_time,
       timer_end: Time.zone.now,
       comments: 'Worked for an hour',
@@ -51,10 +51,10 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test 'upsert running session: stop' do
+  test 'create_or_update running session: stop' do
     FactoryBot.create(:timer_session, user: User.find(1))
 
-    post :upsert, params: { timer_session: {
+    post :create_or_update, params: { timer_session: {
       timer_start: Time.zone.now - 1.hours,
       timer_end: Time.zone.now,
       comments: 'Worked for an hour',
@@ -65,10 +65,10 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert TimerSession.last.timer_start, TimerSession.first.timer_end
   end
 
-  test 'upsert running session: cancel' do
+  test 'create_or_update running session: cancel' do
     FactoryBot.create(:timer_session, user: User.find(1))
 
-    post :upsert, params: { timer_session: { cancel: 'true' } }, xhr: true
+    post :create_or_update, params: { timer_session: { cancel: 'true' } }, xhr: true
     assert_response 200
 
     assert TimerSession.count, 0
