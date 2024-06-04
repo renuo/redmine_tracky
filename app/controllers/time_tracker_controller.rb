@@ -38,8 +38,11 @@ class TimeTrackerController < TrackyController
   end
 
   def cancel_timer
-    @current_timer_session.destroy
-    render :cancel, layout: false
+    if @current_timer_session.destroy
+      render :cancel, layout: false
+    else
+      render :cancel, layout: false, status: :unprocessable_entity
+    end
   end
 
   def stop_timer
