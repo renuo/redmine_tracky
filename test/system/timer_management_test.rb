@@ -58,14 +58,20 @@ class TimerManagementTest < ApplicationSystemTestCase
     find('#timer_session_issue_id').send_keys(:arrow_down)
     find('#timer_session_issue_id').send_keys(:tab)
 
+    fill_in 'timer_session[issue_id]', with: Issue.second.subject
+    sleep(1)
+    find('#timer_session_issue_id').send_keys(:arrow_down)
+    find('#timer_session_issue_id').send_keys(:tab)
+
     fill_in 'timer_session_timer_start',
             with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
     fill_in 'timer_session_timer_end',
             with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
 
-    subject = Issue.first.subject
+    subjects = [Issue.first.subject, Issue.second.subject]
     find('[data-name="timer-start"]').click
-    assert has_content?(subject)
+    assert has_content?(subjects[0])
+    assert has_content?(subjects[1])
   end
 
   test 'stopping timer with valid attributes' do
