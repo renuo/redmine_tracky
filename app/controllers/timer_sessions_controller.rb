@@ -8,6 +8,7 @@ class TimerSessionsController < TrackyController
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_session_ids(@timer_sessions_in_range)
     set_timer_sessions
     @timer_offset = offset_for_time_zone
+    @current_timer_session = TimerSession.active.find_by(user: User.current)
   end
 
   def report
