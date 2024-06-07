@@ -43,12 +43,12 @@ class TimerSessionsController < TrackyController
 
   def edit
     @timer_session = user_scoped_timer_session(params[:id])
-    render :edit, layout: false
+    render_js :edit
   end
 
   def time_error
     @timer_session = TimeEntityDecorator.new(user_scoped_timer_session(params[:id]))
-    render :time_error, layout: false
+    render_js :time_error
   end
 
   def continue
@@ -68,9 +68,9 @@ class TimerSessionsController < TrackyController
       TimeRebalancer.new(timer_session_params[:issue_ids],
                          @timer_session).rebalance_entries
       flash[:notice] = l(:notice_successful_update)
-      render (@timer_session.valid? ? :update_redirect : :update), layout: false
+      render_js(@timer_session.valid? ? :update_redirect : :update)
     else
-      render :update, layout: false
+      render_js :update
     end
   end
 

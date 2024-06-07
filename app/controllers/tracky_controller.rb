@@ -24,4 +24,10 @@ class TrackyController < ApplicationController
 
     Time.zone.now.in_time_zone(User.current.preference.time_zone).utc_offset / 1.minute
   end
+
+  def render_js(template, status = :ok)
+    respond_to do |format|
+      format.js { render template, status: }
+    end
+  end
 end

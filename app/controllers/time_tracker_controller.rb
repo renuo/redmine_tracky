@@ -13,10 +13,10 @@ class TimeTrackerController < TrackyController
   end
 
   def cancel
-    if !@current_timer_session.present?
-      cancel_timer
-    else
+    if @current_timer_session.present?
       render_js :cancel, :not_found
+    else
+      cancel_timer
     end
   end
 
@@ -34,6 +34,7 @@ class TimeTrackerController < TrackyController
     end
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def start_timer
     @current_timer_session = SessionCreator.new(User.current, timer_params, params[:commit]).create
 
@@ -49,12 +50,11 @@ class TimeTrackerController < TrackyController
       render_js :update and return
     end
 
-    if @current_timer_session.timer_end.present?
-      stop_timer and return
-    end
+    stop_timer and return if @current_timer_session.timer_end.present?
 
     render_js :start
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def stop_timer
     if @current_timer_session.update(timer_params.merge(finished: true))
