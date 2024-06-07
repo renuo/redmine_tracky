@@ -65,12 +65,26 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert TimerSession.last.timer_start, TimerSession.first.timer_end
   end
 
-  test 'create_or_update running session: cancel' do
-    FactoryBot.create(:timer_session, user: User.find(1))
+  test 'cancel running session' do
+    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
-    post :create_or_update, params: { timer_session: { cancel: 'true' } }, xhr: true
+    delete :cancel, xhr: true
     assert_response 200
 
     assert TimerSession.count, 0
+  end
+
+  test 'cancel without running session' do
+    post :cancel, xhr: true
+    assert_response 404
+
+    assert TimerSession.count, 0
+  end
+
+  test 'cancel without login' do
+    @controller.logged_user = nil
+    @request.session[:user_id] = nil
+    delete :cancel, xhr: true
+    assert_response 403
   end
 end

@@ -12,7 +12,6 @@ class TimerSession < RedmineTrackyApplicationRecord
   validates :timer_start, presence: true
 
   validate :validate_session_attributes, on: :update
-timer_se
   scope :active, -> { where(finished: false) }
   scope :finished, -> { where(finished: true) }
 

@@ -10,5 +10,6 @@ post 'timer_sessions_rebalance/:id', to: 'timer_sessions#rebalance', as: :timer_
 post 'timer_sessions_continue/:id', to: 'timer_sessions#continue', as: :timer_sessions_continue
 
 post 'time_tracker/create_or_update', to: 'time_tracker#create_or_update', as: :time_tracker_create_or_update
+delete 'time_tracker/cancel', to: 'time_tracker#cancel', as: :time_tracker_cancel
 
 get 'completion/issues', to: 'completion#issues'

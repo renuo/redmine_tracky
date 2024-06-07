@@ -3,16 +3,33 @@
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/MethodLength
 class TimeTrackerController < TrackyController
-  def create_or_update
-    @current_timer_session = TimerSession.active.find_by(user: User.current)
+  before_action :set_current_timer_session, only: %i[create_or_update cancel]
 
+  def create_or_update
     return start_timer unless @current_timer_session
     return cancel_timer if params[:cancel].present?
 
     stop_timer if timer_params[:timer_end].present?
   end
 
+  def cancel
+    unless @current_timer_session.present?
+      render :cancel, layout: false, status: :not_found
+      return
+    end
+
+    if @current_timer_session.destroy
+      render :cancel, layout: false
+    else
+      render :cancel, layout: false, status: :unprocessable_entity
+    end
+  end
+
   private
+
+  def set_current_timer_session
+    @current_timer_session = TimerSession.active.find_by(user: User.current)
+  end
 
   def start_timer
     @current_timer_session = SessionCreator.new(User.current, timer_params, params[:commit]).create
@@ -37,21 +54,13 @@ class TimeTrackerController < TrackyController
     render :start, layout: false
   end
 
-  def cancel_timer
-    if @current_timer_session.destroy
-      render :cancel, layout: false
-    else
-      render :cancel, layout: false, status: :unprocessable_entity
-    end
-  end
-
   def stop_timer
     if @current_timer_session.update(timer_end: default_end_time_for_timer(@current_timer_session), finished: true)
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
       render :stop, layout: false
     else
-      render :update, layout: false
+      render :update, layout: false, status: :unprocessable_entity
     end
   end
 
@@ -59,7 +68,7 @@ class TimeTrackerController < TrackyController
     if @current_timer_session.update(timer_params)
       head :no_content
     else
-      render :update, layout: false
+      render :update, layout: false, status: :unprocessable_entity
     end
   end
 
