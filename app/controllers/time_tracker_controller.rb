@@ -7,6 +7,7 @@ class TimeTrackerController < TrackyController
 
   def create_or_update
     return start_timer unless @current_timer_session
+
     cancel_timer if params[:cancel].present?
     stop_timer if timer_params[:timer_end].present?
   end
