@@ -13,12 +13,11 @@ class TimeTrackerController < TrackyController
   end
 
   def cancel
-    unless @current_timer_session.present?
-      render :cancel, layout: false, status: :not_found
-      return
+    if !@current_timer_session.present?
+      cancel_timer
+    else
+      render_js :cancel, :not_found
     end
-
-    cancel_timer
   end
 
   private
@@ -29,9 +28,9 @@ class TimeTrackerController < TrackyController
 
   def cancel_timer
     if @current_timer_session.destroy
-      render :cancel, layout: false
+      render_js :cancel
     else
-      render :cancel, layout: false, status: :unprocessable_entity
+      render_js :cancel, :unprocessable_entity
     end
   end
 
@@ -40,31 +39,30 @@ class TimeTrackerController < TrackyController
 
     unless @current_timer_session.valid?
       @current_timer_session.errors.add(:base, :invalid)
-      render :start, layout: false and return
+      render_js :start and return
     end
 
     issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @current_timer_session)
 
     unless issue_connector.run
       @current_timer_session.errors.add(:issue_id, :invalid)
-      render :update, layout: false and return
+      render_js :update and return
     end
 
     if @current_timer_session.timer_end.present?
-      stop_timer
-      return
+      stop_timer and return
     end
 
-    render :start, layout: false
+    render_js :start
   end
 
   def stop_timer
     if @current_timer_session.update(timer_params.merge(finished: true))
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
-      render :stop, layout: false
+      render_js :stop
     else
-      render :update, layout: false, status: :unprocessable_entity
+      render_js :update, :unprocessable_entity
     end
   end
 
@@ -72,12 +70,18 @@ class TimeTrackerController < TrackyController
     if @current_timer_session.update(timer_params)
       head :no_content
     else
-      render :update, layout: false, status: :unprocessable_entity
+      render_js :update, :unprocessable_entity
     end
   end
 
   def default_end_time_for_timer(timer_session)
     timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now.asctime
+  end
+
+  def render_js(template, status = :ok)
+    respond_to do |format|
+      format.js { render template, status: }
+    end
   end
 
   def timer_params
