@@ -52,18 +52,6 @@
     width: 100% !important;
   }
 
-  .d-flex {
-    display: flex;
-  }
-
-  .align-items-end {
-    align-items: flex-end;
-  }
-
-  .gap-1 {
-    gap: 1rem;
-  }
-
   @media only screen and (max-width: 480px) {
     [class*="w-"] {
       width: 100% !important;
