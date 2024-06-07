@@ -3,7 +3,6 @@
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/MethodLength
 class TimeTrackerController < TrackyController
-  respond_to :js
   before_action :set_current_timer_session, only: %i[create_or_update cancel]
 
   def create_or_update
@@ -14,13 +13,14 @@ class TimeTrackerController < TrackyController
   end
 
   def cancel
-    if @current_timer_session.present?
-      cancel_timer
-    else
+    unless @current_timer_session.present?
       respond_to do |format|
         format.js { render :cancel, layout: false, status: :not_found }
       end
+      return
     end
+
+    cancel_timer
   end
 
   private
