@@ -13,8 +13,8 @@ class TimeTrackerController < TrackyController
   end
 
   def cancel
-    if @current_timer_session.present?
-      render_js :cancel, :not_found
+    if @current_timer_session.blank?
+      head :not_found
     else
       cancel_timer
     end
