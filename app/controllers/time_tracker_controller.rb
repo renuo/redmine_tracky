@@ -14,9 +14,7 @@ class TimeTrackerController < TrackyController
 
   def cancel
     unless @current_timer_session.present?
-      respond_to do |format|
-        format.js { render :cancel, layout: false, status: :not_found }
-      end
+      render :cancel, layout: false, status: :not_found
       return
     end
 
@@ -31,13 +29,9 @@ class TimeTrackerController < TrackyController
 
   def cancel_timer
     if @current_timer_session.destroy
-      respond_to do |format|
-        format.js { render :cancel, layout: false }
-      end
+      render :cancel, layout: false
     else
-      respond_to do |format|
-        format.js { render :cancel, layout: false, status: :unprocessable_entity }
-      end
+      render :cancel, layout: false, status: :unprocessable_entity
     end
   end
 
@@ -46,18 +40,14 @@ class TimeTrackerController < TrackyController
 
     unless @current_timer_session.valid?
       @current_timer_session.errors.add(:base, :invalid)
-      respond_to do |format|
-        format.js { render :start, layout: false and return }
-      end
+      render :start, layout: false and return
     end
 
     issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @current_timer_session)
 
     unless issue_connector.run
       @current_timer_session.errors.add(:issue_id, :invalid)
-      respond_to do |format|
-        format.js { render :update, layout: false and return }
-      end
+      render :update, layout: false and return
     end
 
     if @current_timer_session.timer_end.present?
@@ -65,22 +55,16 @@ class TimeTrackerController < TrackyController
       return
     end
 
-    respond_to do |format|
-      format.js { render :start, layout: false }
-    end
+    render :start, layout: false
   end
 
   def stop_timer
     if @current_timer_session.update(timer_params.merge(finished: true))
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
-      respond_to do |format|
-        format.js { render :stop, layout: false }
-      end
+      render :stop, layout: false
     else
-      respond_to do |format|
-        format.js { render :update, layout: false, status: :unprocessable_entity }
-      end
+      render :update, layout: false, status: :unprocessable_entity
     end
   end
 
@@ -88,9 +72,7 @@ class TimeTrackerController < TrackyController
     if @current_timer_session.update(timer_params)
       head :no_content
     else
-      respond_to do |format|
-        format.js { render :update, layout: false, status: :unprocessable_entity }
-      end
+      render :update, layout: false, status: :unprocessable_entity
     end
   end
 
