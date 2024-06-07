@@ -7,8 +7,7 @@ class TimeTrackerController < TrackyController
 
   def create_or_update
     return start_timer unless @current_timer_session
-    return cancel_timer if params[:cancel].present?
-
+    cancel_timer if params[:cancel].present?
     stop_timer if timer_params[:timer_end].present?
   end
 
@@ -18,17 +17,21 @@ class TimeTrackerController < TrackyController
       return
     end
 
-    if @current_timer_session.destroy
-      render :cancel, layout: false
-    else
-      render :cancel, layout: false, status: :unprocessable_entity
-    end
+    cancel_timer
   end
 
   private
 
   def set_current_timer_session
     @current_timer_session = TimerSession.active.find_by(user: User.current)
+  end
+
+  def cancel_timer
+    if @current_timer_session.destroy
+      render :cancel, layout: false
+    else
+      render :cancel, layout: false, status: :unprocessable_entity
+    end
   end
 
   def start_timer
@@ -55,7 +58,7 @@ class TimeTrackerController < TrackyController
   end
 
   def stop_timer
-    if @current_timer_session.update(timer_end: default_end_time_for_timer(@current_timer_session), finished: true)
+    if @current_timer_session.update(timer_params.merge(finished: true))
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
       render :stop, layout: false

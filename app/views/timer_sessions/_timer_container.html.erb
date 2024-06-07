@@ -75,7 +75,7 @@
             <% end %>
           <% end %>
           <% if User.current.allowed_to_globally?(action: :cancel, controller: 'time_tracker') %>
-            <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel do %>
+            <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel, value: :cancel do %>
               <%= t('timer_sessions.timer.cancel') %>
               <i class="icon icon-cancel"></i>
             <% end %>
