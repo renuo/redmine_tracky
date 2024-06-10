@@ -12,6 +12,7 @@ class TimeTrackerController < TrackyController
 
     # Go to start page if timer session is not valid
     unless @current_timer_session.valid?
+      @current_timer_session.issues << Issue.find(timer_params[:issue_ids]) if timer_params[:issue_ids].present?
       @current_timer_session.errors.add(:base, :invalid)
       render :start, layout: false and return
     end
