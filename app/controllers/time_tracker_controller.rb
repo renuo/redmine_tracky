@@ -35,6 +35,7 @@ class TimeTrackerController < TrackyController
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def start_timer
     @current_timer_session = SessionCreator.new(User.current, timer_params, params[:commit]).create
 
@@ -55,6 +56,7 @@ class TimeTrackerController < TrackyController
 
     render_js :start
   end
+  # rubocop:enable Metrics/PerceivedComplexity
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def stop_timer
