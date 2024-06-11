@@ -39,6 +39,7 @@ class TimeTrackerController < TrackyController
     @current_timer_session = SessionCreator.new(User.current, timer_params, params[:commit]).create
 
     unless @current_timer_session.valid?
+      @current_timer_session.issues << Issue.find(timer_params[:issue_ids]) if timer_params[:issue_ids].present?
       @current_timer_session.errors.add(:base, :invalid)
       render_js :start and return
     end
