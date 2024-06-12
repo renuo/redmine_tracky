@@ -32,7 +32,7 @@ class TimeTrackerController < TrackyController
     end
   end
 
-  def update_timer
+  def update
     if @current_timer_session.update(timer_params)
       head :no_content
     else
@@ -54,49 +54,6 @@ class TimeTrackerController < TrackyController
 
   def set_current_timer_session
     @current_timer_session = TimerSession.active.find_by(user: User.current)
-  end
-
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
-  def start_timer
-    @current_timer_session = SessionCreator.new(User.current, timer_params, params[:commit]).create
-
-    unless @current_timer_session.valid?
-      @current_timer_session.issues << Issue.find(timer_params[:issue_ids]) if timer_params[:issue_ids].present?
-      @current_timer_session.errors.add(:base, :invalid)
-      render_js :start and return
-    end
-
-    issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @current_timer_session)
-
-    unless issue_connector.run
-      @current_timer_session.errors.add(:issue_id, :invalid)
-      render_js :update and return
-    end
-
-    stop_timer and return if @current_timer_session.timer_end.present?
-
-    render_js :start
-  end
-  # rubocop:enable Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/CyclomaticComplexity
-
-  def stop_timer
-    if @current_timer_session.update(timer_params.merge(finished: true))
-      TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
-      flash[:notice] = l(:notice_successful_update)
-      render_js :stop
-    else
-      render_js :update, :unprocessable_entity
-    end
-  end
-
-  def update_timer
-    if @current_timer_session.update(timer_params)
-      head :no_content
-    else
-      render_js :update, :unprocessable_entity
-    end
   end
 
   def render_js(template, status = :ok)
