@@ -2,10 +2,10 @@
   <div class="timer-container">
     <% active_timer_session = timer_session || TimerSession.new %>
     <%= labelled_form_for(active_timer_session,
-        url: time_tracker_path(active_timer_session),
-        method: :post,
-        remote: true,
-        format: :js) do |f| %>
+      url: time_tracker_path(active_timer_session),
+      method: active_timer_session.persisted? ? :put : :post,
+      remote: true,
+      format: :js) do |f| %>
       <%= f.hidden_field :id, data: { timer_id: '' } %>
       <%= error_messages_for active_timer_session %>
       <% if active_timer_session.timer_start %>
@@ -75,7 +75,7 @@
             <% end %>
           <% end %>
           <% if User.current.allowed_to_globally?(action: :cancel, controller: 'time_tracker') %>
-            <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel, value: :cancel do %>
+            <%= f.button :cancel, type: :button, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel, value: :cancel do %>
               <%= t('timer_sessions.timer.cancel') %>
               <i class="icon icon-cancel"></i>
             <% end %>
