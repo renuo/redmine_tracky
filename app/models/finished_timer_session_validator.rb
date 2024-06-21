@@ -2,6 +2,8 @@
 
 class FinishedTimerSessionValidator < ActiveModel::Validator
   def validate(record)
+    return unless record.finished?
+
     @record = record
 
     validate_start_and_end_present
@@ -37,8 +39,8 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
   def validate_limit_recorded_hours
     return if @record.timer_start.blank? || @record.timer_end.blank?
 
-    @record.validate_day_limit
-    @record.validate_session_limit
+    validate_day_limit
+    validate_session_limit
   end
 
   def validate_minimal_duration
@@ -47,7 +49,7 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
 
   def validate_day_limit
     return unless (
-        @record.splittable_hours + TimerSession.created_by(user).recorded_on(timer_start.to_date).sum(:hours)
+        @record.splittable_hours + TimerSession.created_by(@record.user).recorded_on(@record.timer_start.to_date).sum(:hours)
       ) > SettingsManager.max_hours_recorded_per_day.to_f
 
     @record.errors.add(:timer_start, :limit_reached_day)

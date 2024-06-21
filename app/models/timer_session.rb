@@ -6,8 +6,8 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   belongs_to :user
 
-  validates_with: :unfinished_timer_session_validator if -> { !finished? }
-  validates_with: :finished_timer_session_validator if -> { finished? }
+  validates_with UnfinishedTimerSessionValidator
+  validates_with FinishedTimerSessionValidator
 
   has_many :issues, -> { distinct }, through: :timer_session_issues
   has_many :time_entries, through: :timer_session_time_entries
