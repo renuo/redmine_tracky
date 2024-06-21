@@ -14,27 +14,27 @@ class TimeTrackerController < TrackyController
     unless @current_timer_session.valid?
       @current_timer_session.issues << Issue.find(timer_params[:issue_ids]) if timer_params[:issue_ids].present?
       @current_timer_session.errors.add(:base, :invalid)
-      render_js :start and return
+      render_js :start, :unprocessable_entity and return
     end
 
     issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @current_timer_session)
     unless issue_connector.run
       @current_timer_session.errors.add(:issue_id, :invalid)
-      render_js :update and return
+      render_js :update, :unprocessable_entity and return
     end
 
     if @current_timer_session.update(timer_params.merge(finished: true))
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
-      render_js :stop and return
+      render_js :stop, :ok and return
     end
 
     render_js :update, :unprocessable_entity
   end
 
-  def update
+  def updated
     if @current_timer_session.update(timer_params)
-      head :no_content
+      head :no_content, status: :ok
     else
       render_js :update, :unprocessable_entity
     end

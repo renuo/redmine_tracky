@@ -25,21 +25,21 @@ class TimeTrackerControllerTest < ActionController::TestCase
 
   # auth spec
 
-  test '#create without login' do
+  test '#create - without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
     post :create, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
     assert_response 403
   end
 
-  test '#update without login' do
+  test '#update - without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
     patch :update, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
     assert_response 403
   end
 
-  test '#destroy without login' do
+  test '#destroy - without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
     delete :destroy, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
@@ -48,11 +48,12 @@ class TimeTrackerControllerTest < ActionController::TestCase
 
   # create tests
 
-  test '#create with complete params' do
+  test '#create - with complete params' do
     recorded_time = Time.zone.now - 1.hour
     assert_equal 0, TimerSession.count
     post :create, params: { timer_session: {
       timer_start: recorded_time,
+      timer_end: Time.zone.now,
       comments: 'Starting a new session',
       issue_ids: ['1']
     } }, xhr: true
@@ -61,11 +62,12 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test '#create with end time present' do
+  test '#create - with end time present' do
     recorded_time = Time.zone.now - 1.hour
     assert_equal 0, TimerSession.count
     post :create, params: { timer_session: {
       timer_start: recorded_time,
+      timer_end: Time.zone.now,
       comments: 'Starting a new session',
       issue_ids: ['1']
     } }, xhr: true
@@ -74,8 +76,8 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test '#update with end time' do
-    FactoryBot.create(:timer_session, user: User.find(1))
+  test '#update - with end time' do
+    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
     recorded_time = Time.zone.now - 1.hour
     post :update, params: { timer_session: {
@@ -87,8 +89,8 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test '#update with invalid params' do
-    FactoryBot.create(:timer_session, user: User.find(1))
+  test '#update - with invalid params' do
+    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
     post :update, params: { timer_session: {
       timer_start: Time.zone.now - 1.hours,
@@ -101,7 +103,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert TimerSession.last.timer_start, TimerSession.first.timer_end
   end
 
-  test '#destroy with existing session' do
+  test '#destroy - with existing session' do
     FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
     delete :destroy, xhr: true
@@ -110,7 +112,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert TimerSession.count, 0
   end
 
-  test '#destroy with no session' do
+  test '#destroy - with no session' do
     post :destroy, xhr: true
     assert_response 404
 
