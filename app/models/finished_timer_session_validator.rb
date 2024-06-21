@@ -8,9 +8,12 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
 
     validate_start_and_end_present
     validate_comment_present
-    validate_issues_selected
     validate_minimal_duration
     validate_limit_recorded_hours
+
+    # issues get connected after the session is finished
+    return unless record.persisted?
+    validate_issues_selected
   end
 
   private

@@ -6,13 +6,6 @@ class UnfinishedTimerSessionValidator < ActiveModel::Validator
 
     @record = record
 
-    validate_start_and_end_present
-  end
-
-  private
-
-  def validate_start_and_end_present
-    @record.errors.add(:timer_start, :blank) if @record.timer_start.blank?
-    @record.errors.add(:timer_end, :blank) if @record.timer_end.blank?
+    # TODO: add validations
   end
 end
