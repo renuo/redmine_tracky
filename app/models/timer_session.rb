@@ -6,21 +6,21 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   belongs_to :user
 
+  validates_with: :unfinished_timer_session_validator if -> { !finished? }
+  validates_with: :finished_timer_session_validator if -> { finished? }
+
   has_many :issues, -> { distinct }, through: :timer_session_issues
   has_many :time_entries, through: :timer_session_time_entries
 
+  validate :validate_session_attributes
   validates :timer_start, presence: true
+  before_save :set_recorded_hours
 
-  validate :validate_session_attributes, on: :update
   scope :active, -> { where(finished: false) }
   scope :finished, -> { where(finished: true) }
 
   scope :created_by, ->(user) { where(user: user) }
   scope :recorded_on, ->(date) { where(timer_start: date) }
-
-  validate :validate_start_before_end_date
-
-  before_save :set_recorded_hours
 
   attr_accessor :issue_id, :absolute_time
 
@@ -45,62 +45,6 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   private
-
-  def validate_start_and_end_present
-    errors.add(:timer_start, :blank) if timer_start.blank?
-    errors.add(:timer_end, :blank) if timer_end.blank?
-  end
-
-  def validate_comment_present
-    errors.add(:comments, :blank) if comments.blank?
-  end
-
-  def validate_issues_selected
-    errors.add(:issue_id, :no_selection) if issues.count.zero?
-  end
-
-  def validate_start_before_end_date
-    return if timer_start.blank? || timer_end.blank?
-    return if timer_end > timer_start
-
-    errors.add(:timer_start, :after_end)
-    errors.add(:timer_end, :before_start)
-  end
-
-  def validate_limit_recorded_hours
-    return if timer_start.blank? || timer_end.blank?
-
-    validate_day_limit
-    validate_session_limit
-  end
-
-  def validate_minimal_duration
-    errors.add(:timer_start, :too_short) if (splittable_hours / issues.count) < SettingsManager.min_hours_to_record.to_f
-  end
-
-  def validate_day_limit
-    return unless (
-        splittable_hours + TimerSession.created_by(user).recorded_on(timer_start.to_date).sum(:hours)
-      ) > SettingsManager.max_hours_recorded_per_day.to_f
-
-    errors.add(:timer_start, :limit_reached_day)
-  end
-
-  def validate_session_limit
-    return unless splittable_hours > SettingsManager.max_hours_recorded_per_session.to_f
-
-    errors.add(:timer_start, :limit_reached_session)
-  end
-
-  def validate_session_attributes
-    return unless finished_changed? || finished?
-
-    validate_start_and_end_present
-    validate_comment_present
-    validate_issues_selected
-    validate_minimal_duration
-    validate_limit_recorded_hours
-  end
 
   def set_recorded_hours
     return unless timer_start.present? && timer_end.present?
