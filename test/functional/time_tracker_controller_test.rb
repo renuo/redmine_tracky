@@ -8,15 +8,15 @@ class TimeTrackerControllerTest < ActionController::TestCase
   tests TimeTrackerController
 
   fixtures :projects, :users, :email_addresses, :user_preferences, :members, :member_roles, :roles,
-           :groups_users,
-           :trackers, :projects_trackers,
-           :enabled_modules,
-           :versions,
-           :issue_statuses, :issue_categories, :issue_relations, :workflows,
-           :enumerations,
-           :issues, :journals, :journal_details,
-           :watchers,
-           :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
+    :groups_users,
+    :trackers, :projects_trackers,
+    :enabled_modules,
+    :versions,
+    :issue_statuses, :issue_categories, :issue_relations, :workflows,
+    :enumerations,
+    :issues, :journals, :journal_details,
+    :watchers,
+    :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
 
   def setup
     @controller.logged_user = User.find(1)
@@ -25,30 +25,30 @@ class TimeTrackerControllerTest < ActionController::TestCase
 
   # auth spec
 
-  test '#create without login'
+  test '#create without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
     post :create, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
     assert_response 403
   end
 
-  test '#create without login'
+  test '#update without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
-    post :create, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    patch :update, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
     assert_response 403
   end
-  
-  test '#destroy without login'
+
+  test '#destroy without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
-    post :destroy, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    delete :destroy, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
     assert_response 403
   end
 
   # create tests
 
-  test 'create - complete params' do
+  test '#create with complete params' do
     recorded_time = Time.zone.now - 1.hour
     assert_equal 0, TimerSession.count
     post :create, params: { timer_session: {
@@ -61,7 +61,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test 'create - end time presetn' do
+  test '#create with end time present' do
     recorded_time = Time.zone.now - 1.hour
     assert_equal 0, TimerSession.count
     post :create, params: { timer_session: {
@@ -74,7 +74,9 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test '#update: stop' do
+  test '#update with end time' do
+    FactoryBot.create(:timer_session, user: User.find(1))
+
     recorded_time = Time.zone.now - 1.hour
     post :update, params: { timer_session: {
       timer_start: recorded_time,
@@ -85,10 +87,10 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test '#update: invalid' do
+  test '#update with invalid params' do
     FactoryBot.create(:timer_session, user: User.find(1))
 
-    post :create_or_update, params: { timer_session: {
+    post :update, params: { timer_session: {
       timer_start: Time.zone.now - 1.hours,
       timer_end: Time.zone.now,
       comments: 'Worked for an hour',
@@ -99,17 +101,17 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert TimerSession.last.timer_start, TimerSession.first.timer_end
   end
 
-  test '#destroy: found' do
+  test '#destroy with existing session' do
     FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
-    delete :cancel, xhr: true
+    delete :destroy, xhr: true
     assert_response 200
 
     assert TimerSession.count, 0
   end
 
-  test '#destroy: not found' do
-    post :cancel, xhr: true
+  test '#destroy with no session' do
+    post :destroy, xhr: true
     assert_response 404
 
     assert TimerSession.count, 0
