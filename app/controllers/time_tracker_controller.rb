@@ -23,6 +23,10 @@ class TimeTrackerController < TrackyController
       render_js :update, :unprocessable_entity and return
     end
 
+    unless @current_timer_session.finished?
+      render_js :start, :ok and return
+    end
+
     if @current_timer_session.update(timer_params.merge(finished: true))
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
@@ -34,15 +38,13 @@ class TimeTrackerController < TrackyController
 
   def updated
     if @current_timer_session.update(timer_params)
-      head :no_content, status: :ok
+      render_js :update, :ok
     else
       render_js :update, :unprocessable_entity
     end
   end
 
   def destroy
-    render :not_found and return if @current_timer_session.blank?
-
     if @current_timer_session.destroy
       render_js :cancel
     else
@@ -57,7 +59,7 @@ class TimeTrackerController < TrackyController
   end
 
   def require_current_timer_session
-    render :not_found, status: :not_found if @current_timer_session.blank?
+    head :not_found, status: :not_found if @current_timer_session.blank?
   end
 
   def render_js(template, status = :ok)
