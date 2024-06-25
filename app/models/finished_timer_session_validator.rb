@@ -13,6 +13,7 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
 
     # issues get connected after the session is finished
     return unless record.persisted?
+
     validate_issues_selected
   end
 
@@ -47,12 +48,16 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
   end
 
   def validate_minimal_duration
-    @record.errors.add(:timer_start, :too_short) if (@record.splittable_hours / @record.issues.count) < SettingsManager.min_hours_to_record.to_f
+    return unless (@record.splittable_hours / @record.issues.count) < SettingsManager.min_hours_to_record.to_f
+
+    @record.errors.add(:timer_start,
+                       :too_short)
   end
 
   def validate_day_limit
     return unless (
-        @record.splittable_hours + TimerSession.created_by(@record.user).recorded_on(@record.timer_start.to_date).sum(:hours)
+        @record.splittable_hours + TimerSession.created_by(@record.user)
+        .recorded_on(@record.timer_start.to_date).sum(:hours)
       ) > SettingsManager.max_hours_recorded_per_day.to_f
 
     @record.errors.add(:timer_start, :limit_reached_day)

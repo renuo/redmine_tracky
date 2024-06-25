@@ -2,6 +2,8 @@
 
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
 class TimeTrackerController < TrackyController
   before_action :set_current_timer_session, only: %i[create update destroy]
   before_action :require_current_timer_session, only: %i[update destroy]
@@ -23,9 +25,7 @@ class TimeTrackerController < TrackyController
       render_js :update, :unprocessable_entity and return
     end
 
-    unless @current_timer_session.session_finished?
-      render_js :start, :ok and return
-    end
+    render_js :start, :ok and return unless @current_timer_session.session_finished?
 
     if @current_timer_session.update(timer_params.merge(finished: true))
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
@@ -41,9 +41,9 @@ class TimeTrackerController < TrackyController
       if @current_timer_session.session_finished?
         if @current_timer_session.update(finished: true)
           TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
-          flash[:notice] = "Successfully stopped timer."
+          flash[:notice] = 'Successfully stopped timer.'
           render_js :stop, :ok
-        else 
+        else
           render_js :update, :unprocessable_entity
         end
       else
@@ -88,5 +88,7 @@ class TimeTrackerController < TrackyController
     end
   end
 end
+# rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/MethodLength
 # rubocop:enable Metrics/AbcSize
