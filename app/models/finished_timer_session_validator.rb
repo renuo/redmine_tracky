@@ -9,7 +9,8 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
     validate_start_and_end_present
     validate_comment_present
     validate_minimal_duration
-    validate_limit_recorded_hours
+    validate_day_limit
+    validate_session_limit
 
     # issues get connected after the session is finished
     return unless record.persisted?
@@ -30,13 +31,6 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
 
   def validate_issues_selected
     @record.errors.add(:issue_id, :no_selection) if @record.issues.count.zero?
-  end
-
-  def validate_limit_recorded_hours
-    return if @record.timer_start.blank? || @record.timer_end.blank?
-
-    validate_day_limit
-    validate_session_limit
   end
 
   def validate_minimal_duration

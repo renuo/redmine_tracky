@@ -60,18 +60,33 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
-  test '#create - with end time present' do
+  test '#create - with end time not present' do
     assert_equal 0, TimerSession.count
     recorded_time = Time.zone.now - 1.hour
     post :create, params: { timer_session: {
       timer_start: recorded_time,
-      timer_end: Time.zone.now,
+      timer_end: nil,
       comments: 'Starting a new session',
       issue_ids: ['1']
     } }, xhr: true
     assert_equal 1, TimerSession.count
-    assert_equal TimerSession.last.finished, true
+    assert_equal TimerSession.last.finished, false
     assert_response 200
+  end
+
+  test '#create - with existing session' do
+  FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    assert_equal 1, TimerSession.count
+    recorded_time = Time.zone.now - 1.hour
+    post :create, params: { timer_session: {
+      timer_start: recorded_time,
+      timer_end: Time.zone.now,
+      comments: 'Starting a session with conflict',
+      issue_ids: ['1']
+    } }, xhr: true
+    assert_equal 1, TimerSession.count
+    assert_equal TimerSession.last.finished, false
+    assert_response 409
   end
 
   test '#create - with invalid params' do
@@ -83,7 +98,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       comments: 'Starting a new session',
       issue_ids: ['1']
     } }, xhr: true
-    assert_equal 1, TimerSession.count
+    assert_equal 0, TimerSession.count
     assert_response 422
   end
 
@@ -117,14 +132,24 @@ class TimeTrackerControllerTest < ActionController::TestCase
     FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
     post :update, params: { timer_session: {
-      timer_start: Time.zone.now - 1.hours,
+      timer_start: Time.zone.now + 1.hours,
       timer_end: Time.zone.now,
       comments: 'Worked for an hour',
       issue_ids: ['1']
     } }, xhr: true
-    assert_response 200
+    assert_response 422
+  end
 
-    assert TimerSession.last.timer_start, TimerSession.first.timer_end
+  test '#update - with end time and invalid params' do
+    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+
+    post :update, params: { timer_session: {
+      timer_start: Time.zone.now,
+      timer_end: Time.zone.now + 1.hours,
+      comments: nil,
+      issue_ids: ['1']
+    } }, xhr: true
+    assert_response 422
   end
 
   test '#destroy - with existing session' do

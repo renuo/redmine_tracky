@@ -27,7 +27,7 @@ class TimeTrackerController < TrackyController
 
     render_js :start, :ok and return unless @current_timer_session.session_finished?
 
-    if @current_timer_session.update(timer_params.merge(finished: true))
+    if @current_timer_session.update(finished: true)
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
       render_js :stop, :ok and return
@@ -37,29 +37,22 @@ class TimeTrackerController < TrackyController
   end
 
   def update
-    if @current_timer_session.update(timer_params)
-      if @current_timer_session.session_finished?
-        if @current_timer_session.update(finished: true)
-          TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
-          flash[:notice] = 'Successfully stopped timer.'
-          render_js :stop, :ok
-        else
-          render_js :update, :unprocessable_entity
-        end
-      else
-        render_js :update, :ok
-      end
+    return render_js(:update, :unprocessable_entity) unless @current_timer_session.update(timer_params)
+
+    if @current_timer_session.session_finished?
+      return render_js(:update, :unprocessable_entity) unless @current_timer_session.update(finished: true)
+
+      TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
+      flash[:notice] = 'Successfully stopped timer.'
+      render_js(:stop, :ok)
     else
-      render_js :update, :unprocessable_entity
+      render_js(:update, :ok)
     end
   end
 
   def destroy
-    if @current_timer_session.destroy
-      render_js :cancel
-    else
-      render_js :cancel, :unprocessable_entity
-    end
+    @current_timer_session.destroy
+    render_js :cancel
   end
 
   private
