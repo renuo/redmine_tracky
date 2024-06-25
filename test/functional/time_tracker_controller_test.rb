@@ -75,7 +75,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#create - with existing session' do
-  FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
     assert_equal 1, TimerSession.count
     post :create, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
@@ -101,7 +101,8 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#create - from last session' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: true, timer_start: Time.zone.now - 2.hours, timer_end: Time.zone.now - 1.hour)
+    FactoryBot.create(:timer_session, user: User.find(1), finished: true, timer_start: Time.zone.now - 2.hours,
+                                      timer_end: Time.zone.now - 1.hour)
     assert_equal 1, TimerSession.count
     post :create, params: { timer_session: {
       timer_start: nil,
