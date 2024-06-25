@@ -23,8 +23,6 @@ class TimeTrackerControllerTest < ActionController::TestCase
     @request.session[:user_id] = 1
   end
 
-  # auth spec
-
   test '#create - without login' do
     @controller.logged_user = nil
     @request.session[:user_id] = nil
@@ -46,11 +44,11 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 403
   end
 
-  # create tests
+  # Non auth tests
 
   test '#create - with complete params' do
-    recorded_time = Time.zone.now - 1.hour
     assert_equal 0, TimerSession.count
+    recorded_time = Time.zone.now - 1.hour
     post :create, params: { timer_session: {
       timer_start: recorded_time,
       timer_end: Time.zone.now,
@@ -63,8 +61,8 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#create - with end time present' do
-    recorded_time = Time.zone.now - 1.hour
     assert_equal 0, TimerSession.count
+    recorded_time = Time.zone.now - 1.hour
     post :create, params: { timer_session: {
       timer_start: recorded_time,
       timer_end: Time.zone.now,
@@ -76,13 +74,39 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 200
   end
 
+  test '#create - with invalid params' do
+    assert_equal 0, TimerSession.count
+    recorded_time = Time.zone.now + 1.hour
+    post :create, params: { timer_session: {
+      timer_start: recorded_time,
+      timer_end: Time.zone.now,
+      comments: 'Starting a new session',
+      issue_ids: ['1']
+    } }, xhr: true
+    assert_equal 1, TimerSession.count
+    assert_response 422
+  end
+
   test '#update - with end time' do
+    assert_equal 0, TimerSession.count
     FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
     recorded_time = Time.zone.now - 1.hour
     post :update, params: { timer_session: {
       timer_start: recorded_time,
       timer_end: Time.zone.now,
+      comments: 'Worked for an hour',
+      issue_ids: ['1']
+    } }, xhr: true
+    assert_response 200
+  end
+
+  test '#update - with no end time' do
+    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+
+    post :update, params: { timer_session: {
+      timer_start: Time.zone.now - 1.hours,
+      timer_end: nil,
       comments: 'Worked for an hour',
       issue_ids: ['1']
     } }, xhr: true
