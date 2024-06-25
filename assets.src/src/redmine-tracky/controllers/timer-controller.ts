@@ -52,8 +52,9 @@ export default class extends Controller {
   }
 
   private timeDiffToString(timeDiff: TimeDiff) {
+    console.log({ timeDiff })
     const duration = Duration.fromObject(timeDiff)
-    const formattedDuration = duration.toFormat('hh:mm:ss').replaceAll('-', '')
+    const formattedDuration = duration.toFormat('hh:mm:ss').replace(/-/g, '')
     const sign = Object.values(timeDiff).some((value) => value < 0) ? '-' : ''
     return sign + formattedDuration
   }
