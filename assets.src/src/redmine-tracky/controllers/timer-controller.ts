@@ -52,7 +52,6 @@ export default class extends Controller {
   }
 
   private timeDiffToString(timeDiff: TimeDiff) {
-    console.log({ timeDiff })
     const duration = Duration.fromObject(timeDiff)
     const formattedDuration = duration.toFormat('hh:mm:ss').replace(/-/g, '')
     const sign = Object.values(timeDiff).some((value) => value < 0) ? '-' : ''
@@ -84,7 +83,6 @@ export default class extends Controller {
   }
 
   private adjustedDateTime() {
-    const localOffset = DateTime.local().offset
-    return DateTime.local().minus({ minutes: localOffset - this.timezoneValue })
+    return DateTime.local()
   }
 }
