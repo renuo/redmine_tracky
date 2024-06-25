@@ -32,14 +32,6 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
     @record.errors.add(:issue_id, :no_selection) if @record.issues.count.zero?
   end
 
-  def validate_start_before_end_date
-    return if @record.timer_start.blank? || @record.timer_end.blank?
-    return if @record.timer_end > @record.timer_start
-
-    @record.errors.add(:timer_start, :after_end)
-    @record.errors.add(:timer_end, :before_start)
-  end
-
   def validate_limit_recorded_hours
     return if @record.timer_start.blank? || @record.timer_end.blank?
 
