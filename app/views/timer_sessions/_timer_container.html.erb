@@ -2,10 +2,10 @@
   <div class="timer-container">
     <% active_timer_session = timer_session %>
     <%= labelled_form_for(active_timer_session,
-      url: time_tracker_path(active_timer_session),
+      url: time_tracker_path,
       method: active_timer_session.persisted? ? :patch : :post,
       remote: true,
-      format: :js) do |f| %>
+    ) do |f| %>
       <%= f.hidden_field :id, data: { timer_id: '' } %>
       <%= error_messages_for active_timer_session %>
       <% if active_timer_session.timer_start %>

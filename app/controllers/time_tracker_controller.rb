@@ -23,7 +23,7 @@ class TimeTrackerController < TrackyController
       render_js :update, :unprocessable_entity and return
     end
 
-    unless @current_timer_session.finished?
+    unless @current_timer_session.session_finished?
       render_js :start, :ok and return
     end
 
@@ -36,9 +36,19 @@ class TimeTrackerController < TrackyController
     render_js :update, :unprocessable_entity
   end
 
-  def updated
+  def update
     if @current_timer_session.update(timer_params)
-      render_js :update, :ok
+      if @current_timer_session.session_finished?
+        if @current_timer_session.update(finished: true)
+          TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
+          flash[:notice] = "Successfully stopped timer."
+          render_js :stop, :ok
+        else 
+          render_js :update, :unprocessable_entity
+        end
+      else
+        render_js :update, :ok
+      end
     else
       render_js :update, :unprocessable_entity
     end
