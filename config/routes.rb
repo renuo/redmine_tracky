@@ -11,7 +11,7 @@ post 'timer_sessions_continue/:id', to: 'timer_sessions#continue', as: :timer_se
 
 # avoid resources because there is either 0 or 1 object
 post :time_tracker, to: 'time_tracker#create'
-put :time_tracker, to: 'time_tracker#update'
+patch :time_tracker, to: 'time_tracker#update'
 delete :time_tracker, to: 'time_tracker#destroy'
 
 get 'completion/issues', to: 'completion#issues'
