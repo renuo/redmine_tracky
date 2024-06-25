@@ -103,7 +103,6 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#update - with end time' do
-    assert_equal 0, TimerSession.count
     FactoryBot.create(:timer_session, user: User.find(1), finished: false)
 
     recorded_time = Time.zone.now - 1.hour
@@ -149,6 +148,20 @@ class TimeTrackerControllerTest < ActionController::TestCase
       comments: nil,
       issue_ids: ['1']
     } }, xhr: true
+    assert_response 422
+  end
+
+  test '#create - with invalid issue connection' do
+    assert_equal 0, TimerSession.count
+    invalid_issue_id = 999
+
+    post :create, params: { timer_session: {
+      timer_start: Time.zone.now,
+      timer_end: Time.zone.now + 1.hours,
+      comments: 'Worked on non-existing issue',
+      issue_ids: [invalid_issue_id]
+    } }, xhr: true
+
     assert_response 422
   end
 
