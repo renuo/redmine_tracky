@@ -8,7 +8,7 @@ class UnfinishedTimerSessionValidator < ActiveModel::Validator
   end
 
   def validate_start_before_end_date
-    return if @record.timer_start.blank? || @record.timer_end.blank?
+    return if @record.timer_end.blank?
     return if @record.timer_end > @record.timer_start
 
     @record.errors.add(:timer_start, :after_end)
