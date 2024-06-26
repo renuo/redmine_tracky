@@ -28,10 +28,10 @@ Redmine::Plugin.register :redmine_tracky do
   settings default: default_settings, partial: 'settings/redmine_tracky_settings'
 
   menu :application_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
-       caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
+       caption: 'Tracky', if: proc { User.current.allowed_to_globally?(action: :index, controller: 'timer_sessions') }
 
   menu :top_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
-       caption: 'Tracky', if: proc { PermissionManager.new.can?(:index, :timer_sessions) }
+       caption: 'Tracky', if: proc { User.current.allowed_to_globally?(action: :index, controller: 'timer_sessions') }
 
   project_module :timer_sessions do
     permission :manage_timer_sessions, {

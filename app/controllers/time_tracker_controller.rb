@@ -1,77 +1,74 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
 class TimeTrackerController < TrackyController
-  def start
-    # Early return if timer already running
-    if @current_timer_session
-      render :update, layout: false and return
-    end
+  before_action :set_current_timer_session, only: %i[create update destroy]
+  before_action :require_current_timer_session, only: %i[update destroy]
 
-    @current_timer_session = SessionCreator.new(@current_user, timer_params, params[:commit]).create
+  def create
+    head :conflict and return if @current_timer_session.present?
 
-    # Go to start page if timer session is not valid
+    @current_timer_session = SessionCreator.new(User.current, timer_params, params[:commit]).create
+
     unless @current_timer_session.valid?
       @current_timer_session.issues << Issue.find(timer_params[:issue_ids]) if timer_params[:issue_ids].present?
       @current_timer_session.errors.add(:base, :invalid)
-      render :start, layout: false and return
+      render_js :start, :unprocessable_entity and return
     end
 
     issue_connector = IssueConnector.new(timer_params[:issue_ids] || [], @current_timer_session)
-
-    # Go to update page if connected issues are not valid
     unless issue_connector.run
       @current_timer_session.errors.add(:issue_id, :invalid)
-      render :update, layout: false and return
+      render_js :update, :unprocessable_entity and return
     end
 
-    # Early close the timer session if the timer_end is set and it's valid
-    if @current_timer_session.session_finished? && @current_timer_session.update(finished: true)
+    render_js :start, :ok and return unless @current_timer_session.session_finished?
+
+    if @current_timer_session.update(finished: true)
       TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
       flash[:notice] = l(:notice_successful_update)
-      render :stop, layout: false and return
+      render_js :stop, :ok and return
     end
 
-    # Go back to the start otherwise
-    render :start, layout: false
-  end
-
-  def stop
-    if @current_timer_session.nil?
-      render :stop, layout: false and return
-    end
-
-    if params[:cancel]
-      @current_timer_session.destroy
-      render :cancel, layout: false and return
-    end
-
-    if @current_timer_session.update(timer_end: default_end_time_for_timer(@current_timer_session), finished: true)
-      TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
-      flash[:notice] = l(:notice_successful_update)
-      render :stop, layout: false
-    else
-      render :update, layout: false
-    end
+    render_js :update, :unprocessable_entity
   end
 
   def update
-    # Start over if timer is not running
-    if @current_timer_session.nil?
-      render :start, layout: false and return
-    end
+    return render_js(:update, :unprocessable_entity) unless @current_timer_session.update(timer_params)
 
-    if @current_timer_session.update(timer_params)
-      head :no_content
+    if @current_timer_session.session_finished?
+      return render_js(:update, :unprocessable_entity) unless @current_timer_session.update(finished: true)
+
+      TimeSplitter.new(@current_timer_session, @current_timer_session.issues).create_time_entries
+      flash[:notice] = 'Successfully stopped timer.'
+      render_js(:stop, :ok)
     else
-      render :update, layout: false
+      render_js(:update, :ok)
     end
+  end
+
+  def destroy
+    @current_timer_session.destroy
+    render_js :cancel
   end
 
   private
 
-  def default_end_time_for_timer(timer_session)
-    timer_session&.timer_end.presence || timer_params[:timer_end]&.presence || user_time_zone.now.asctime
+  def set_current_timer_session
+    @current_timer_session = TimerSession.active.find_by(user: User.current)
+  end
+
+  def require_current_timer_session
+    head :not_found, status: :not_found if @current_timer_session.blank?
+  end
+
+  def render_js(template, status = :ok)
+    respond_to do |format|
+      format.js { render template, status: }
+    end
   end
 
   def timer_params
@@ -84,4 +81,7 @@ class TimeTrackerController < TrackyController
     end
   end
 end
-# rubocop:enable Style/IfUnlessModifier, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+# rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/AbcSize

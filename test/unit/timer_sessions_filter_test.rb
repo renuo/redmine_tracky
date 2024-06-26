@@ -27,7 +27,8 @@ class TimerSessionsFilterTest < ActiveSupport::TestCase
 
     @other_session = FactoryBot.create(:timer_session,
                                        user: User.find(2),
-                                       timer_start: Time.zone.now - 15.days)
+                                       timer_start: Time.zone.now - 15.days,
+                                       timer_end: Time.zone.now - 14.days)
     TimerSessionIssue.create!(
       issue_id: @issue.id,
       timer_session_id: @other_session.id

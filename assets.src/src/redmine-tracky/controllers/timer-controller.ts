@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import { DateTime, DurationUnits } from 'luxon'
+import { DateTime, Duration, DurationUnits } from 'luxon'
 import { TimeDiff } from '@interfaces/time-diff'
 
 export default class extends Controller {
@@ -26,7 +26,7 @@ export default class extends Controller {
 
     if (start && end) {
       const diff: string = this.timeDifference()
-      this.updateTimer(diff)
+      this.updateTimerLabel(diff)
     } else if (start) {
       this.startTicker()
     }
@@ -39,7 +39,7 @@ export default class extends Controller {
   private startTicker() {
     const updateTime = () => {
       const diff = this.timeDifference()
-      this.updateTimer(diff)
+      this.updateTimerLabel(diff)
     }
 
     window.TimerInterval = setInterval(updateTime, 1000)
@@ -52,17 +52,10 @@ export default class extends Controller {
   }
 
   private timeDiffToString(timeDiff: TimeDiff) {
-    const sign = timeDiff.minutes < 0 || timeDiff.seconds < 0 ? '-' : ''
-
-    return (
-      sign +
-      ['hours', 'minutes', 'seconds']
-        .map((v) => timeDiff[v as keyof TimeDiff])
-        .map((v) => Math.abs(Math.floor(v)))
-        .filter((v, i) => i !== 0 || v !== 0) // Remove hours if zero
-        .map((v) => v.toString().padStart(2, '0'))
-        .join(':')
-    )
+    const duration = Duration.fromObject(timeDiff)
+    const formattedDuration = duration.toFormat('hh:mm:ss').replace(/-/g, '')
+    const sign = Object.values(timeDiff).some((value) => value < 0) ? '-' : ''
+    return sign + formattedDuration
   }
 
   private dateTimeFromTarget(target: HTMLInputElement) {
@@ -85,12 +78,11 @@ export default class extends Controller {
     )
   }
 
-  private updateTimer(time: string) {
+  private updateTimerLabel(time: string) {
     $(this.labelTarget).text(time)
   }
 
   private adjustedDateTime() {
-    const localOffset = DateTime.local().offset
-    return DateTime.local().minus({ minutes: localOffset - this.timezoneValue })
+    return DateTime.local()
   }
 }

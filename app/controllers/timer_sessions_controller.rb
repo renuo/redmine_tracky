@@ -4,10 +4,11 @@ class TimerSessionsController < TrackyController
   def index
     @timer_sessions_in_range = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
                                            .finished
-                                           .created_by(@current_user)
+                                           .created_by(User.current)
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_session_ids(@timer_sessions_in_range)
     set_timer_sessions
     @timer_offset = offset_for_time_zone
+    @current_timer_session = TimerSession.active.find_by(user: User.current) || TimerSession.new
   end
 
   def report
@@ -17,7 +18,7 @@ class TimerSessionsController < TrackyController
   end
 
   def time_entries_in_range(timer_sessions)
-    time_entries = TimeEntry.where(user: @current_user).includes(:project)
+    time_entries = TimeEntry.where(user: User.current).includes(:project)
                             .where.not(id: timer_sessions.pluck(:'time_entries.id'))
     apply_filter(time_entries, :spent_on)
   end
@@ -42,12 +43,12 @@ class TimerSessionsController < TrackyController
 
   def edit
     @timer_session = user_scoped_timer_session(params[:id])
-    render :edit, layout: false
+    render_js :edit
   end
 
   def time_error
     @timer_session = TimeEntityDecorator.new(user_scoped_timer_session(params[:id]))
-    render :time_error, layout: false
+    render_js :time_error
   end
 
   def continue
@@ -56,7 +57,7 @@ class TimerSessionsController < TrackyController
     new_timer_session = timer_session_template.dup
     new_timer_session.update(timer_end: nil,
                              finished: false,
-                             timer_start: (@current_user.time_zone || Time.zone).now.asctime)
+                             timer_start: (User.current.time_zone || Time.zone).now.asctime)
     IssueConnector.new(linked_issues.map(&:id) || [], new_timer_session).run
     redirect_to timer_sessions_path
   end
@@ -67,9 +68,9 @@ class TimerSessionsController < TrackyController
       TimeRebalancer.new(timer_session_params[:issue_ids],
                          @timer_session).rebalance_entries
       flash[:notice] = l(:notice_successful_update)
-      render (@timer_session.valid? ? :update_redirect : :update), layout: false
+      render_js(@timer_session.valid? ? :update_redirect : :update)
     else
-      render :update, layout: false
+      render_js :update
     end
   end
 
@@ -91,7 +92,7 @@ class TimerSessionsController < TrackyController
   end
 
   def user_scoped_timer_session(id)
-    TimerSession.where(user: @current_user).find(id)
+    TimerSession.where(user: User.current).find(id)
   end
 
   def timer_session_params

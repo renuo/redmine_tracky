@@ -1,11 +1,11 @@
 <div class="box" data-controller="form timer" data-timer-timezone-value="<%= offset_for_time_zone %>">
   <div class="timer-container">
-    <% active_timer_session = timer_session || TimerSession.new %>
+    <% active_timer_session = timer_session %>
     <%= labelled_form_for(active_timer_session,
-        url: active_timer_session.persisted? ? stop_time_tracker_path : start_time_tracker_path,
-        method: :post,
-        remote: true,
-        format: :js) do |f| %>
+      url: time_tracker_path,
+      method: active_timer_session.persisted? ? :patch : :post,
+      remote: true,
+    ) do |f| %>
       <%= f.hidden_field :id, data: { timer_id: '' } %>
       <%= error_messages_for active_timer_session %>
       <% if active_timer_session.timer_start %>
@@ -66,22 +66,22 @@
         <% end %>
       <% end %>
       <div class="mb-3"></div>
-      <% if timer_session %>
+      <% if timer_session.persisted? %>
         <div data-ending-action-buttons>
-          <% if @permission_manager.can?(:stop, :time_tracker) %>
+          <% if User.current.allowed_to_globally?(action: :stop, controller: 'time_tracker') %>
             <%= f.button :stop, type: :submit, data: { name: 'timer-stop', form_target: 'stopButton' }, name: :stop do %>
               <%= t('timer_sessions.timer.stop') %>
               <i class="icon icon-error"></i>
             <% end %>
           <% end %>
-          <% if @permission_manager.can?(:cancel, :time_tracker) %>
-            <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel do %>
+          <% if User.current.allowed_to_globally?(action: :cancel, controller: 'time_tracker') %>
+            <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel, value: :cancel, form: "timer-cancel-form" do %>
               <%= t('timer_sessions.timer.cancel') %>
               <i class="icon icon-cancel"></i>
             <% end %>
           <% end %>
         </div>
-      <% elsif !timer_session && @permission_manager.can?(:start, :time_tracker) %>
+      <% elsif !timer_session.persisted? && User.current.allowed_to_globally?(action: :start, controller: 'time_tracker') %>
         <%= f.button :start, type: :submit, value: :start, data: { name: 'timer-start' }, name: :commit do %>
           <%= t('timer_sessions.timer.start') %>
           <i class="icon icon-add new-issue"></i>
@@ -92,5 +92,7 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <%= button_to "hide me", time_tracker_path, method: :delete, form: {id: "timer-cancel-form", data: {remote: true}, format: "js"} %>
   </div>
 </div>

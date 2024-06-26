@@ -8,7 +8,7 @@
     <div class="w-100" data-timer-sessions-list>
       <%= render 'timer_sessions_list', timer_sessions_by_day: @timer_sessions %>
     </div>
-    <% if @permission_manager.can?(:report, :timer_sessions) %>
+    <% if User.current.allowed_to_globally?(action: :report, controller: 'timer_sessions') %>
       <hr>
       <div class="w-100" data-timer-session-container>
         <%= render 'entries_report_query', current_report: @current_report %>
