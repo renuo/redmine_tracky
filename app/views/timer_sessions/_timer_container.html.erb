@@ -93,6 +93,6 @@
       <% end %>
     <% end %>
 
-    <%= button_to "hide me", time_tracker_path, method: :delete, form: {id: "timer-cancel-form", data: {remote: true}, format: "js"} %>
+    <%= button_to "", time_tracker_path, class: "hidden", method: :delete, form: {id: "timer-cancel-form", data: {remote: true}, format: "js"} %>
   </div>
 </div>
