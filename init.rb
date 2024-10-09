@@ -37,7 +37,7 @@ Redmine::Plugin.register :redmine_tracky do
     permission :manage_timer_sessions, {
       timer_sessions: %i[index create continue update edit patch
                          destroy report time_error report time_error rebalance],
-      time_tracker: %i[start stop update]
+      time_tracker: %i[create update destroy]
     }, require: :loggedin
 
     permission :index_timer_sessions, {
@@ -45,15 +45,15 @@ Redmine::Plugin.register :redmine_tracky do
     }, require: :loggedin
 
     permission :create_timer_sessions, {
-      time_tracker: %i[start update]
+      time_tracker: %i[create]
     }, require: :loggedin
 
     permission :stop_timer_sessions, {
-      time_tracker: %i[stop]
+      time_tracker: %i[update]
     }, require: :loggedin
 
     permission :cancel_timer_sessions, {
-      time_tracker: %i[cancel]
+      time_tracker: %i[destroy]
     }, require: :loggedin
 
     permission :query_report, {
