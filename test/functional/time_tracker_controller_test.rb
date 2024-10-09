@@ -20,7 +20,9 @@ class TimeTrackerControllerTest < ActionController::TestCase
 
   def setup
     user = User.find(2)
-    user.roles.first.add_permission! :manage_timer_sessions
+    user.roles.first.add_permission! :create_timer_sessions
+    user.roles.first.add_permission! :stop_timer_sessions
+    user.roles.first.add_permission! :cancel_timer_sessions
     @controller.logged_user = user
     @request.session[:user_id] = user.id
   end
@@ -196,5 +198,29 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 404
 
     assert TimerSession.count, 0
+  end
+
+  test '#create - without create_timer_sessions permission' do
+    user = User.find(2)
+    user.roles.first.remove_permission! :create_timer_sessions
+    @controller.logged_user = user
+    post :create, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    assert_response 403
+  end
+
+  test '#update - without edit_timer_sessions permission' do
+    user = User.find(2)
+    user.roles.first.remove_permission! :stop_timer_sessions
+    @controller.logged_user = user
+    patch :update, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    assert_response 403
+  end
+
+  test '#destroy - without delete_timer_sessions permission' do
+    user = User.find(2)
+    user.roles.first.remove_permission! :cancel_timer_sessions
+    @controller.logged_user = user
+    delete :destroy, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    assert_response 403
   end
 end
