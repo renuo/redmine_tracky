@@ -7,8 +7,7 @@ class TrackyController < ApplicationController
   helper_method :offset_for_time_zone
 
   def verify_permission!
-    return unless User.current
-    return if User.current.allowed_to_globally?(action: action_name.to_sym, controller: controller_name.to_s)
+    return if User.current&.allowed_to_globally?(action: action_name.to_sym, controller: controller_name.to_s)
 
     render_403(flash: { error: t('timer_sessions.messages.errors.permission.no_access') })
   end
