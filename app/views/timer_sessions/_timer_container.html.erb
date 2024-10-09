@@ -68,20 +68,20 @@
       <div class="mb-3"></div>
       <% if timer_session.persisted? %>
         <div data-ending-action-buttons>
-          <% if User.current.allowed_to_globally?(action: :stop, controller: 'time_tracker') %>
+          <% if User.current.allowed_to_globally?(action: :update, controller: 'time_tracker') %>
             <%= f.button :stop, type: :submit, data: { name: 'timer-stop', form_target: 'stopButton' }, name: :stop do %>
               <%= t('timer_sessions.timer.stop') %>
               <i class="icon icon-error"></i>
             <% end %>
           <% end %>
-          <% if User.current.allowed_to_globally?(action: :cancel, controller: 'time_tracker') %>
+          <% if User.current.allowed_to_globally?(action: :destroy, controller: 'time_tracker') %>
             <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel, value: :cancel, form: "timer-cancel-form" do %>
               <%= t('timer_sessions.timer.cancel') %>
               <i class="icon icon-cancel"></i>
             <% end %>
           <% end %>
         </div>
-      <% elsif !timer_session.persisted? && User.current.allowed_to_globally?(action: :start, controller: 'time_tracker') %>
+      <% elsif !timer_session.persisted? && User.current.allowed_to_globally?(action: :create, controller: 'time_tracker') %>
         <%= f.button :start, type: :submit, value: :start, data: { name: 'timer-start' }, name: :commit do %>
           <%= t('timer_sessions.timer.start') %>
           <i class="icon icon-add new-issue"></i>
