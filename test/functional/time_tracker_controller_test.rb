@@ -19,8 +19,12 @@ class TimeTrackerControllerTest < ActionController::TestCase
            :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values
 
   def setup
-    @controller.logged_user = User.find(1)
-    @request.session[:user_id] = 1
+    user = User.find(2)
+    user.roles.first.add_permission! :create_timer_sessions
+    user.roles.first.add_permission! :stop_timer_sessions
+    user.roles.first.add_permission! :cancel_timer_sessions
+    @controller.logged_user = user
+    @request.session[:user_id] = user.id
   end
 
   test '#create - without login' do
@@ -75,7 +79,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#create - with existing session' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(2), finished: false)
     assert_equal 1, TimerSession.count
     post :create, params: { timer_session: {
       timer_start: Time.zone.now - 1.hour,
@@ -101,7 +105,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#create - from last session' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: true, timer_start: Time.zone.now - 2.hours,
+    FactoryBot.create(:timer_session, user: User.find(2), finished: true, timer_start: Time.zone.now - 2.hours,
                                       timer_end: Time.zone.now - 1.hour)
     assert_equal 1, TimerSession.count
     post :create, params: { timer_session: {
@@ -118,7 +122,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#update - with end time' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(2), finished: false)
 
     recorded_time = Time.zone.now - 1.hour
     post :update, params: { timer_session: {
@@ -131,7 +135,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#update - with no end time' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(2), finished: false)
 
     post :update, params: { timer_session: {
       timer_start: Time.zone.now - 1.hours,
@@ -143,7 +147,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#update - with invalid params' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(2), finished: false)
 
     post :update, params: { timer_session: {
       timer_start: Time.zone.now + 1.hours,
@@ -155,7 +159,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#update - with end time and invalid params' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(2), finished: false)
 
     post :update, params: { timer_session: {
       timer_start: Time.zone.now,
@@ -181,7 +185,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
   end
 
   test '#destroy - with existing session' do
-    FactoryBot.create(:timer_session, user: User.find(1), finished: false)
+    FactoryBot.create(:timer_session, user: User.find(2), finished: false)
 
     delete :destroy, xhr: true
     assert_response 200
@@ -194,5 +198,29 @@ class TimeTrackerControllerTest < ActionController::TestCase
     assert_response 404
 
     assert TimerSession.count, 0
+  end
+
+  test '#create - without create_timer_sessions permission' do
+    user = User.find(2)
+    user.roles.first.remove_permission! :create_timer_sessions
+    @controller.logged_user = user
+    post :create, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    assert_response 403
+  end
+
+  test '#update - without edit_timer_sessions permission' do
+    user = User.find(2)
+    user.roles.first.remove_permission! :stop_timer_sessions
+    @controller.logged_user = user
+    patch :update, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    assert_response 403
+  end
+
+  test '#destroy - without delete_timer_sessions permission' do
+    user = User.find(2)
+    user.roles.first.remove_permission! :cancel_timer_sessions
+    @controller.logged_user = user
+    delete :destroy, params: { timer_session: { comments: 'Very interesting' } }, xhr: true
+    assert_response 403
   end
 end
