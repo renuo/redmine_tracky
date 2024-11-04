@@ -40,6 +40,44 @@ Administration => Roles & Permissions
 - Test: `rake test`
 - Watch Assets: `rake watch`
 
+## Time Tracking Flow
+
+```mermaid
+stateDiagram-v2
+    [*] --> CheckingSession : Start Request
+    
+    CheckingSession --> Conflict : Session Exists
+    Conflict --> [*] : Return Conflict
+    
+    CheckingSession --> SessionCreation : No Active Session
+    SessionCreation --> ValidatingSession : Create Session
+    
+    ValidatingSession --> IssueAssociation : Valid Session
+    ValidatingSession --> Error : Invalid Session
+    Error --> [*] : Return Unprocessable
+    
+    IssueAssociation --> ConnectorValidation : Issue Connector Init
+    ConnectorValidation --> Error : Connector Invalid
+    Error --> [*] : Return Unprocessable
+    
+    ConnectorValidation --> CheckingFinished : Connector Valid
+    CheckingFinished --> Finalize : Session Finished
+    CheckingFinished --> UpdateTimer : Session Active
+    
+    Finalize --> TimeEntryCreation : Mark Finished
+    TimeEntryCreation --> Success : Create Time Entries
+    Success --> [*] : Return Success
+    
+    UpdateTimer --> TimerUpdated : Update Session
+    TimerUpdated --> Success : Valid Update
+    TimerUpdated --> Error : Invalid Update
+    Error --> [*] : Return Unprocessable
+    
+    destroy : Destroy Session
+    destroy --> Cancel : Cancel Timer
+    Cancel --> [*] : Return Cancel
+```
+
 ## Copyright
 
 Copyright 2021-2024 [Renuo AG](https://www.renuo.ch/), published under the MIT license.
