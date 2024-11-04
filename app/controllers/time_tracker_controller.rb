@@ -40,7 +40,7 @@ class TimeTrackerController < TrackyController
     updated_params = timer_params
 
     if updated_params[:timer_end].blank?
-      updated_params[:timer_end] = Time.zone.now
+      updated_params[:timer_end] = user_time_zone.now.asctime
     end
 
     return render_js(:update, :unprocessable_entity) unless @current_timer_session.update(updated_params)
