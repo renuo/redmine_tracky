@@ -103,4 +103,12 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_equal(time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format')),
                  TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))
   end
+
+  test 'loading timer with issues from url' do
+    timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
+    visit timer_sessions_path("issue_ids[]=#{Issue.first.id}&issue_ids[]=#{Issue.second.id}")
+    assert has_content?(timer_session.comments)
+    assert has_content?(Issue.first.subject)
+    assert has_content?(Issue.second.subject)
+  end
 end
