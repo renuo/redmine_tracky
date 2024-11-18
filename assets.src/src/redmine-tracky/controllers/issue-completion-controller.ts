@@ -50,7 +50,6 @@ export default class extends Controller {
     issueIds.forEach(id => {
       const url = window.RedmineTracky.issueCompletionPath
       const data = { term: id, scope: 'all' }
-      console.log(`Fetching issue with ID: ${id}`)
 
       $.get(url, data, null, 'json')
         .done((results: CompletionResult[]) => {
