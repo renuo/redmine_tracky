@@ -78,6 +78,12 @@ stateDiagram-v2
     Cancel --> [*] : Return Cancel
 ```
 
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/renuo/redmine_tracky. 
+This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to 
+the [code of conduct](https://github.com/renuo/redmine_tracky/blob/main/CODE_OF_CONDUCT.md).
+
 ## Copyright
 
 Copyright 2021-2024 [Renuo AG](https://www.renuo.ch/), published under the MIT license.
