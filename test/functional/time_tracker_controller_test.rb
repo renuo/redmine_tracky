@@ -132,6 +132,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       issue_ids: ['1']
     } }, xhr: true
     assert_response 200
+    assert_equal TimerSession.last.finished, true
   end
 
   test '#update - with no end time' do
