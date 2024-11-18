@@ -18,23 +18,23 @@
     "stimulus-flatpickr": "^3.0.0-0"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.31",
+    "@types/jquery": "^3.5.32",
     "@types/luxon": "^3.4.2",
     "@types/mocha": "^10.0.9",
-    "@types/node": "^20.16.13",
+    "@types/node": "^20.17.6",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "css-loader": "^6.11.0",
     "esbuild-wasm": "^0.20.2",
     "eslint": "^8.57.1",
-    "mocha": "^10.7.3",
-    "sass": "^1.79.4",
+    "mocha": "^10.8.2",
+    "sass": "^1.80.6",
     "sass-loader": "^14.2.1",
     "style-loader": "^3.3.4",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
-    "webpack": "^5.95.0",
+    "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"
   },
   "peerDependencies": {
