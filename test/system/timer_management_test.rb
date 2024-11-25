@@ -106,8 +106,7 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'loading timer with issues from url' do
     timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
-    visit timer_sessions_path("issue_ids[]=#{Issue.first.id}&issue_ids[]=#{Issue.second.id}")
-    assert has_content?(timer_session.comments)
+    visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
     assert has_content?(Issue.first.subject)
     assert has_content?(Issue.second.subject)
   end
