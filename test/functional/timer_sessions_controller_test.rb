@@ -42,6 +42,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
     get(:index)
     assert_response 200
     assert response.body.include?(@issue.subject)
+    assert response.body.include?(@issue.project.name)
     assert response.body.include?(@timer_session.splittable_hours.round(2).to_s)
   end
 

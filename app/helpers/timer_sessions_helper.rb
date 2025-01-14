@@ -57,9 +57,12 @@ module TimerSessionsHelper
   def issue_information(issue)
     subject = issue.subject
     issue_information = issue.id.to_s
+
+    truncated_subject = subject[0..(MAX_SUBJECT_LENGTH - issue.project.name.length - issue_information.length)]
+
     [
       issue_information,
-      "#{subject[0..(MAX_SUBJECT_LENGTH - issue_information.length)]}#{subject_label_trail(subject)}"
+      "[#{issue.project.name}] #{truncated_subject}#{subject_label_trail(subject)}"
     ].join(': ')
   end
 
