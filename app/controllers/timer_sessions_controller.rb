@@ -2,7 +2,7 @@
 
 class TimerSessionsController < TrackyController
   def index
-    @timer_sessions_in_range = TimerSession.includes(:issues, :project, :time_entries, :timer_session_time_entries)
+    @timer_sessions_in_range = TimerSession.includes(:time_entries, :timer_session_time_entries, issues: :project)
                                            .finished
                                            .created_by(User.current)
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_session_ids(@timer_sessions_in_range)
