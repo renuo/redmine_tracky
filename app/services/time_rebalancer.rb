@@ -45,7 +45,7 @@ class TimeRebalancer
 
   def update_times
     new_time = @timer_session.splittable_hours / @issues.count
-    @timer_session.errors.add(:timer_start, :too_short) if new_time < SettingsManager.min_hours_to_record
+    @timer_session.errors.add(:timer_start, :insufficient_recording_time) if new_time < SettingsManager.min_hours_to_record
     return unless @timer_session.valid?
 
     @timer_session.time_entries.each do |time_entry|

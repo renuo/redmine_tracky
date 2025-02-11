@@ -18,7 +18,7 @@ de:
               after_end: muss vor dem Ende der Arbeitszeit sein
               limit_reached_day: Du versuchst zu viel Zeit am Starttag zu buchen
               limit_reached_session: Du versuchst zu viel Zeit in dieser Session zu buchen
-              too_short: Bitte buche mindestens 0.01 Stunden für jedes Issue
+              insufficient_recording_time: Bitte buche mindestens 0.01 Stunden für jedes Issue
             timer_end:
               before_start: muss nach dem Start der Arbeitszeit sein
             issue_id:
