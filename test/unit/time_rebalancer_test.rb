@@ -75,6 +75,13 @@ class TimeRebalancerTest < ActiveSupport::TestCase
     ).comments
   end
 
+  test '#rebalance_entries - time too short' do
+    @timer_session.update(timer_start: Time.zone.now, timer_end: Time.zone.now - 1.hour)
+    TimeRebalancer.new(@timer_session.issue_ids, @timer_session).rebalance_entries
+
+    assert_equal 'too_short', @timer_session.errors[:timer_start].first
+  end
+
   test '#force_rebalance' do
     issue_id = @issue.id
     assert_equal 1, TimerSessionTimeEntry.count
