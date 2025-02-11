@@ -23,7 +23,7 @@ en:
               after_end: must be before the end of the timer
               limit_reached_day: You are trying to record too much time for one day
               limit_reached_session: You are trying to record too much time for one session
-              too_short: Please log at least 0.01 hours
+              insufficient_recording_time: Please log at least 0.01 hours
             timer_end:
               before_start: must be after the start of the timer
             issue_id:
