@@ -5,12 +5,15 @@ on: push
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        redmine-version: ['5.1-stable', '6.0-stable']
     steps:
       - name: Checkout Redmine
         uses: actions/checkout@v4
         with:
           repository: redmine/redmine
-          ref: 6.0-stable
+          ref: ${{ matrix.redmine-version }}
 
       - name: Checkout Tracky
         uses: actions/checkout@v4
@@ -22,13 +25,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor/bundle
-          key: gems-${{ hashFiles('Gemfile', 'plugins/redmine_tracky/PluginGemfile.lock') }}
+          key: gems-${{ hashFiles('Gemfile', 'plugins/redmine_tracky/PluginGemfile.lock') }}-${{ matrix.redmine-version }}
 
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
           path: plugins/redmine_tracky/assets.src/node_modules
-          key: npm-${{ hashFiles('plugins/redmine_tracky/assets.src/package-lock.json') }}
+          key: npm-${{ hashFiles('plugins/redmine_tracky/assets.src/package-lock.json') }}-${{ matrix.redmine-version }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
