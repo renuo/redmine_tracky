@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: redmine/redmine
-          ref: 5.1-stable
+          ref: 6.0-stable
 
       - name: Checkout Tracky
         uses: actions/checkout@v4
