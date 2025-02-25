@@ -36,8 +36,7 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
   def validate_minimal_duration
     return unless (@record.splittable_hours / @record.issues.count) < SettingsManager.min_hours_to_record.to_f
 
-    @record.errors.add(:timer_start,
-                       :too_short)
+    @record.errors.add(:timer_start, :insufficient_recording_time)
   end
 
   def validate_day_limit
