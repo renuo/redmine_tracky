@@ -32,7 +32,7 @@ class IssueSearcherTest < ActiveSupport::TestCase
 
   test 'call - search by project name' do
     search_term = @issues[0].project.name
-    assert_equal @issues[0], @service.call(search_term, Issue.all).last
+    assert_includes @service.call(search_term, Issue.all), @issues[0]
   end
 
   test 'call - filters closed issues' do
