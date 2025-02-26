@@ -18,7 +18,7 @@ class IssueSearcherTest < ActiveSupport::TestCase
     @issues = [
       create(:issue, id: 100, subject: 'Very special Renuo issue', project: @projects[0]),
       create(:issue, id: 101, subject: 'Second special Renuo issue', project: @projects[1]),
-      create(:issue, :closed, id: 102, subject: 'Closed issue', project: @projects[2]),
+      create(:issue, :closed, id: 102, subject: 'Closed issue', project: @projects[2])
     ]
   end
 
