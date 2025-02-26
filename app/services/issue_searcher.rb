@@ -2,7 +2,7 @@
 
 class IssueSearcher
   SEARCH_LIMIT = 10
-  PROJECT_RESULTS_LIMIT = 15
+  PROJECT_RESULTS_LIMIT = 10
   TICKET_OPEN_STATUS = true
 
   def call(search_term, issues)
