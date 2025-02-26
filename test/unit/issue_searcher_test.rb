@@ -29,7 +29,7 @@ class IssueSearcherTest < ActiveSupport::TestCase
 
   test 'call - search by subject' do
     search_term = 'Very special Renuo issue'
-    assert_equal [@issues[0]], @service.call( search_term, Issue.all)
+    assert_equal [@issues[0]], @service.call(search_term, Issue.all)
   end
 
   test 'call - search by project name' do
