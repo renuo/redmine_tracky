@@ -11,7 +11,7 @@
         <%= render TimerSessionEntryComponent.new(
           timer_session_entry: time_entity,
           discrepancy_detected: @non_matching_timer_session_ids.include?(time_entity.id),
-          overlap_detected: timer_sessions.any? { |other_time_entity| time_entity != other_time_entity && other_time_entity.overlaps?(time_entity) },
+          overlap_detected: timer_sessions.any? { |other_entity| time_entity != other_entity && other_entity.overlaps?(time_entity) },
           gap_separator: draw_gap_separator(time_entity, previous_time_entity)
         ) %>
       <% end %>
