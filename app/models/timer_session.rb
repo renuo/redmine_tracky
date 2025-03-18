@@ -44,7 +44,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def overlaps?(other_session)
-    (timer_start..timer_end).overlaps?(other_session.timer_start..other_session.timer_end)
+    (timer_start...timer_end).overlaps?(other_session.timer_start...other_session.timer_end)
   end
 
   private
