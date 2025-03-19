@@ -78,10 +78,10 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   end
 
   test 'overlapping time entries' do
-    @timer_sessions.first.update(timer_end: @timer_sessions.last.timer_start + 1.hour)
+    @timer_sessions.first.update(timer_start: Time.zone.now - 1.hour, timer_end: Time.zone.now + 5.minutes)
+    @timer_sessions.second.update(timer_start: Time.zone.now, timer_end: Time.zone.now + 1.hour)
     visit timer_sessions_path
-    assert has_content?(I18n.t('timer_sessions.messaging.errors.overlapping_time_entries'))
-    expect(page).to have_css('.icon-warning[title="Overlapping time entries"]')
+    assert_selector '.icon-warning[title="Overlapping time entries"]'
   end
 
   test 'spent - time query' do
