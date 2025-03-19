@@ -77,6 +77,13 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
                                scope: 'timer_sessions.messaging.errors.discrepancy_in_time_sum'))
   end
 
+  test 'overlapping time entries' do
+    @timer_sessions.first.update(timer_end: @timer_sessions.last.timer_start + 1.hour)
+    visit timer_sessions_path
+    assert has_content?(I18n.t('timer_sessions.messaging.errors.overlapping_time_entries'))
+    expect(page).to have_css('.icon-warning[title="Overlapping time entries"]')
+  end
+
   test 'spent - time query' do
     click_button I18n.t('timer_sessions.work_report_query.buttons.submit')
     assert has_content?(I18n.t(:label_spent_time))
