@@ -19,7 +19,7 @@ class TimerSessionEntryComponent < ViewComponent::Base
   def display_discrepancy_errors?
     @discrepancy_detected
   end
-  
+
   def display_overlap_errors?
     @overlap_detected
   end
