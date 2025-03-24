@@ -2,8 +2,6 @@
 
 class TimerSessionsController < TrackyController
   def index
-    puts "reached here"
-    # binding.irb
     @timer_sessions_in_range = TimerSession.includes(:time_entries, :timer_session_time_entries, issues: :project)
                                            .finished
                                            .created_by(User.current)

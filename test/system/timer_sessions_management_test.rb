@@ -51,9 +51,9 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   test 'continue' do
     assert_equal 3, TimerSession.count
     find('[data-timer-session-continue-button]', match: :first).click
-    assert has_content?(TimerSession.last.comments)
     assert_equal 4, TimerSession.count
     assert_equal 4, TimerSessionIssue.count
+    assert has_content?(TimerSession.last.comments)
   end
 
   test 'destroy' do

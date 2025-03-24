@@ -11,22 +11,6 @@ class TimerManagementTest < ApplicationSystemTestCase
            :watchers, :journals, :journal_details, :versions,
            :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions
 
-  def log_user(login, password)
-    visit '/logout'
-    if has_css?('input[name="commit"][type="submit"]')
-      find('input[type="submit"]').click
-      User.current = nil
-    end
-
-    visit '/login'
-
-    within('#login-form form') do
-      fill_in 'username', :with => login
-      fill_in 'password', :with => password
-      find('input[name=login]').click
-    end
-  end
-
   setup do
     log_user('admin', 'admin')
     User.current = User.find(1)
