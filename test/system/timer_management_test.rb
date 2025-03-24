@@ -12,13 +12,13 @@ class TimerManagementTest < ApplicationSystemTestCase
            :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions
 
   setup do
-    log_user('admin', 'admin')
-    User.current = User.find(1)
+    # User.current = User.find(1)
     # User.current.preference.update(time_zone: 'Tijuana')
-    visit timer_sessions_path
   end
 
   test 'creation of timer' do
+    log_user('admin', 'admin')
+    visit timer_sessions_path
     find('[data-name="timer-start"]').click
     assert has_content?(I18n.t('timer_sessions.timer.stop'))
     assert has_content?(I18n.t('timer_sessions.timer.cancel'))
@@ -26,6 +26,7 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'cancelation of timer' do
     FactoryBot.create(:timer_session, finished: false, user: User.current)
+    log_user('admin', 'admin')
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
     find('[data-name="timer-cancel"]').click
@@ -35,6 +36,7 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'update running timer' do
     timer_session = FactoryBot.create(:timer_session, finished: false, user: User.current)
+    log_user('admin', 'admin')
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
     fill_in 'timer_session_comments', with: 'Working on stuff'
@@ -43,6 +45,7 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'stopping of timer with invalid attributes' do
     FactoryBot.create(:timer_session, finished: false, user: User.current)
+    log_user('admin', 'admin')
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
     find('[data-name="timer-stop"]').click
@@ -52,6 +55,8 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'starting of timer with invalid attributes and present issues' do
     time_in_user_time_zone = User.current.convert_time_to_user_timezone(Time.zone.now)
+    log_user('admin', 'admin')
+    visit timer_sessions_path
 
     fill_in 'timer_session[issue_id]', with: Issue.first.subject
     sleep(1)
@@ -77,6 +82,8 @@ class TimerManagementTest < ApplicationSystemTestCase
   test 'stopping timer with valid attributes' do
     timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
     timer_session.reload
+    log_user('admin', 'admin')
+    visit timer_sessions_path
 
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
@@ -87,6 +94,8 @@ class TimerManagementTest < ApplicationSystemTestCase
   end
 
   test 'stopping timer with correction' do
+    log_user('admin', 'admin')
+    visit timer_sessions_path
     timer_session = FactoryBot.create(:timer_session, finished: false, user: User.current, timer_end: nil)
     TimerSessionIssue.create!(
       issue_id: Issue.find(1).id,
@@ -106,6 +115,8 @@ class TimerManagementTest < ApplicationSystemTestCase
 
   test 'loading timer with issues from url' do
     FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
+    log_user('admin', 'admin')
+    visit timer_sessions_path
     visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
     assert has_content?(Issue.first.subject)
     assert has_content?(Issue.second.subject)
