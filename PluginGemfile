@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'view_component', '~> 3.8'
+gem 'view_component', '~> 3.21'
 
 group :development, :test do
   gem 'brakeman', '~> 6.1'
