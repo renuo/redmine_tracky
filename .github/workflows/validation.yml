@@ -37,6 +37,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.7'
+          bundler-cache: true
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -56,6 +57,24 @@ jobs:
         working-directory: plugins/redmine_tracky
         run: bundle exec rake lint
 
-      - name: Run tests
+      - name: Run tests with JUnit output
         working-directory: plugins/redmine_tracky
-        run: bundle exec rake test
+        run: |
+          bundle exec rake test TESTOPTS="--junit --junit-filename=test-results.xml"
+        env:
+          RAILS_ENV: test
+          COVERAGE: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.redmine-version }}
+          path: plugins/redmine_tracky/test-results.xml
+          retention-days: 7
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ matrix.redmine-version }}
+          path: plugins/redmine_tracky/coverage
+          retention-days: 7

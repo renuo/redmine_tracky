@@ -28,6 +28,14 @@ SimpleCov.start 'rails' do
   minimum_coverage line: 95, branch: 70
 end
 
+# Configure JUnit reporter if running in CI
+if ENV['GITHUB_ACTIONS']
+  require 'minitest/reporters'
+  Minitest::Reporters.use! [
+    Minitest::Reporters::JUnitReporter.new('test-results.xml')
+  ]
+end
+
 FactoryBot.definition_file_paths = [File.expand_path('factories', __dir__)]
 FactoryBot.find_definitions
 
