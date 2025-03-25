@@ -105,10 +105,10 @@ class TimerManagementTest < ApplicationSystemTestCase
                  TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))
   end
 
-  # test 'loading timer with issues from url' do
-  #   FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
-  #   visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
-  #   assert has_content?(Issue.first.subject)
-  #   assert has_content?(Issue.second.subject)
-  # end
+  test 'loading timer with issues from url' do
+    FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
+    visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
+    assert has_content?(Issue.first.subject, wait: 5)
+    assert has_content?(Issue.second.subject)
+  end
 end
