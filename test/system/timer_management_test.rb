@@ -56,12 +56,12 @@ class TimerManagementTest < ApplicationSystemTestCase
     fill_in 'timer_session[issue_id]', with: Issue.first.subject
     sleep(1)
     find('#timer_session_issue_id').send_keys(:arrow_down)
-    find('#timer_session_issue_id').send_keys(:enter)
+    find('#timer_session_issue_id').send_keys(:tab)
 
     fill_in 'timer_session[issue_id]', with: Issue.second.subject
     sleep(1)
     find('#timer_session_issue_id').send_keys(:arrow_down)
-    find('#timer_session_issue_id').send_keys(:enter)
+    find('#timer_session_issue_id').send_keys(:tab)
 
     fill_in 'timer_session_timer_start',
             with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
