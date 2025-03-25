@@ -74,17 +74,18 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert has_content?(subjects[1])
   end
 
-  # test 'stopping timer with valid attributes' do
-  #   timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
-  #   timer_session.reload
-  #
-  #   visit timer_sessions_path
-  #   assert has_content?(I18n.t('timer_sessions.index.title'))
-  #   assert_not TimerSession.last.finished?
-  #   find('[data-name="timer-stop"]').click
-  #   assert has_content?(timer_session.comments)
-  #   assert TimerSession.last.finished?
-  # end
+  test 'stopping timer with valid attributes' do
+    timer_session = FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
+    timer_session.reload
+
+    visit timer_sessions_path
+    assert has_content?(I18n.t('timer_sessions.index.title'))
+    assert_not TimerSession.last.finished?
+
+    find('[data-name="timer-stop"]', wait: 5).click
+    assert has_content?(timer_session.comments, wait: 5)
+    assert TimerSession.last.finished?
+  end
 
   test 'stopping timer with correction' do
     timer_session = FactoryBot.create(:timer_session, finished: false, user: User.current, timer_end: nil)
