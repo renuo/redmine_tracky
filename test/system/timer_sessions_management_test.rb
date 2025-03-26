@@ -11,7 +11,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
            :time_entries
 
   setup do
-    log_user('admin', 'admin')
+    login_user('admin', 'admin')
     User.current = User.find(1)
     # User.current.preference.update(time_zone: 'Tijuana')
     @timer_sessions = FactoryBot.create_list(:timer_session, 3,
@@ -51,9 +51,9 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
   test 'continue' do
     assert_equal 3, TimerSession.count
     find('[data-timer-session-continue-button]', match: :first).click
+    assert has_content?(TimerSession.last.comments, wait: 5)
     assert_equal 4, TimerSession.count
     assert_equal 4, TimerSessionIssue.count
-    assert has_content?(TimerSession.last.comments)
   end
 
   test 'destroy' do

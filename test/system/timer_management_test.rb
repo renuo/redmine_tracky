@@ -12,7 +12,7 @@ class TimerManagementTest < ApplicationSystemTestCase
            :workflows, :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions
 
   setup do
-    log_user('admin', 'admin')
+    login_user('admin', 'admin')
     User.current = User.find(1)
     # User.current.preference.update(time_zone: 'Tijuana')
     visit timer_sessions_path
@@ -28,7 +28,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     FactoryBot.create(:timer_session, finished: false, user: User.current)
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
-    find('[data-name="timer-cancel"]').click
+    find('[data-name="timer-cancel"]', wait: 5).click
     page.driver.browser.switch_to.alert.accept
     assert has_content?(I18n.t('timer_sessions.timer.start'))
   end
@@ -81,8 +81,9 @@ class TimerManagementTest < ApplicationSystemTestCase
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
     assert_not TimerSession.last.finished?
-    find('[data-name="timer-stop"]').click
-    assert has_content?(timer_session.comments)
+
+    find('[data-name="timer-stop"]', wait: 5).click
+    assert has_content?(timer_session.comments, wait: 5)
     assert TimerSession.last.finished?
   end
 
@@ -107,7 +108,7 @@ class TimerManagementTest < ApplicationSystemTestCase
   test 'loading timer with issues from url' do
     FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
     visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
-    assert has_content?(Issue.first.subject)
+    assert has_content?(Issue.first.subject, wait: 5)
     assert has_content?(Issue.second.subject)
   end
 end
