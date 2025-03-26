@@ -50,6 +50,7 @@ de:
       timer_end_hint: Wenn du dieses Feld mein Stoppen leer lässt, wird die aktuelle Zeit verwendet
       issue_list_hint: Falls du mehr als ein Issue auswählst, splitten wir die Zeit auf die Issues aufgeteilt
       no_time_entries_found: Es wurden keine Zeiteinträge gefunden!
+      overlap_error: Überlappen der Zeiterfassungen!
       timer_absolute_time_hint: |-
         Wenn du dieses Field füllst, wird der aktuelle Startzeitpunkt verschoben um die absolut gesetzte Dauer der Erfassung zu erhalten.
         Sollte kein Endzeitpunkt gegeben sein, wird die aktuelle Zeit verwendet.

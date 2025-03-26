@@ -37,6 +37,8 @@
                     remote: true do %>
           <span class="icon-only icon-warning"></span>
         <% end %>
+      <% elsif display_overlap_errors? %>
+          <span class="icon-only icon-warning" title="<%= t('timer_sessions.messaging.overlap_error') %>"></span>
       <% end %>
     <% end %>
   </td>
