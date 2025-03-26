@@ -28,7 +28,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     FactoryBot.create(:timer_session, finished: false, user: User.current)
     visit timer_sessions_path
     assert has_content?(I18n.t('timer_sessions.index.title'))
-    find('[data-name="timer-cancel"]').click
+    find('[data-name="timer-cancel"]', wait: 5).click
     page.driver.browser.switch_to.alert.accept
     assert has_content?(I18n.t('timer_sessions.timer.start'))
   end
