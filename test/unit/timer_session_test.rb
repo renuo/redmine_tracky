@@ -57,4 +57,20 @@ class TimerSessionTest < ActiveSupport::TestCase
     @timer_session.update(timer_end: Time.zone.now + 2.days)
     assert_not @timer_session.valid?
   end
+
+  test 'overlaps?' do
+    session1 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now,
+                                                 timer_end: Time.zone.now + 1.hour)
+    session2 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now + 1.hour,
+                                                 timer_end: Time.zone.now + 2.hours)
+
+    assert_not session1.overlaps?(session2)
+    assert_not session2.overlaps?(session1)
+
+    session3 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now + 30.minutes,
+                                                 timer_end: Time.zone.now + 1.hours)
+
+    assert session3.overlaps?(session1)
+    assert session1.overlaps?(session3)
+  end
 end

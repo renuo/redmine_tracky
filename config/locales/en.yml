@@ -55,6 +55,7 @@ en:
       timer_end_hint: If you leave this empty on stop, the current time is used
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
       no_time_entries_found: No time entries found
+      overlap_error: Overlapping time entries
       timer_absolute_time_hint: |-
         If you set this value it will re-arange the start time of the session to match the absolute duration from the current end time.
         If no end time is given it will use the current time.
