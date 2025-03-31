@@ -60,3 +60,11 @@ jobs:
       - name: Run tests
         working-directory: plugins/redmine_tracky
         run: bundle exec rake test
+        env:
+          GITHUB_ACTIONS: true
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always() # Always run even if the previous step fails
+        with:
+          report_paths: 'plugins/redmine_tracky/test/reports/TEST-*.xml'

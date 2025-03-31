@@ -6,4 +6,5 @@ group :development, :test do
   gem 'brakeman', '~> 6.1'
   gem 'bullet'
   gem 'factory_bot_rails', '~> 6.4'
+  gem 'minitest-reporters', '~> 1.6'
 end
