@@ -68,6 +68,18 @@
     border-width: 1.5px;
   }
 
+  .error-block-overlap {
+    background-color: #fef9fa !important;
+  }
+
+  .error-block-overlap:nth-child(odd) {
+    background-color: #fff3f3 !important;
+  }
+
+  .error-block-overlap:nth-child(even) {
+    background-color: #fce4e6 !important;
+  }
+
   .timer-sessions-table {
     border-collapse: collapse;
   }

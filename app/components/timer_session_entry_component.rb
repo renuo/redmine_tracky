@@ -43,7 +43,7 @@ class TimerSessionEntryComponent < ViewComponent::Base
   def row_classes
     classes = []
     classes << 'error-block' if display_discrepancy_errors?
-    classes << 'error-block' if display_overlap_errors?
+    classes << 'error-block-overlap' if display_overlap_errors?
     classes << 'gap-marker' if @gap_separator
     classes.join(' ')
   end
