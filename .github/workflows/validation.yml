@@ -67,4 +67,4 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: always() # Always run even if the previous step fails
         with:
-          report_paths: 'plugins/redmine_tracky/test/reports/TEST-*.xml'
+          report_paths: 'test/reports/TEST-*.xml'
