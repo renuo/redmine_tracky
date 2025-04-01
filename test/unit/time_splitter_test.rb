@@ -31,7 +31,6 @@ class TimeSplitterTest < ActiveSupport::TestCase
     time_splitter = TimeSplitter.new(@timer_session, @timer_session.issues)
     time_splitter.create_time_entries
     assert_equal TimerSessionTimeEntry.count, 1
-    assert_equal 1, 0
   end
 
   test 'splits time entries on multiple issues' do
