@@ -81,4 +81,25 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     click_button I18n.t('timer_sessions.work_report_query.buttons.submit')
     assert has_content?(I18n.t(:label_spent_time))
   end
+
+  test 'preserves filter parameters when updating a timer session' do
+    filter_date = 1.week.ago.strftime('%Y-%m-%d')
+    current_date = Date.today.strftime('%Y-%m-%d')
+
+    visit timer_sessions_path(filter: { min_date: filter_date, max_date: current_date })
+
+    assert_equal filter_date, find('input[name="filter[min_date]"]').value
+    assert_equal current_date, find('input[name="filter[max_date]"]').value
+
+    find('[data-timer-session-edit-button]', match: :first).click
+    assert has_content?(I18n.t('timer_sessions.edit.title'))
+
+    within '.edit-modal' do
+      fill_in TimerSession.human_attribute_name(:comments), with: 'Updated with filters'
+      find('[data-modal-update-button]', match: :first).click
+    end
+
+    assert_equal filter_date, find('input[name="filter[min_date]"]').value
+    assert_equal current_date, find('input[name="filter[max_date]"]').value
+  end
 end
