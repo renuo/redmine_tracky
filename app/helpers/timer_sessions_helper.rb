@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
-  MAX_SUBJECT_LENGTH = 75
   SECONDS_IN_MINUTE = 60
   GAP_LIMIT_IN_MINUTES = 5
 
@@ -55,24 +54,7 @@ module TimerSessionsHelper
   end
 
   def issue_information(issue)
-    subject = issue.subject
-
-    [
-      issue_identifier(issue),
-      "#{truncated_subject(subject)}#{subject_label_trail(subject)}"
-    ].join(': ')
-  end
-
-  def issue_identifier(issue)
-    "[#{issue.project.name}] #{issue.id}"
-  end
-
-  def truncated_subject(subject)
-    subject[0..(MAX_SUBJECT_LENGTH - subject.length)]
-  end
-
-  def subject_label_trail(subject)
-    '...' if subject.length > MAX_SUBJECT_LENGTH
+    "[#{issue.project.name}] #{issue.id}: #{issue.subject}"
   end
 
   def draw_gap_separator(time_entity, previous_time_entity)
