@@ -58,7 +58,7 @@ class TimerSessionTest < ActiveSupport::TestCase
     assert_not @timer_session.valid?
   end
 
-  test 'overlaps?' do
+  test 'overlaps?' do # rubocop:disable Metrics/BlockLength
     session1 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now,
                                                  timer_end: Time.zone.now + 1.hour)
     session2 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now + 1.hour,
