@@ -111,23 +111,23 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert has_content?(Issue.first.subject, wait: 5)
     assert has_content?(Issue.second.subject)
   end
-  
+
   test 'preserves filter parameters when stopping a timer' do
     filter_date = 1.week.ago.strftime('%Y-%m-%d')
     current_date = Date.today.strftime('%Y-%m-%d')
-    
+
     visit timer_sessions_path(filter: { min_date: filter_date, max_date: current_date })
-    
+
     find('[data-name="timer-start"]').click
     assert has_content?(I18n.t('timer_sessions.timer.stop'))
-    
+
     fill_in 'timer_session[issue_id]', with: Issue.first.subject
     sleep(1)
     find('#timer_session_issue_id').send_keys(:arrow_down)
     find('#timer_session_issue_id').send_keys(:tab)
-    
+
     find('[data-name="timer-stop"]', wait: 5).click
-    
+
     assert current_url.include?("filter%5Bmin_date%5D=#{filter_date}")
     assert current_url.include?("filter%5Bmax_date%5D=#{current_date}")
   end
@@ -135,15 +135,15 @@ class TimerManagementTest < ApplicationSystemTestCase
   test 'preserves filter parameters when canceling a timer' do
     filter_date = 1.week.ago.strftime('%Y-%m-%d')
     current_date = Date.today.strftime('%Y-%m-%d')
-    
+
     visit timer_sessions_path(filter: { min_date: filter_date, max_date: current_date })
-    
+
     find('[data-name="timer-start"]').click
     assert has_content?(I18n.t('timer_sessions.timer.cancel'))
-    
+
     find('[data-name="timer-cancel"]', wait: 5).click
     page.driver.browser.switch_to.alert.accept
-    
+
     assert current_url.include?("filter%5Bmin_date%5D=#{filter_date}")
     assert current_url.include?("filter%5Bmax_date%5D=#{current_date}")
   end
