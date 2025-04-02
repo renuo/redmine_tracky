@@ -72,5 +72,16 @@ class TimerSessionTest < ActiveSupport::TestCase
 
     assert session3.overlaps?(session1)
     assert session1.overlaps?(session3)
+
+    base_time = Time.utc(2023, 1, 1, 10, 0, 0)
+    session1 = FactoryBot.create(:timer_session, user: User.current, 
+                                 timer_start: base_time, 
+                                 timer_end: base_time + 1.hour + 25.seconds)
+    session2 = FactoryBot.create(:timer_session, user: User.current, 
+                                 timer_start: base_time + 1.hour + 5.seconds, 
+                                 timer_end: base_time + 2.hours)
+
+    assert_not session1.overlaps?(session2)
+    assert_not session2.overlaps?(session1)
   end
 end
