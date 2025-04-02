@@ -49,7 +49,7 @@ class TimerSession < RedmineTrackyApplicationRecord
     my_end = timer_end.change(sec: 0)
     other_start = other_session.timer_start.change(sec: 0)
     other_end = other_session.timer_end.change(sec: 0)
-    
+
     (my_start...my_end).overlaps?(other_start...other_end)
   end
 
