@@ -87,7 +87,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     current_date = Date.today.strftime('%Y-%m-%d')
 
     visit timer_sessions_path(filter: { min_date: filter_date, max_date: current_date })
-    
+
     assert_equal filter_date, find('input[name="filter[min_date]"]').value
     assert_equal current_date, find('input[name="filter[max_date]"]').value
 
