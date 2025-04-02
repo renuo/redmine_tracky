@@ -117,6 +117,9 @@ class TimerManagementTest < ApplicationSystemTestCase
     current_date = Date.today.strftime('%Y-%m-%d')
 
     visit timer_sessions_path(filter: { min_date: filter_date, max_date: current_date })
+    
+    assert_equal filter_date, find('input[name="filter[min_date]"]').value
+    assert_equal current_date, find('input[name="filter[max_date]"]').value
 
     find('[data-name="timer-start"]').click
     assert has_content?(I18n.t('timer_sessions.timer.stop'))
@@ -128,8 +131,8 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     find('[data-name="timer-stop"]', wait: 5).click
 
-    assert current_url.include?("filter%5Bmin_date%5D=#{filter_date}")
-    assert current_url.include?("filter%5Bmax_date%5D=#{current_date}")
+    assert_equal filter_date, find('input[name="filter[min_date]"]').value
+    assert_equal current_date, find('input[name="filter[max_date]"]').value
   end
 
   test 'preserves filter parameters when canceling a timer' do
@@ -137,6 +140,9 @@ class TimerManagementTest < ApplicationSystemTestCase
     current_date = Date.today.strftime('%Y-%m-%d')
 
     visit timer_sessions_path(filter: { min_date: filter_date, max_date: current_date })
+    
+    assert_equal filter_date, find('input[name="filter[min_date]"]').value
+    assert_equal current_date, find('input[name="filter[max_date]"]').value
 
     find('[data-name="timer-start"]').click
     assert has_content?(I18n.t('timer_sessions.timer.cancel'))
@@ -144,7 +150,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     find('[data-name="timer-cancel"]', wait: 5).click
     page.driver.browser.switch_to.alert.accept
 
-    assert current_url.include?("filter%5Bmin_date%5D=#{filter_date}")
-    assert current_url.include?("filter%5Bmax_date%5D=#{current_date}")
+    assert_equal filter_date, find('input[name="filter[min_date]"]').value
+    assert_equal current_date, find('input[name="filter[max_date]"]').value
   end
 end
