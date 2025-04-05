@@ -8,7 +8,6 @@ require 'minitest/reporters'
 
 ENV['GOOGLE_CHROME_OPTS_ARGS'] = 'headless,disable-gpu,no-sandbox,disable-dev-shm-usage'
 
-# Configure Minitest reporters
 if ENV['CI'] || ENV['GITHUB_ACTIONS']
   Minitest::Reporters.use! [
     Minitest::Reporters::DefaultReporter.new,
