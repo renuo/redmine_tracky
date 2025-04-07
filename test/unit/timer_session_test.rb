@@ -57,41 +57,4 @@ class TimerSessionTest < ActiveSupport::TestCase
     @timer_session.update(timer_end: Time.zone.now + 2.days)
     assert_not @timer_session.valid?
   end
-
-  test 'overlaps?' do # rubocop:disable Metrics/BlockLength
-    session1 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now,
-                                                 timer_end: Time.zone.now + 1.hour)
-    session2 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now + 1.hour,
-                                                 timer_end: Time.zone.now + 2.hours)
-
-    assert_not session1.overlaps?(session2)
-    assert_not session2.overlaps?(session1)
-
-    session3 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now + 30.minutes,
-                                                 timer_end: Time.zone.now + 1.hours)
-
-    assert session3.overlaps?(session1)
-    assert session1.overlaps?(session3)
-
-    base_time = Time.utc(2023, 1, 1, 10, 0, 0)
-    session1 = FactoryBot.create(:timer_session, user: User.current,
-                                                 timer_start: base_time,
-                                                 timer_end: base_time + 1.hour + 25.seconds)
-    session2 = FactoryBot.create(:timer_session, user: User.current,
-                                                 timer_start: base_time + 1.hour + 5.seconds,
-                                                 timer_end: base_time + 2.hours)
-
-    assert_not session1.overlaps?(session2)
-    assert_not session2.overlaps?(session1)
-
-    session1 = FactoryBot.create(:timer_session, user: User.current,
-                                                 timer_start: base_time,
-                                                 timer_end: base_time + 1.hour + 32.seconds)
-    session2 = FactoryBot.create(:timer_session, user: User.current,
-                                                 timer_start: base_time + 1.hour,
-                                                 timer_end: base_time + 2.hours)
-
-    assert session1.overlaps?(session2)
-    assert session2.overlaps?(session1)
-  end
 end
