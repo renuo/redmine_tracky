@@ -64,15 +64,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def round_to_nearest_minute(time)
-    return time unless time.is_a?(Time)
-
-    seconds = time.sec
-
-    if seconds < 30
-      time - seconds
-    else
-      time + (60 - seconds)
-    end
+    time + ((30 - time.sec) / 60 * 60)
   end
 
   def set_recorded_hours
