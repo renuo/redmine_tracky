@@ -28,6 +28,11 @@
     color: #d74427;
   }
 
+  .whitespace-nowrap {
+    white-space: nowrap;
+    width: fit-content;
+  }
+
   .w-20 {
     width: 20% !important;
   }
@@ -57,7 +62,7 @@
   }
 
   @media only screen and (max-width: 480px) {
-    [class*="w-"] {
+    [class*='w-'] {
       width: 100% !important;
     }
   }
@@ -82,6 +87,7 @@
 
   .timer-sessions-table {
     border-collapse: collapse;
+    table-layout: auto;
   }
 
   .timer-sessions-table > td {
@@ -140,7 +146,7 @@
 
   @media only screen and (max-width: 768px) {
     /* For mobile phones: */
-    [class*="col-"] {
+    [class*='col-'] {
       width: 100%;
     }
   }
