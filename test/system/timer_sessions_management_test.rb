@@ -27,6 +27,15 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     end
   end
 
+  test 'index - does not raise error when rendering time entries on same date' do
+    last_session = @timer_sessions.last
+
+    TimeEntry.create!(issue: last_session.issues.last, user: last_session.user, hours: 1,
+                      spent_on: last_session.timer_start)
+    visit timer_sessions_path
+    assert has_content?(last_session.comments)
+  end
+
   test 'filter' do
     @timer_sessions.each do |timer_session|
       assert has_content?(timer_session.comments)
