@@ -64,7 +64,7 @@ module TimerSessionsHelper
   end
 
   def issue_identifier(issue)
-    "[#{issue.project.name}] #{issue.id}"
+    "#{issue.id} #{issue.project.name}"
   end
 
   def truncated_subject(subject)
