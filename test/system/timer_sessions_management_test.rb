@@ -29,7 +29,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
 
   test 'index - does not raise error when rendering time entries on same date' do
     last_session = @timer_sessions.last
-    entry = TimeEntry.create!(issue: last_session.issues.last, user: last_session.user, hours: 1,
+    entry = TimeEntry.create!(issue: Issue.first, user: last_session.user, hours: 1,
                               spent_on: last_session.timer_start)
     visit timer_sessions_path
     entry.destroy!
