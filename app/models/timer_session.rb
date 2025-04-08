@@ -44,7 +44,8 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def overlaps?(other_session)
-    return false unless timer_end.present? && other_session.timer_start.present?
+    return false if other_session.nil?
+    return false if timer_start.nil? || timer_end.nil? || other_session.timer_start.nil? || other_session.timer_end.nil?
 
     this_start = round_to_nearest_minute(timer_start)
     this_end = round_to_nearest_minute(timer_end)
@@ -57,7 +58,15 @@ class TimerSession < RedmineTrackyApplicationRecord
   private
 
   def round_to_nearest_minute(time)
-    Time.at((time.to_f / 60).round * 60).utc
+    return time unless time.is_a?(Time)
+
+    seconds = time.sec
+
+    if seconds < 30
+      time - seconds
+    else
+      time + (60 - seconds)
+    end
   end
 
   def set_recorded_hours
