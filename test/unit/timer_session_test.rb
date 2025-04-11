@@ -76,7 +76,7 @@ class TimerSessionTest < ActiveSupport::TestCase
     base_time = Time.utc(2023, 1, 1, 10, 0, 0)
     session1 = FactoryBot.create(:timer_session, user: User.current,
                                                  timer_start: base_time,
-                                                 timer_end: base_time + 1.hour +  25.seconds)
+                                                 timer_end: base_time + 1.hour + 25.seconds)
     session2 = FactoryBot.create(:timer_session, user: User.current,
                                                  timer_start: base_time + 1.hour + 5.seconds,
                                                  timer_end: base_time + 2.hours)
