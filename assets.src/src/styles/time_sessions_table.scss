@@ -1,25 +1,8 @@
 @import 'variables';
 
 .redmine-tracky {
-  .timer-session-table-row {
-    display: flex;
-  }
-
   .timer-sessions-table td {
     text-align: left !important;
-  }
-
-  .timer-session-subject {
-    display: flex;
-    flex-grow: 1;
-
-    .issue-links {
-      width: 40%;
-    }
-
-    .comments {
-      width: 60%;
-    }
   }
 
   .timer-session-table-actions {

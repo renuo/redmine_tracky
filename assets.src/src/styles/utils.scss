@@ -28,11 +28,6 @@
     color: #d74427;
   }
 
-  .whitespace-nowrap {
-    white-space: nowrap;
-    width: fit-content;
-  }
-
   .w-20 {
     width: 20% !important;
   }
@@ -87,7 +82,6 @@
 
   .timer-sessions-table {
     border-collapse: collapse;
-    table-layout: auto;
   }
 
   .timer-sessions-table > td {
