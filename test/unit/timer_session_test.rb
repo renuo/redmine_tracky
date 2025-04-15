@@ -58,6 +58,17 @@ class TimerSessionTest < ActiveSupport::TestCase
     assert_not @timer_session.valid?
   end
 
+  test 'round_timer_to_nearest_minute' do
+    timer_start_before = @timer_session.timer_start
+    timer_start_after = timer_start_before + 10.seconds
+
+    @timer_session.update(timer_start: timer_start_after)
+    assert_equal @timer_session.timer_start, timer_start_before
+
+    timer_start_after = timer_start_before + 40.seconds
+    assert_equal @timer_session.timer_start, timer_start_before + 1.minute
+  end
+
   test 'overlaps?' do # rubocop:disable Metrics/BlockLength
     session1 = FactoryBot.create(:timer_session, user: User.current, timer_start: Time.zone.now,
                                                  timer_end: Time.zone.now + 1.hour)
