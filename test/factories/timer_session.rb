@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :timer_session do
-    timer_start { Time.zone.now - 1.hour }
-    timer_end { Time.zone.now }
+    timer_start { (Time.zone.now - 1.hour).change(usec: 0) }
+    timer_end { Time.zone.now.change(usec: 0) }
     sequence(:comments) { |n| "Working on - #{n} - tickets!" }
     finished { true }
     user { User.current }

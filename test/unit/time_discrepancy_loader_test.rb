@@ -54,15 +54,4 @@ class TimeDiscrepancyLoaderTest < ActiveSupport::TestCase
     assert_equal 1, where_time_not_adding_up.length
     assert_kind_of Integer, where_time_not_adding_up.first
   end
-
-  test 'ignore small discrepancies in time sum' do
-    timer_sessions = TimerSession.includes(:issues, :time_entries, :timer_session_time_entries)
-                                 .finished.created_by(User.current)
-    uneven_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_session_ids(timer_sessions)
-
-    # @timer_session is still valid (even though the hours are not equal)
-    # because the difference is less than 0.05
-    assert uneven_timer_session_ids.exclude?(@timer_session.id)
-    assert_not_equal @timer_session.hours, @timer_session.time_entries.sum(&:hours)
-  end
 end

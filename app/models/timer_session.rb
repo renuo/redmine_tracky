@@ -65,8 +65,8 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def round_timer_to_nearest_minute
-    self.timer_start = round_to_nearest_minute(timer_start)
-    self.timer_end = round_to_nearest_minute(timer_end)
+    self.timer_start = round_to_nearest_minute(timer_start) if timer_end.present?
+    self.timer_end = round_to_nearest_minute(timer_end) if timer_end.present?
   end
 
   def round_to_nearest_minute(time)
