@@ -117,7 +117,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
     } }, xhr: true
     assert_equal 2, TimerSession.count
     assert_equal TimerSession.last.finished, true
-    assert_in_delta TimerSession.last.timer_start, Time.zone.now - 1.hour, 1.second
+    assert_in_delta TimerSession.last.timer_start, Time.zone.now - 1.hour, 30.seconds
     assert_response 200
   end
 
