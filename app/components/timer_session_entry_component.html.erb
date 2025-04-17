@@ -1,15 +1,14 @@
-<tr class="timer-session-table-row <%= row_classes %>">
-  <td class="timer-session-subject" colspan="2">
-    <div class="issue-links">
-      <% issue_link_list(timer_session_entry.issues).each do |issue_link| %>
-        <%= issue_link %><br>
-      <% end %>
-    </div>
-    <p class="comments"><%= timer_session_entry.comments %></p>
+<tr class="<%= row_classes %>">
+  <td class="td-px-0 w-40">
+    <% issue_link_list(timer_session_entry.issues).each do |issue_link| %>
+      <%= issue_link %>
+      <br>
+    <% end %>
   </td>
-  <td class="whitespace-nowrap"><%= timer_session_entry.formated_session_time %></td>
-  <td class="whitespace-nowrap"><%= format_worked_hours(timer_session_entry.recorded_hours) %></td>
-  <td class="whitespace-nowrap timer-session-table-actions">
+  <td class="w-20"><%= timer_session_entry.comments %></td>
+  <td><%= timer_session_entry.formated_session_time %></td>
+  <td><%= format_worked_hours(timer_session_entry.recorded_hours) %></td>
+  <td class="timer-session-table-actions">
     <% if timer_session_entry? %>
       <% if can_continue_entry? %>
         <%= link_to timer_sessions_continue_path(timer_session_entry),
