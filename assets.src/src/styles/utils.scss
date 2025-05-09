@@ -57,7 +57,7 @@
   }
 
   @media only screen and (max-width: 480px) {
-    [class*="w-"] {
+    [class*='w-'] {
       width: 100% !important;
     }
   }
@@ -140,7 +140,7 @@
 
   @media only screen and (max-width: 768px) {
     /* For mobile phones: */
-    [class*="col-"] {
+    [class*='col-'] {
       width: 100%;
     }
   }

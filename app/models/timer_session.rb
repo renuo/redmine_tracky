@@ -14,6 +14,7 @@ class TimerSession < RedmineTrackyApplicationRecord
 
   validates :timer_start, presence: true
   before_save :set_recorded_hours
+  before_save :round_timer_to_nearest_minute
 
   scope :active, -> { where(finished: false) }
   scope :finished, -> { where(finished: true) }
@@ -44,7 +45,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def overlaps?(other_session)
-    return false unless timer_end.present? && other_session.timer_start.present?
+    return false unless can_overlap?(other_session)
 
     this_start = round_to_nearest_minute(timer_start)
     this_end = round_to_nearest_minute(timer_end)
@@ -55,6 +56,18 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   private
+
+  def can_overlap?(other_session)
+    return false if other_session.nil?
+    return false if timer_start.nil? || timer_end.nil? || other_session.timer_start.nil? || other_session.timer_end.nil?
+
+    true
+  end
+
+  def round_timer_to_nearest_minute
+    self.timer_start = round_to_nearest_minute(timer_start) if timer_end.present?
+    self.timer_end = round_to_nearest_minute(timer_end) if timer_end.present?
+  end
 
   def round_to_nearest_minute(time)
     Time.at((time.to_f / 60).round * 60).utc
