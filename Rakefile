@@ -66,7 +66,7 @@ end
 
 desc 'Lint Ruby code.'
 task :lint_ruby do
-  sh "bundle exec rubocop #{"-f g" if ENV.key?("GITHUB_ACTIONS")} -c .rubocop.yml"
+  sh "bundle exec rubocop #{'-f g' if ENV.key?('GITHUB_ACTIONS')} -c .rubocop.yml"
   sh 'bundle exec brakeman -q -z --no-summary --no-pager'
 end
 
