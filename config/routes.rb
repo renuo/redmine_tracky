@@ -15,3 +15,7 @@ patch :time_tracker, to: 'time_tracker#update'
 delete :time_tracker, to: 'time_tracker#destroy'
 
 get 'completion/issues', to: 'completion#issues'
+
+resources :projects do
+  resources :autolinks, only: %i[index new edit create update destroy]
+end
