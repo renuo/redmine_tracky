@@ -2,5 +2,7 @@
 
 <%= labelled_form_for @autolink, url: project_autolink_path(@project, @autolink) do |f| %>
   <%= render partial: 'autolinks/form', locals: { f: f } %>
-  <%= submit_tag t('.update') %>
+  <%= submit_tag t('button_update') %>
 <% end %>
+
+<%= button_to t('button_delete'), project_autolink_path(@project, @autolink), method: :delete %>

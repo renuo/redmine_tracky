@@ -43,10 +43,8 @@ en:
       title: Autolinks
     new:
       title: New autolink
-      create: Add autolink reference
     edit:
       title: Edit autolink
-      update: Update autolink reference
     form:
       prefix_hint: This prefix appended by a string will generate a link any time it is found in an issue.
       prefix_placeholder: TICKET-

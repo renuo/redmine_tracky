@@ -1,2 +1,7 @@
 <%= title t('.title') %>
 <%= link_to t('autolinks.new.title'), new_project_autolink_path %>
+
+<% @autolinks.each do |autolink| %>
+  <p><%= link_to "#{autolink.prefix}123", edit_project_autolink_path(@project, autolink) %> →
+     <%= autolink.target_url.sub('<num>', '123') %></p>
+<% end %>

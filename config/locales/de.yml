@@ -38,10 +38,8 @@ de:
       title: Autolinks
     new:
       title: Neuer Autolink
-      create: Autolink-Referenz hinzufügen
     edit:
       title: Autolink bearbeiten
-      update: Autolink-Referenz aktualisieren
     form:
       prefix_hint: Dieses Präfix erzeugt jedes Mal einen Link, wenn es in einem Issue gefunden wird.
       prefix_placeholder: TICKET-
