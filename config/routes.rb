@@ -15,3 +15,4 @@ patch :time_tracker, to: 'time_tracker#update'
 delete :time_tracker, to: 'time_tracker#destroy'
 
 get 'completion/issues', to: 'completion#issues'
+get 'projects/:project_id/autolinks', to: 'autolinks#index', as: :autolinks

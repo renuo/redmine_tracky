@@ -15,6 +15,7 @@ Redmine::Plugin.register :redmine_tracky do
   project_module :redmine_tracky do
     permission :view_polls, polls: :index
     permission :vote_polls, polls: :vote
+    permission :autolinks, { autolinks: %i[index] }, require: :loggedin
   end
 
   default_settings = {
@@ -32,6 +33,9 @@ Redmine::Plugin.register :redmine_tracky do
 
   menu :top_menu, :timer_sessions, { controller: 'timer_sessions', action: 'index' },
        caption: 'Tracky', if: proc { User.current.allowed_to_globally?(action: :index, controller: 'timer_sessions') }
+
+  menu :project_menu, :autolinks, { controller: 'autolinks', action: 'index' },
+       caption: 'Autolinks', after: :activity, param: :project_id
 
   project_module :timer_sessions do
     permission :manage_timer_sessions, {
