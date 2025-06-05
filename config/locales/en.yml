@@ -22,6 +22,8 @@ en:
       models:
         autolink:
           attributes:
+            prefix:
+              invalid: must be in all caps and end with a hyphen
             target_url:
               no_num: must contain <num> for the reference number
         timer_session:
@@ -41,7 +43,10 @@ en:
       title: Autolinks
     new:
       title: New autolink
-      create: Create
+      create: Add autolink reference
+    edit:
+      title: Edit autolink
+      update: Update autolink reference
     form:
       prefix_hint: This prefix appended by a string will generate a link any time it is found in an issue.
       prefix_placeholder: TICKET-

@@ -17,6 +17,8 @@ de:
       models:
         autolink:
           attributes:
+            prefix:
+              invalid: muss in Grossbuchstaben sein und mit einem Bindestrich enden
             target_url:
               no_num: muss <num> für die Referenznummer enthalten
         timer_session:
@@ -32,9 +34,14 @@ de:
               no_selection: mindestens ein Issue muss gewählt sein
               invalid: ein oder mehrere Issues müssen gewählt sein
   autolinks:
+    index:
+      title: Autolinks
     new:
       title: Neuer Autolink
-      create: Erstellen
+      create: Autolink-Referenz hinzufügen
+    edit:
+      title: Autolink bearbeiten
+      update: Autolink-Referenz aktualisieren
     form:
       prefix_hint: Dieses Präfix erzeugt jedes Mal einen Link, wenn es in einem Issue gefunden wird.
       prefix_placeholder: TICKET-
