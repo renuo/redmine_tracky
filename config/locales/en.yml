@@ -7,6 +7,9 @@ en:
         max_date: Max Date
   activerecord:
     attributes:
+      autolink:
+        prefix: Reference prefix
+        target_url: Target URL
       timer_session:
         timer_start: Start of session
         timer_end: End of session
@@ -17,6 +20,10 @@ en:
         period: Query Period
     errors:
       models:
+        autolink:
+          attributes:
+            target_url:
+              no_num: must contain <num> for the reference number
         timer_session:
           attributes:
             timer_start:
@@ -30,15 +37,14 @@ en:
               no_selection: at least one issue must be selected
               invalid: one or more issues do not exist
   autolinks:
+    index:
+      title: Autolinks
     new:
       title: New autolink
       create: Create
     form:
-      prefix: Reference prefix
       prefix_hint: This prefix appended by a string will generate a link any time it is found in an issue.
       prefix_placeholder: TICKET-
-      target_url: Target URL
-      target_url_hint: The URL must contain <num> for the reference number.
       target_url_placeholder: https://www.redmine.org/issues/<num>
   timer_sessions:
     filters:

@@ -2,6 +2,9 @@
 de:
   activerecord:
     attributes:
+      autolink:
+        prefix: Referenzpräfix
+        target_url: Ziel-URL
       timer_session:
         timer_start: Start der Arbeitszeit
         timer_end: Ende der Arbeitszeit
@@ -12,6 +15,10 @@ de:
         period: Auswertungsperiode
     errors:
       models:
+        autolink:
+          attributes:
+            target_url:
+              no_num: muss <num> für die Referenznummer enthalten
         timer_session:
           attributes:
             timer_start:
@@ -29,11 +36,8 @@ de:
       title: Neuer Autolink
       create: Erstellen
     form:
-      prefix: Referenzpräfix
       prefix_hint: Dieses Präfix erzeugt jedes Mal einen Link, wenn es in einem Issue gefunden wird.
       prefix_placeholder: TICKET-
-      target_url: Ziel-URL
-      target_url_hint: Die URL muss <num> für die Referenznummer enthalten.
       target_url_placeholder: https://www.redmine.org/issues/<num>
   timer_sessions:
     filters:

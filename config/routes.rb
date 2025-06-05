@@ -16,6 +16,6 @@ delete :time_tracker, to: 'time_tracker#destroy'
 
 get 'completion/issues', to: 'completion#issues'
 
-get 'projects/:project_id/autolinks', to: 'autolinks#index', as: :autolinks
+get 'projects/:project_id/autolinks', to: 'autolinks#index', as: :project_autolinks
 post 'projects/:project_id/autolinks', to: 'autolinks#create'
-get 'projects/:project_id/autolinks/new', to: 'autolinks#new', as: :new_autolink
+get 'projects/:project_id/autolinks/new', to: 'autolinks#new', as: :new_project_autolink

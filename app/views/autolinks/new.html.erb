@@ -1,6 +1,6 @@
 <%= title t('.title') %>
 
-<%= labelled_form_for @autolink, url: autolinks_path(@project) do |f| %>
-  <%= render partial: 'autolinks/form', locals: { :f: f } %>
+<%= labelled_form_for @autolink, url: project_autolinks_path(@project) do |f| %>
+  <%= render partial: 'autolinks/form', locals: { f: f } %>
   <%= submit_tag t('.create') %>
 <% end %>

@@ -15,6 +15,13 @@ class AutolinksController < TrackyController
   end
 
   def create
+    @autolink = Autolink.new(**autolink_params, project: @project)
+
+    if @autolink.save
+      redirect_to project_autolinks_path(@project)
+    else
+      render :new
+    end
   end
 
   def update
@@ -28,5 +35,9 @@ class AutolinksController < TrackyController
 
   def set_autolink
     @autolink = Autolink.find_by(id: params[:id], project: @project)
+  end
+
+  def autolink_params
+    params.require(:autolink).permit(:prefix, :target_url)
   end
 end
