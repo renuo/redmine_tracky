@@ -1,0 +1,8 @@
+<%= labelled_fields_for :autolink, @autolink do |f| %>
+  <p><%= f.text_field :prefix, label: t('.prefix'), placeholder: t('.prefix_placeholder'),
+                      maxlength: 20, required: true %></p>
+  <p><%= t('.prefix_hint') %></p>
+  <p><%= f.text_field :target_url, label: t('.target_url'), placeholder: t('.target_url_placeholder'),
+                      size: 60, maxlength: 255, required: true %></p>
+  <p><%= t('.target_url_hint') %></p>
+<% end %>

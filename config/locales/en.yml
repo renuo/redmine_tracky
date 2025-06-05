@@ -29,6 +29,17 @@ en:
             issue_id:
               no_selection: at least one issue must be selected
               invalid: one or more issues do not exist
+  autolinks:
+    new:
+      title: New autolink
+      create: Create
+    form:
+      prefix: Reference prefix
+      prefix_hint: This prefix appended by a string will generate a link any time it is found in an issue.
+      prefix_placeholder: TICKET-
+      target_url: Target URL
+      target_url_hint: The URL must contain <num> for the reference number.
+      target_url_placeholder: https://www.redmine.org/issues/<num>
   timer_sessions:
     filters:
       filter: Filter

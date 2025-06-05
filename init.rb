@@ -15,7 +15,7 @@ Redmine::Plugin.register :redmine_tracky do
   project_module :redmine_tracky do
     permission :view_polls, polls: :index
     permission :vote_polls, polls: :vote
-    permission :autolinks, { autolinks: %i[index] }, require: :loggedin
+    permission :autolinks, { autolinks: %i[index new edit create update] }, require: :loggedin
   end
 
   default_settings = {
