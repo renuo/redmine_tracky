@@ -3,5 +3,5 @@
 
 <% @autolinks.each do |autolink| %>
   <p><%= link_to "#{autolink.prefix}123", edit_project_autolink_path(@project, autolink) %> →
-     <%= autolink.target_url.sub('<num>', '123') %></p>
+     <%= autolink.target_url_with('123') %></p>
 <% end %>

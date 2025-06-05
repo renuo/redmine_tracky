@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'redmine'
+require_relative 'config/initializers/autolinks'
 
 Redmine::Plugin.register :redmine_tracky do
   name 'Tracky plugin'
