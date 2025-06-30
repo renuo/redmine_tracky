@@ -115,6 +115,6 @@ class TimerSessionTest < ActiveSupport::TestCase
 
     timer_session.save!
 
-    assert_equal 0, timer_session.timer_start.sec, 'timer_start should be rounded to nearest minute even when timer_end is nil'
+    assert_equal 0, timer_session.timer_start.sec, 'timer_start should be rounded to nearest minute even when timer_end is nil' # rubocop:disable Layout/LineLength
   end
 end
