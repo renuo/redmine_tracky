@@ -59,6 +59,7 @@ class TimerSessionTest < ActiveSupport::TestCase
   end
 
   test 'round_timer_to_nearest_minute' do
+    @timer_session.timer_end = nil
     timer_start_before = @timer_session.timer_start
 
     timer_start_after = timer_start_before + 10.seconds
