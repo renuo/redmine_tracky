@@ -13,8 +13,8 @@ class TimerSession < RedmineTrackyApplicationRecord
   has_many :time_entries, through: :timer_session_time_entries
 
   validates :timer_start, presence: true
-  before_save :set_recorded_hours
   before_save :round_timer_to_nearest_minute
+  before_save :set_recorded_hours
 
   scope :active, -> { where(finished: false) }
   scope :finished, -> { where(finished: true) }
@@ -65,7 +65,7 @@ class TimerSession < RedmineTrackyApplicationRecord
   end
 
   def round_timer_to_nearest_minute
-    self.timer_start = round_to_nearest_minute(timer_start) if timer_end.present?
+    self.timer_start = round_to_nearest_minute(timer_start) if timer_start.present?
     self.timer_end = round_to_nearest_minute(timer_end) if timer_end.present?
   end
 
