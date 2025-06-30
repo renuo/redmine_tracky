@@ -109,7 +109,7 @@ class TimerSessionTest < ActiveSupport::TestCase
   end
 
   test 'round_timer_start_when_timer_end_is_nil' do
-    timer_session = FactoryBot.build(:timer_session, user: User.current)
+    timer_session = FactoryBot.build(:timer_session, user: User.current, finished: false)
     timer_session.timer_end = nil
     timer_session.timer_start = Time.zone.now + 45.seconds
 
