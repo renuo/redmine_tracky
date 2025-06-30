@@ -107,4 +107,14 @@ class TimerSessionTest < ActiveSupport::TestCase
     assert session1.overlaps?(session2)
     assert session2.overlaps?(session1)
   end
+
+  test 'round_timer_start_when_timer_end_is_nil' do
+    timer_session = FactoryBot.build(:timer_session, user: User.current)
+    timer_session.timer_end = nil
+    timer_session.timer_start = Time.zone.now + 45.seconds
+
+    timer_session.save!
+
+    assert_equal 0, timer_session.timer_start.sec, 'timer_start should be rounded to nearest minute even when timer_end is nil'
+  end
 end
