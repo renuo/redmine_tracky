@@ -7,7 +7,7 @@
       <%= t('resolution_options.edit_timer_session', scope: base_scope, hours: format_worked_hours(timer_session.recorded_hours)) %><br>
       <%= link_to edit_timer_session_path(timer_session), remote: true do %>
         <%= t('timer_sessions.edit.title') %>
-        <div class="icon-only icon-edit"></div>
+        <%= sprite_icon('edit', t(:button_edit), icon_only: true) %>
       <% end %>
     </li>
     <li>
@@ -18,7 +18,7 @@
             <li>
               <%= link_to edit_time_entry_path(time_entry) do %>
                 <%= format_time_entry_information(time_entry) %>
-                <div class="icon-only icon-edit"></div>
+                <%= sprite_icon('edit', t(:button_edit), icon_only: true) %>
               <% end %>
             </li>
           </ul>
@@ -33,14 +33,13 @@
   <div class="mt-3">
     <%= link_to timer_session_path(timer_session), data: { confirm: l(:text_are_you_sure) }, method: :delete, title: l(:button_delete) do %>
       <%= t('timer_sessions.destroy.button') %>
-      <div class="icon-only icon-del"></div>
+      <%= sprite_icon('del', t(:button_delete), icon_only: true) %>
     <% end %>
   </div>
   <div class="mt-3">
     <%= link_to timer_sessions_rebalance_path(timer_session), data: { confirm: l(:text_are_you_sure) }, method: :post, title: l(:button_delete) do %>
       <%= t('timer_sessions.rebalance.button') %>
-      <div class="icon-only icon-add"></div>
+      <%= sprite_icon('add', t(:button_add), icon_only: true) %>
     <% end %>
   </div>
 </div>
-

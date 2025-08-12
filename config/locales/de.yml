@@ -24,6 +24,7 @@ de:
             issue_id:
               no_selection: mindestens ein Issue muss gewählt sein
               invalid: ein oder mehrere Issues müssen gewählt sein
+  button_continue: Weitermachen
   timer_sessions:
     filters:
       filter: Filter
@@ -63,7 +64,7 @@ de:
             Es wurde eine Diskrepanz in der erfassten Zeit der Session %{range} gefunden!
             Bitte resuliere diese Diskrepanz!
           resolution_options:
-            options: "Um eine Diskrepanz zu resulieren hast du folgende Optionen:"
+            options: 'Um eine Diskrepanz zu resulieren hast du folgende Optionen:'
             edit_timer_session: Du kannst die Session direkt editieren, damit sie %{hours} umfasst
             edit_time_entries: Du kannst einen der Zeiterfassungen anpassen damit die Summe %{hours} ergibt
             last_resort: |
@@ -74,15 +75,15 @@ de:
       continue_last_session: Anschliessend Starten
       stop: Stop
       cancel: Abbrechen
-      date_placeholder: "dd.mm.yyyy hh:mm"
-      absolute_time_placeholder: "0.75"
-      current: "Aktuelle Arbeitserfassung: "
+      date_placeholder: 'dd.mm.yyyy hh:mm'
+      absolute_time_placeholder: '0.75'
+      current: 'Aktuelle Arbeitserfassung: '
     index:
       title: Tracky
       table:
-        total_hours_worked: "Totale Stunden: %{hours} h"
+        total_hours_worked: 'Totale Stunden: %{hours} h'
     rebalance:
-      button: "Ausbalancieren"
+      button: 'Ausbalancieren'
     edit:
       title: Arbeitseintrag bearbeiten
       update: Überarbeiten
@@ -93,10 +94,10 @@ de:
       tomorrow: Morgen
       yesterday: Gestern
     formats:
-      date_with_year: "%d.%m.%Y"
-      date_with_year_and_weekday: "%A %d.%m.%Y"
-      date_without_year: "%d.%m"
-      datetime_format: "%d.%m.%Y %H:%M"
+      date_with_year: '%d.%m.%Y'
+      date_with_year_and_weekday: '%A %d.%m.%Y'
+      date_without_year: '%d.%m'
+      datetime_format: '%d.%m.%Y %H:%M'
       jquery_datetime_format: d.m.Y H:i
-      js_datetime_format: "dd.MM.yyyy HH:mm"
-      time: "%H:%M"
+      js_datetime_format: 'dd.MM.yyyy HH:mm'
+      time: '%H:%M'

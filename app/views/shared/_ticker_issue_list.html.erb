@@ -11,7 +11,7 @@
           </td>
           <td>
             <span class="text-danger input-group-text" data-action="click->list#removeItem">
-              <i class="icon-only icon-del"></i>
+              <%= sprite_icon('del', t(:button_delete), icon_only: true) %>
             </span>
             <%= hidden_field_tag 'timer_session[issue_ids][]', issue.id, id: "timer_session_issue_id_#{issue.id}", readonly: true %>
           </td>
