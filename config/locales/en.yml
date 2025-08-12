@@ -29,6 +29,7 @@ en:
             issue_id:
               no_selection: at least one issue must be selected
               invalid: one or more issues do not exist
+  button_continue: Continue
   timer_sessions:
     filters:
       filter: Filter

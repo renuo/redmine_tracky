@@ -11,34 +11,30 @@
   <td class="timer-session-table-actions">
     <% if timer_session_entry? %>
       <% if can_continue_entry? %>
-        <%= link_to timer_sessions_continue_path(timer_session_entry),
-                    method: :post,
-                    data: { timer_session_continue_button: '' } do %>
-          <span class="icon-only icon-arrow-right"></span>
-        <% end %>
+        <%= link_to(sprite_icon('arrow-right', t(:button_continue), icon_only: true),
+                    timer_sessions_continue_path(timer_session_entry),
+                    data: { timer_session_continue_button: '' },
+                    method: :post, class: 'icon-only icon-arrow-right') %>
       <% end %>
       <% if can_edit_entry? %>
-        <%= link_to edit_timer_session_path(timer_session_entry),
+        <%= link_to(sprite_icon('edit', t(:button_edit), icon_only: true),
+                    edit_timer_session_path(timer_session_entry),
                     data: { timer_session_edit_button: '' },
-                    remote: true do %>
-          <span class="icon-only icon-edit"></span>
-        <% end %>
+                    remote: true, class: 'icon-only icon-edit') %>
       <% end %>
       <% if can_destroy_entry? %>
-        <%= link_to timer_session_path(timer_session_entry),
+        <%= link_to(sprite_icon('del', t(:button_delete), icon_only: true),
+                    timer_session_path(timer_session_entry),
                     data: { confirm: t(:text_are_you_sure), timer_session_destroy_button: '' },
-                    method: :delete, title: t(:button_delete) do %>
-          <span class="icon-only icon-del"></span>
-        <% end %>
+                    method: :delete, class: 'icon-only icon-del') %>
       <% end %>
       <% if display_discrepancy_errors? %>
-        <%= link_to timer_sessions_time_error_path(timer_session_entry),
+        <%= link_to(sprite_icon('warning', t('timer_sessions.messaging.errors.discrepancy_in_time_sum.title'), icon_only: true),
+                    timer_sessions_time_error_path(timer_session_entry),
                     data: { timer_session_discrepancy_button: '' },
-                    remote: true do %>
-          <span class="icon-only icon-warning"></span>
-        <% end %>
+                    remote: true, class: 'icon-only icon-warning') %>
       <% elsif display_overlap_errors? %>
-          <span class="icon-only icon-warning" title="<%= t('timer_sessions.messaging.overlap_error') %>"></span>
+          <%= sprite_icon('warning', t('timer_sessions.messaging.overlap_error'), icon_only: true) %>
       <% end %>
     <% end %>
   </td>

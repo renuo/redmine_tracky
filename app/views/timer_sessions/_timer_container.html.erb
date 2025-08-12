@@ -71,24 +71,22 @@
           <% if User.current.allowed_to_globally?(action: :update, controller: 'time_tracker') %>
             <%= f.button :stop, type: :submit, data: { name: 'timer-stop', form_target: 'stopButton' }, name: :stop do %>
               <%= t('timer_sessions.timer.stop') %>
-              <i class="icon icon-error"></i>
             <% end %>
           <% end %>
           <% if User.current.allowed_to_globally?(action: :destroy, controller: 'time_tracker') %>
             <%= f.button :cancel, type: :submit, data: { name: 'timer-cancel', confirm: l(:text_are_you_sure) }, class: 'ml-3', name: :cancel, value: :cancel, form: "timer-cancel-form" do %>
               <%= t('timer_sessions.timer.cancel') %>
-              <i class="icon icon-cancel"></i>
             <% end %>
           <% end %>
         </div>
       <% elsif !timer_session.persisted? && User.current.allowed_to_globally?(action: :create, controller: 'time_tracker') %>
         <%= f.button :start, type: :submit, value: :start, data: { name: 'timer-start' }, name: :commit do %>
           <%= t('timer_sessions.timer.start') %>
-          <i class="icon icon-add new-issue"></i>
+          <%= sprite_icon('add') %>
         <% end %>
         <%= f.button :start, type: :submit, value: :continue_last_session, data: { name: 'timer-continue' }, class: 'ml-3', name: :commit do %>
           <%= t('timer_sessions.timer.continue_last_session') %>
-          <i class="icon icon-add new-issue"></i>
+          <%= sprite_icon('add') %>
         <% end %>
       <% end %>
     <% end %>

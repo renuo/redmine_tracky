@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module TimerSessionsHelper
+  include IconsHelper
+
   MAX_SUBJECT_LENGTH = 75
   SECONDS_IN_MINUTE = 60
   GAP_LIMIT_IN_MINUTES = 5
