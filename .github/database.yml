@@ -5,7 +5,7 @@ default: &default
   password: root
   encoding: utf8mb4
   variables:
-    transaction_isolation: "READ-COMMITTED"
+    transaction_isolation: 'READ-COMMITTED'
 
 production:
   <<: *default

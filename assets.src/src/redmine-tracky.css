@@ -1,4 +1,4 @@
-@import "flatpickr/dist/flatpickr.css";
-@import "./styles/time_sessions_table.scss";
-@import "./styles/utils.scss";
-@import "./styles/timer_container.scss";
+@import 'flatpickr/dist/flatpickr.css';
+@import './styles/time_sessions_table.scss';
+@import './styles/utils.scss';
+@import './styles/timer_container.scss';

@@ -47,7 +47,7 @@ export default class extends Controller {
     const urlParams = new URLSearchParams(window.location.search)
     const issueIds = urlParams.getAll('issue_ids[]')
 
-    issueIds.forEach(id => {
+    issueIds.forEach((id) => {
       const url = window.RedmineTracky.issueCompletionPath
       const data = { term: id, scope: 'all' }
 
