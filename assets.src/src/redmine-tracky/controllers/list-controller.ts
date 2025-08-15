@@ -11,7 +11,8 @@ export default class extends Controller {
   }
 
   removeItem({ target }: Event) {
-    ;(target as Element).closest('[data-form-target="issue"]')?.remove()
+    const item = target as Element
+    item.closest('[data-form-target="issue"]')?.remove()
   }
 
   private buildItem(item: CompletionResult) {
