@@ -3,6 +3,10 @@
     column-count: 2;
   }
 
+  .timer-container button svg {
+    stroke: #fff;
+  }
+
   input:disabled,
   button:disabled {
     background-color: #e9ecef;

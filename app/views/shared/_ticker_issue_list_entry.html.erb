@@ -1,0 +1,13 @@
+<tr class="issue-container" data-form-target="issue" data-issue-id="<%= issue.id %>">
+  <td>
+    <b><%= link_to "#{issue.project} - #{issue.id}:", issue_path(issue.id), target: :_blank, rel: :noopener %></b>
+  </td>
+  <td data-issue-subject><%= issue.subject %></td>
+  <td>
+    <span class="text-danger input-group-text" data-action="click->list#removeItem">
+      <%= sprite_icon('del', t(:button_delete), icon_only: true) %>
+    </span>
+    <%= hidden_field_tag 'timer_session[issue_ids][]', issue.id,
+                         id: "timer_session_issue_id_#{issue.id}", readonly: true %>
+  </td>
+</tr>
