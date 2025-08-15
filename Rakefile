@@ -55,7 +55,7 @@ end
 
 desc 'Run code.'
 task :run do
-  sh 'cd ../.. && rails s'
+  sh 'cd ../.. && bundle exec rails s'
 end
 
 desc 'Lint all code.'
