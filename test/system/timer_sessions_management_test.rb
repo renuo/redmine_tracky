@@ -18,6 +18,8 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
                                              :with_issues,
                                              :with_time_entries,
                                              user: User.current)
+    @timer_sessions << FactoryBot.create(:timer_session, :with_issues, :with_time_entries, user: User.current, comments: nil)
+
     visit timer_sessions_path
   end
 
@@ -25,6 +27,8 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     @timer_sessions.each do |timer_session|
       assert has_content?(timer_session.comments)
     end
+
+    assert has_content?(I18n.t(:no_comment))
   end
 
   test 'index - does not raise error when rendering time entries on same date' do
