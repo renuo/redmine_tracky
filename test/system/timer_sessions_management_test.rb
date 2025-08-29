@@ -15,7 +15,7 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     User.current = User.find(1)
     # User.current.preference.update(time_zone: 'Tijuana')
     @timer_sessions = FactoryBot.create_list(:timer_session, 3, :with_issues, :with_time_entries, user: User.current)
-    @timer_sessions.last.update!(comments: nil)
+    @timer_sessions.first.update!(comments: nil)
     visit timer_sessions_path
   end
 
