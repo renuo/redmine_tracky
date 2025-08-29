@@ -25,6 +25,7 @@ de:
               no_selection: mindestens ein Issue muss gewählt sein
               invalid: ein oder mehrere Issues müssen gewählt sein
   button_continue: Weitermachen
+  no_comment: Kein Kommentar
   timer_sessions:
     filters:
       filter: Filter
