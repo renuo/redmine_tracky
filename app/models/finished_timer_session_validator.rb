@@ -7,7 +7,6 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
     @record = record
 
     validate_start_and_end_present
-    validate_comment_present
     validate_minimal_duration
     validate_day_limit
     validate_session_limit
@@ -23,10 +22,6 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
   def validate_start_and_end_present
     @record.errors.add(:timer_start, :blank) if @record.timer_start.blank?
     @record.errors.add(:timer_end, :blank) if @record.timer_end.blank?
-  end
-
-  def validate_comment_present
-    @record.errors.add(:comments, :blank) if @record.comments.blank?
   end
 
   def validate_issues_selected
