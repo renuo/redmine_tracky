@@ -166,7 +166,7 @@ class TimeTrackerControllerTest < ActionController::TestCase
       timer_start: Time.zone.now,
       timer_end: Time.zone.now + 1.hours,
       comments: nil,
-      issue_ids: ['1']
+      issue_ids: []
     } }, xhr: true
     assert_response 422
   end
