@@ -14,10 +14,8 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     login_user('admin', 'admin')
     User.current = User.find(1)
     # User.current.preference.update(time_zone: 'Tijuana')
-    @timer_sessions = FactoryBot.create_list(:timer_session, 3,
-                                             :with_issues,
-                                             :with_time_entries,
-                                             user: User.current)
+    @timer_sessions = FactoryBot.create_list(:timer_session, 3, :with_issues, :with_time_entries, user: User.current)
+    @timer_sessions.first.update!(comments: nil)
     visit timer_sessions_path
   end
 
@@ -25,6 +23,8 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     @timer_sessions.each do |timer_session|
       assert has_content?(timer_session.comments)
     end
+
+    assert has_content?(I18n.t(:no_comment))
   end
 
   test 'index - does not raise error when rendering time entries on same date' do

@@ -5,7 +5,13 @@
       <br>
     <% end %>
   </td>
-  <td class="w-20"><%= timer_session_entry.comments %></td>
+  <td class="w-20">
+    <% if timer_session_entry.comments.present? %>
+      <%= timer_session_entry.comments %>
+    <% else %>
+      <i><%= t(:no_comment) %></i>
+    <% end %>
+  </td>
   <td><%= timer_session_entry.formated_session_time %></td>
   <td><%= format_worked_hours(timer_session_entry.recorded_hours) %></td>
   <td class="timer-session-table-actions">

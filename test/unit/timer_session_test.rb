@@ -37,7 +37,7 @@ class TimerSessionTest < ActiveSupport::TestCase
   test 'comment_present' do
     assert @timer_session.valid?
     @timer_session.comments = nil
-    assert_not @timer_session.valid?
+    assert @timer_session.valid?
   end
 
   test 'issues_selected' do
