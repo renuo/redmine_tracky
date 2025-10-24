@@ -148,4 +148,12 @@
   .float-right {
     float: right !important;
   }
+
+  .table-fixed {
+    table-layout: fixed;
+  }
+
+  .hyphens-auto {
+    hyphens: auto;
+  }
 }

@@ -1,11 +1,11 @@
 <tr class="<%= row_classes %>">
-  <td class="td-px-0 w-40">
+  <td class="td-px-0 w-40 hyphens-auto">
     <% issue_link_list(timer_session_entry.issues).each do |issue_link| %>
       <%= issue_link %>
       <br>
     <% end %>
   </td>
-  <td class="w-20"><%= timer_session_entry.comments %></td>
+  <td class="w-20 hyphens-auto"><%= timer_session_entry.comments %></td>
   <td><%= timer_session_entry.formated_session_time %></td>
   <td><%= format_worked_hours(timer_session_entry.recorded_hours) %></td>
   <td class="timer-session-table-actions">
