@@ -153,11 +153,7 @@
     table-layout: fixed;
   }
 
-  .break-normal {
-    overflow-wrap: normal;
-  }
-
-  .overflow-auto {
-    overflow: auto;
+  .hyphens-auto {
+    hyphens: auto;
   }
 }
