@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout B
+      - name: Checkout redmine_tracky
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -46,7 +46,7 @@ jobs:
       - name: Create pull request in renuo-redmine
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.A_REPO_TOKEN }}
+          token: ${{ secrets.RENUO_REDMINE_REPO_TOKEN }}
           repository: renuo/renuo-redmine
           base: main
           head: ${{ github.actor }}:${{ env.BRANCH }}
