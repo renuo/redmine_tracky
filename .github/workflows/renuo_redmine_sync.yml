@@ -41,7 +41,7 @@ jobs:
           cd renuo-redmine
           BRANCH="sync-redmine-tracky-$(date +%s)"
           git checkout -b "$BRANCH"
-          git push https://x-access-token:${{ secrets.REDMINE_TRACKY_REPO_TOKEN }}@github.com/renuo/renuo-redmine.git "$BRANCH"
+          git push https://x-access-token:${{ secrets.RENUO_REDMINE_REPO_TOKEN }}@github.com/renuo/renuo-redmine.git "$BRANCH"
 
       - name: Create pull request in renuo-redmine
         uses: peter-evans/create-pull-request@v6
