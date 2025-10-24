@@ -1,0 +1,55 @@
+name: Update `renuo-redmine` `redmine-tracky` plugin
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout B
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clone renuo-redmine
+        run: |
+          git clone https://github.com/renuo/renuo-redmine.git
+          cd renuo-redmine
+          git checkout main
+
+      - name: Copy plugin files
+        run: |
+          cd renuo-redmine
+          git add plugins/redmine_tracky
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Sync from redmine_tracky: $(date +'%Y-%m-%d %H:%M:%S')"
+
+      - name: Push changes to a new branch
+        run: |
+          cd renuo-redmine
+          BRANCH="sync-redmine-tracky-$(date +%s)"
+          git checkout -b "$BRANCH"
+          git push https://x-access-token:${{ secrets.REDMINE_TRACKY_REPO_TOKEN }}@github.com/renuo/renuo-redmine.git "$BRANCH"
+
+      - name: Create pull request in renuo-redmine
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.A_REPO_TOKEN }}
+          repository: renuo/renuo-redmine
+          base: main
+          head: ${{ github.actor }}:${{ env.BRANCH }}
+          title: "Sync from redmine_tracky"
+          body: "Automated PR to sync changes from repository redmine_tracky"
+
