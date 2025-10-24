@@ -4,7 +4,7 @@
     <b class="float-right"><%= sum_work_hours(Array.wrap(timer_sessions)) %></b>
   </div>
 
-  <table class="list timer-sessions-table">
+  <table class="list timer-sessions-table table-fixed">
     <tbody>
       <% timer_sessions.each_with_index do |time_entity, index| %>
         <% previous_time_entity = timer_sessions[index + 1] %>

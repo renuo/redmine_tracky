@@ -148,4 +148,16 @@
   .float-right {
     float: right !important;
   }
+
+  .table-fixed {
+    table-layout: fixed;
+  }
+
+  .break-normal {
+    overflow-wrap: normal;
+  }
+
+  .overflow-auto {
+    overflow: auto;
+  }
 }
