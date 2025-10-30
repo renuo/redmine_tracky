@@ -106,10 +106,17 @@ class TimerManagementTest < ApplicationSystemTestCase
   end
 
   test 'loading timer with issues from url' do
-    FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
     visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
-    assert has_content?(Issue.first.subject, wait: 5)
-    assert has_content?(Issue.second.subject)
+
+    assert_text Issue.first.subject
+    assert_text Issue.second.subject
+  end
+
+  test 'loading timer with empty issues from url' do
+    visit timer_sessions_path(issue_ids: [])
+
+    assert_no_text Issue.first.subject
+    assert_no_text Issue.second.subject
   end
 
   test 'preserves filter parameters when stopping a timer' do
