@@ -1,18 +1,18 @@
 # Redmine-Tracky
 
-Improved time tracking for Redmine (tested using Redmine 5.1)
+Improved time tracking for Redmine (tested using Redmine 6.0)
 
 ## Prerequisites
 
 - npm
 - Bash [(>= 5.0)](https://www.gnu.org/software/bash/)
-- MySQL or PostgreSQL [(>= 14)](https://www.postgresql.org/download/)
-- Ruby [(= 3.1.2)](https://www.ruby-lang.org/en/downloads/)
+- MySQL or PostgreSQL [(>= 16)](https://www.postgresql.org/download/)
+- Ruby [(= 3.2.7)](https://www.ruby-lang.org/en/downloads/)
 
 ## Development Setup
 
 ```sh
-git clone -b 5.1-stable https://github.com/redmine/redmine
+git clone -b 6.0-stable https://github.com/redmine/redmine
 git clone https://github.com/renuo/redmine_tracky redmine/plugins/redmine_tracky
 cd redmine/plugins/redmine_tracky
 
