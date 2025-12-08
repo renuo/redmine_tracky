@@ -57,7 +57,8 @@ module TimerSessionsHelper
   end
 
   def issue_information(issue)
-    [ issue_identifier(issue),
+    [
+      issue_identifier(issue),
       issue.subject
     ].join(': ')
   end
