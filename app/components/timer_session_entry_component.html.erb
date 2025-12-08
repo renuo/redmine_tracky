@@ -1,8 +1,7 @@
 <tr class="<%= row_classes %>">
-  <td class="td-px-0 w-40 hyphens-auto">
+  <td class="td-px-0 w-40 hyphens-auto timer-session-table-issue">
     <% issue_link_list(timer_session_entry.issues).each do |issue_link| %>
       <%= issue_link %>
-      <br>
     <% end %>
   </td>
   <td class="w-20 hyphens-auto"><%= timer_session_entry.comments %></td>
