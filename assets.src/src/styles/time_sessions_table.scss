@@ -6,9 +6,10 @@
 
     &.timer-session-table-issue a {
       display: block;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      white-space: nowrap;
 
       &:hover {
         white-space: normal;
