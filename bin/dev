@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+bin/run &
+
+(
+  cd assets.src
+  npm run watch
+)
