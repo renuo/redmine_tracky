@@ -3,6 +3,18 @@
 .redmine-tracky {
   .timer-sessions-table td {
     text-align: left !important;
+
+    &.timer-session-table-issue a {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      white-space: nowrap;
+
+      &:hover {
+        white-space: normal;
+      }
+    }
   }
 
   .timer-session-table-comments {
