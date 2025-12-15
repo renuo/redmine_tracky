@@ -57,24 +57,14 @@ module TimerSessionsHelper
   end
 
   def issue_information(issue)
-    subject = issue.subject
-
     [
       issue_identifier(issue),
-      "#{truncated_subject(subject)}#{subject_label_trail(subject)}"
+      issue.subject
     ].join(': ')
   end
 
   def issue_identifier(issue)
     "#{issue.id} #{issue.project.name}"
-  end
-
-  def truncated_subject(subject)
-    subject[0..(MAX_SUBJECT_LENGTH - subject.length)]
-  end
-
-  def subject_label_trail(subject)
-    '...' if subject.length > MAX_SUBJECT_LENGTH
   end
 
   def draw_gap_separator(time_entity, previous_time_entity)
