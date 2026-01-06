@@ -17,8 +17,12 @@ class CompletionController < ApplicationController
   end
 
   def scoped_issues
-    scope = Issue.cross_project_scope(@project, params[:scope]).visible
-    scope.includes(:project, :tracker)
+    Issue
+      .cross_project_scope(@project, params[:scope])
+      .visible
+      .joins(:project)
+      .where('projects.status = ?', Project::STATUS_ACTIVE)
+      .includes(:project, :tracker)
   end
 
   def format_issues_json(issues)
