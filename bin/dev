@@ -1,7 +1,2 @@
 #!/usr/bin/env bash
-bin/run &
-
-(
-  cd assets.src
-  npm run watch
-)
+bin/run & bundle exec rake watch
