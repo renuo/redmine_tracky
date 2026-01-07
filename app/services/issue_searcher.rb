@@ -35,6 +35,7 @@ class IssueSearcher
     Issue.left_joins(:project, :time_entries)
          .select('issues.*, COUNT(time_entries.id) as time_entries_count')
          .group('issues.id')
+         .where('projects.status = ?', Project::STATUS_ACTIVE)
          .where(project_arel[:name].lower.matches("%#{search_term.downcase}%"))
          .open(TICKET_OPEN_STATUS)
          .order('time_entries_count DESC')
