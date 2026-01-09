@@ -20,8 +20,6 @@ class CompletionController < ApplicationController
     Issue
       .cross_project_scope(@project, params[:scope])
       .visible
-      .joins(:project)
-      .where('projects.status = ?', Project::STATUS_ACTIVE)
       .includes(:project, :tracker)
   end
 
