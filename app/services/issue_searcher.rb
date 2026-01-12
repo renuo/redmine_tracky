@@ -6,6 +6,8 @@ class IssueSearcher
   TICKET_OPEN_STATUS = true
 
   def call(search_term, issues)
+    issues = issues.on_active_project
+
     issues = if search_term.present?
                search_by_term(search_term, issues)
              else
@@ -32,9 +34,10 @@ class IssueSearcher
 
   def hits_by_project(search_term)
     project_arel = Project.arel_table
-    Issue.left_joins(:project, :time_entries)
+    Issue.left_joins(:time_entries)
          .select('issues.*, COUNT(time_entries.id) as time_entries_count')
          .group('issues.id')
+         .on_active_project
          .where(project_arel[:name].lower.matches("%#{search_term.downcase}%"))
          .open(TICKET_OPEN_STATUS)
          .order('time_entries_count DESC')

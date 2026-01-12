@@ -14,11 +14,14 @@ class IssueSearcherTest < ActiveSupport::TestCase
     User.current = User.find(2)
     @service = IssueSearcher.new
     renuo_project = create(:project, name: 'Renuo Project', identifier: 'renuo_project')
-    @projects = [renuo_project, Project.first, Project.second, Project.third]
+    closed_project = create(:project, name: 'Closed Project', identifier: 'closed_project',
+                                      status: Project::STATUS_CLOSED)
+    @projects = [renuo_project, Project.first, Project.second, Project.third, closed_project]
     @issues = [
       create(:issue, id: 100, subject: 'Very special Renuo issue', project: @projects[0]),
       create(:issue, id: 101, subject: 'Second special Renuo issue', project: @projects[1]),
-      create(:issue, :closed, id: 102, subject: 'Closed issue', project: @projects[2])
+      create(:issue, :closed, id: 102, subject: 'Closed issue', project: @projects[2]),
+      create(:issue, id: 200, subject: 'My project is not open', project: closed_project)
     ]
   end
 
@@ -40,6 +43,14 @@ class IssueSearcherTest < ActiveSupport::TestCase
   test 'call - filters closed issues' do
     search_term = 'Closed issue'
     assert_equal [], @service.call(search_term, Issue.all)
+  end
+
+  test 'call - filters issues belonging to a closed project' do
+    issue_search_term = 'My project is not open'
+    project_search_term = 'closed project'
+
+    assert_not_includes @service.call(issue_search_term, Issue.all), @issues[3]
+    assert_not_includes @service.call(project_search_term, Issue.all), @issues[3]
   end
 
   test 'call - hits by id are first' do
