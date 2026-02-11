@@ -15,3 +15,5 @@ patch :time_tracker, to: 'time_tracker#update'
 delete :time_tracker, to: 'time_tracker#destroy'
 
 get 'completion/issues', to: 'completion#issues'
+
+match "/mcp" => "mcp#handle", via: [ :get, :post, :delete ]
