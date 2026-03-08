@@ -1,4 +1,7 @@
-<div class="box" data-controller="form timer" data-timer-timezone-value="<%= offset_for_time_zone %>">
+<div class="box" data-controller="form timer" data-timer-timezone-value="<%= offset_for_time_zone %>"
+     data-form-share-copied-value="<%= t('timer_sessions.timer.share_copied') %>"
+     data-form-share-ignored-value="<%= t('timer_sessions.timer.share_ignored') %>"
+     data-form-session-active-value="<%= timer_session.persisted? %>">
   <div class="timer-container">
     <% active_timer_session = timer_session %>
     <%= labelled_form_for(active_timer_session,
@@ -88,6 +91,10 @@
           <%= t('timer_sessions.timer.continue_last_session') %>
           <%= sprite_icon('add') %>
         <% end %>
+        <button type="button" data-name="timer-share" data-action="click->form#share" class="ml-3">
+          <%= t('timer_sessions.timer.share') %>
+          <%= sprite_icon('link') %>
+        </button>
       <% end %>
     <% end %>
 

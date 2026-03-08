@@ -77,6 +77,9 @@ en:
     timer:
       start: Start
       continue_last_session: Start on end of last session
+      share: Share
+      share_copied: Link copied to clipboard
+      share_ignored: A timer is already running. Shared session parameters were ignored.
       stop: Stop
       cancel: Cancel
       date_placeholder: 'dd.mm.yyyy hh:mm'

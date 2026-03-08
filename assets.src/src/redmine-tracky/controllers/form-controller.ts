@@ -9,6 +9,9 @@ export default class extends Controller {
   declare readonly absolutInputTarget: HTMLInputElement
   declare readonly descriptionTarget: HTMLInputElement
   declare readonly issueTargets: Element[]
+  declare readonly shareCopiedValue: string
+  declare readonly shareIgnoredValue: string
+  declare readonly sessionActiveValue: boolean
 
   private connected = false
 
@@ -21,8 +24,15 @@ export default class extends Controller {
     'absolutInput',
   ]
 
+  static values = {
+    shareCopied: String,
+    shareIgnored: String,
+    sessionActive: Boolean,
+  }
+
   public connect() {
     this.connected = true
+    this.showShareIgnoredNotice()
   }
 
   public disconnect() {
@@ -65,6 +75,78 @@ export default class extends Controller {
     }
 
     this.dispatchUpdate(form)
+  }
+
+  public share(_event: Event) {
+    const params = new URLSearchParams()
+    const issueIds = this.extractIssueIds()
+    const comments = this.descriptionTarget.value
+    const timerStart = this.startTarget.value
+    const timerEnd = this.endTarget.value
+
+    issueIds.forEach((id) => params.append('issue_ids[]', id))
+    if (comments) params.set('comments', comments)
+    if (timerStart) params.set('timer_start', timerStart)
+    if (timerEnd) params.set('timer_end', timerEnd)
+
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`
+
+    this.copyToClipboard(url).then(() => {
+      this.showFlashNotice(this.shareCopiedValue)
+    })
+  }
+
+  private copyToClipboard(text: string): Promise<void> {
+    if (navigator.clipboard?.writeText) {
+      return navigator.clipboard.writeText(text).catch(() => {
+        this.copyToClipboardFallback(text)
+      })
+    }
+    this.copyToClipboardFallback(text)
+    return Promise.resolve()
+  }
+
+  private copyToClipboardFallback(text: string) {
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
+
+  private showShareIgnoredNotice() {
+    if (!this.sessionActiveValue) return
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const hasShareParams = urlParams.has('comments') ||
+      urlParams.has('timer_start') ||
+      urlParams.has('timer_end') ||
+      urlParams.getAll('issue_ids[]').some((v) => v !== '')
+
+    if (hasShareParams) {
+      this.showFlashNotice(this.shareIgnoredValue)
+    }
+  }
+
+  private showFlashNotice(message: string) {
+    const flash = document.getElementById('flash_notice')
+    if (flash) {
+      flash.textContent = message
+      flash.style.display = ''
+      return
+    }
+
+    const container = document.getElementById('content')
+    if (!container) return
+
+    const notice = document.createElement('div')
+    notice.id = 'flash_notice'
+    notice.className = 'flash notice'
+    notice.textContent = message
+    container.prepend(notice)
   }
 
   private extractIssueIds(): string[] {

@@ -119,6 +119,62 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_no_text Issue.second.subject
   end
 
+  test 'loading timer with comments from url' do
+    visit timer_sessions_path(comments: 'Meeting with team')
+
+    assert_equal 'Meeting with team', find('#timer_session_comments').value
+  end
+
+  test 'loading timer with timer_start from url' do
+    visit timer_sessions_path(timer_start: '01.01.2026 09:00')
+
+    assert_equal '01.01.2026 09:00', find('#timer_session_timer_start').value
+  end
+
+  test 'loading timer with timer_end from url' do
+    visit timer_sessions_path(timer_end: '01.01.2026 17:00')
+
+    assert_equal '01.01.2026 17:00', find('#timer_session_timer_end').value
+  end
+
+  test 'loading timer with all query params from url' do
+    visit timer_sessions_path(
+      issue_ids: [Issue.first.id],
+      comments: 'Sprint planning',
+      timer_start: '01.01.2026 09:00',
+      timer_end: '01.01.2026 10:00'
+    )
+
+    assert_text Issue.first.subject
+    assert_equal 'Sprint planning', find('#timer_session_comments').value
+    assert_equal '01.01.2026 09:00', find('#timer_session_timer_start').value
+    assert_equal '01.01.2026 10:00', find('#timer_session_timer_end').value
+  end
+
+  test 'share button is visible and clickable' do
+    visit timer_sessions_path
+
+    fill_in 'timer_session_comments', with: 'Pairing session'
+
+    find('[data-name="timer-share"]', wait: 5).click
+    assert_text I18n.t('timer_sessions.timer.share_copied')
+  end
+
+  test 'share button not visible when timer is active' do
+    FactoryBot.create(:timer_session, finished: false, user: User.current)
+    visit timer_sessions_path
+
+    assert has_content?(I18n.t('timer_sessions.timer.stop'))
+    assert_no_selector('[data-name="timer-share"]')
+  end
+
+  test 'shows prefill notice when active session exists and url has params' do
+    FactoryBot.create(:timer_session, finished: false, user: User.current)
+    visit timer_sessions_path(comments: 'Meeting', issue_ids: [Issue.first.id])
+
+    assert_text I18n.t('timer_sessions.timer.share_ignored')
+  end
+
   test 'preserves filter parameters when stopping a timer' do
     filter_date = 1.week.ago.strftime('%Y-%m-%d')
     current_date = Date.today.strftime('%Y-%m-%d')
