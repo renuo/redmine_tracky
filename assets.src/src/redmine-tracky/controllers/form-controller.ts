@@ -78,18 +78,19 @@ export default class extends Controller {
   }
 
   public share(_event: Event) {
-    const params = new URLSearchParams()
+    const parts: string[] = []
     const issueIds = this.extractIssueIds()
     const comments = this.descriptionTarget.value
     const timerStart = this.startTarget.value
     const timerEnd = this.endTarget.value
 
-    issueIds.forEach((id) => params.append('issue_ids[]', id))
-    if (comments) params.set('comments', comments)
-    if (timerStart) params.set('timer_start', timerStart)
-    if (timerEnd) params.set('timer_end', timerEnd)
+    issueIds.forEach((id) => parts.push(`issue_ids[]=${encodeURIComponent(id)}`))
+    if (comments) parts.push(`comments=${encodeURIComponent(comments)}`)
+    if (timerStart) parts.push(`timer_start=${encodeURIComponent(timerStart)}`)
+    if (timerEnd) parts.push(`timer_end=${encodeURIComponent(timerEnd)}`)
 
-    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`
+    const query = parts.length > 0 ? `?${parts.join('&')}` : ''
+    const url = `${window.location.origin}${window.location.pathname}${query}`
 
     this.copyToClipboard(url).then(() => {
       this.showFlashNotice(this.shareCopiedValue)
