@@ -9,20 +9,6 @@
     gap: 0.5rem;
   }
 
-  .btn-submit {
-    -webkit-appearance: button;
-    cursor: pointer;
-    background-color: #fff;
-    height: 28px;
-    border: 1px solid #ccc;
-    padding: 0 7px;
-    transition: background-color 100ms linear;
-
-    &:hover {
-      background-color: #ededed;
-    }
-  }
-
   .timer-container button svg {
     stroke: #fff;
   }

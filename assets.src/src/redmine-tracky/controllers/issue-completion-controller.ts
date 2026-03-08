@@ -45,14 +45,6 @@ export default class extends Controller {
 
   private prefillFromURL() {
     const urlParams = new URLSearchParams(window.location.search)
-
-    this.prefillIssuesFromURL(urlParams)
-    this.prefillFieldFromURL(urlParams, 'comments', '#timer_session_comments')
-    this.prefillFieldFromURL(urlParams, 'timer_start', '#timer_session_timer_start')
-    this.prefillFieldFromURL(urlParams, 'timer_end', '#timer_session_timer_end')
-  }
-
-  private prefillIssuesFromURL(urlParams: URLSearchParams) {
     const issueIds = urlParams.getAll('issue_ids[]')
 
     issueIds.filter(v => v !== "").forEach((id) => {
@@ -68,17 +60,6 @@ export default class extends Controller {
           console.error(`Failed to fetch issue with ID: ${id}`)
         })
     })
-  }
-
-  private prefillFieldFromURL(urlParams: URLSearchParams, param: string, selector: string) {
-    const value = urlParams.get(param)
-    if (!value) return
-
-    const field = document.querySelector<HTMLInputElement>(selector)
-    if (field) {
-      field.value = value
-      field.dispatchEvent(new Event('change'))
-    }
   }
 
   private addIssue(issue: { item: CompletionResult }) {

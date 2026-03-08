@@ -32,6 +32,7 @@ export default class extends Controller {
 
   public connect() {
     this.connected = true
+    this.prefillFieldsFromURL()
     this.showShareIgnoredNotice()
   }
 
@@ -77,7 +78,8 @@ export default class extends Controller {
     this.dispatchUpdate(form)
   }
 
-  public share(_event: Event) {
+  public share(event: Event) {
+    event.preventDefault()
     const parts: string[] = []
     const issueIds = this.extractIssueIds()
     const comments = this.descriptionTarget.value
@@ -92,30 +94,25 @@ export default class extends Controller {
     const query = parts.length > 0 ? `?${parts.join('&')}` : ''
     const url = `${window.location.origin}${window.location.pathname}${query}`
 
-    this.copyToClipboard(url).then(() => {
+    navigator.clipboard.writeText(url).then(() => {
       this.showFlashNotice(this.shareCopiedValue)
     })
   }
 
-  private copyToClipboard(text: string): Promise<void> {
-    if (navigator.clipboard?.writeText) {
-      return navigator.clipboard.writeText(text).catch(() => {
-        this.copyToClipboardFallback(text)
-      })
-    }
-    this.copyToClipboardFallback(text)
-    return Promise.resolve()
+  private prefillFieldsFromURL() {
+    const urlParams = new URLSearchParams(window.location.search)
+
+    this.prefillField(urlParams, 'comments', this.descriptionTarget)
+    this.prefillField(urlParams, 'timer_start', this.startTarget)
+    this.prefillField(urlParams, 'timer_end', this.endTarget)
   }
 
-  private copyToClipboardFallback(text: string) {
-    const textarea = document.createElement('textarea')
-    textarea.value = text
-    textarea.style.position = 'fixed'
-    textarea.style.opacity = '0'
-    document.body.appendChild(textarea)
-    textarea.select()
-    document.execCommand('copy')
-    document.body.removeChild(textarea)
+  private prefillField(urlParams: URLSearchParams, param: string, target: HTMLInputElement) {
+    const value = urlParams.get(param)
+    if (!value) return
+
+    target.value = value
+    target.dispatchEvent(new Event('change'))
   }
 
   private showShareIgnoredNotice() {
