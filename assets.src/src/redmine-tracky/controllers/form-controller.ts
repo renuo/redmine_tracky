@@ -10,6 +10,7 @@ export default class extends Controller {
   declare readonly descriptionTarget: HTMLInputElement
   declare readonly issueTargets: Element[]
   declare readonly shareCopiedValue: string
+  declare readonly sharePrefilledValue: string
   declare readonly shareIgnoredValue: string
   declare readonly sessionActiveValue: boolean
 
@@ -26,14 +27,18 @@ export default class extends Controller {
 
   static values = {
     shareCopied: String,
+    sharePrefilled: String,
     shareIgnored: String,
     sessionActive: Boolean,
   }
 
   public connect() {
     this.connected = true
-    this.prefillFieldsFromURL()
-    this.showShareIgnoredNotice()
+    if (this.sessionActiveValue) {
+      this.showShareIgnoredNotice()
+    } else {
+      this.prefillFieldsFromURL()
+    }
   }
 
   public disconnect() {
@@ -95,24 +100,31 @@ export default class extends Controller {
     const url = `${window.location.origin}${window.location.pathname}${query}`
 
     navigator.clipboard.writeText(url).then(() => {
-      this.showFlashNotice(this.shareCopiedValue)
+      this.showFlash(this.shareCopiedValue, 'notice')
     })
   }
 
   private prefillFieldsFromURL() {
     const urlParams = new URLSearchParams(window.location.search)
 
-    this.prefillField(urlParams, 'comments', this.descriptionTarget)
-    this.prefillField(urlParams, 'timer_start', this.startTarget)
-    this.prefillField(urlParams, 'timer_end', this.endTarget)
+    const prefilled = [
+      this.prefillField(urlParams, 'comments', this.descriptionTarget),
+      this.prefillField(urlParams, 'timer_start', this.startTarget),
+      this.prefillField(urlParams, 'timer_end', this.endTarget),
+    ].some(Boolean)
+
+    if (prefilled) {
+      this.showFlash(this.sharePrefilledValue, 'notice')
+    }
   }
 
-  private prefillField(urlParams: URLSearchParams, param: string, target: HTMLInputElement) {
+  private prefillField(urlParams: URLSearchParams, param: string, target: HTMLInputElement): boolean {
     const value = urlParams.get(param)
-    if (!value) return
+    if (!value) return false
 
     target.value = value
     target.dispatchEvent(new Event('change'))
+    return true
   }
 
   private showShareIgnoredNotice() {
@@ -125,26 +137,27 @@ export default class extends Controller {
       urlParams.getAll('issue_ids[]').some((v) => v !== '')
 
     if (hasShareParams) {
-      this.showFlashNotice(this.shareIgnoredValue)
+      this.showFlash(this.shareIgnoredValue, 'warning')
     }
   }
 
-  private showFlashNotice(message: string) {
-    const flash = document.getElementById('flash_notice')
-    if (flash) {
-      flash.textContent = message
-      flash.style.display = ''
+  private showFlash(message: string, type: 'notice' | 'warning') {
+    const flashId = `flash_${type}`
+    const existing = document.getElementById(flashId)
+    if (existing) {
+      existing.textContent = message
+      existing.style.display = ''
       return
     }
 
     const container = document.getElementById('content')
     if (!container) return
 
-    const notice = document.createElement('div')
-    notice.id = 'flash_notice'
-    notice.className = 'flash notice'
-    notice.textContent = message
-    container.prepend(notice)
+    const flash = document.createElement('div')
+    flash.id = flashId
+    flash.className = `flash ${type}`
+    flash.textContent = message
+    container.prepend(flash)
   }
 
   private extractIssueIds(): string[] {

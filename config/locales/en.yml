@@ -79,6 +79,7 @@ en:
       continue_last_session: Start on end of last session
       share: Share
       share_copied: Link copied to clipboard
+      share_prefilled: Session was prefilled from a shared link
       share_ignored: A timer is already running. Shared session parameters were ignored.
       stop: Stop
       cancel: Cancel

@@ -145,6 +145,7 @@ class TimerManagementTest < ApplicationSystemTestCase
       timer_end: '01.01.2026 10:00'
     )
 
+    assert_text I18n.t('timer_sessions.timer.share_prefilled')
     assert_text Issue.first.subject
     assert_equal 'Sprint planning', find('#timer_session_comments').value
     assert_equal '01.01.2026 09:00', find('#timer_session_timer_start').value
@@ -168,11 +169,19 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_no_selector('[data-name="timer-share"]')
   end
 
-  test 'shows prefill notice when active session exists and url has params' do
+  test 'shows only ignored notice when active session exists and url has params' do
     FactoryBot.create(:timer_session, finished: false, user: User.current)
     visit timer_sessions_path(comments: 'Meeting', issue_ids: [Issue.first.id])
 
     assert_text I18n.t('timer_sessions.timer.share_ignored')
+    assert_no_text I18n.t('timer_sessions.timer.share_prefilled')
+  end
+
+  test 'shows only prefilled notice when no active session and url has params' do
+    visit timer_sessions_path(comments: 'Sprint planning', timer_start: '01.01.2026 09:00')
+
+    assert_text I18n.t('timer_sessions.timer.share_prefilled')
+    assert_no_text I18n.t('timer_sessions.timer.share_ignored')
   end
 
   test 'preserves filter parameters when stopping a timer' do

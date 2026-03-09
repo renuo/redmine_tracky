@@ -75,6 +75,7 @@ de:
       continue_last_session: Anschliessend Starten
       share: Teilen
       share_copied: Link in die Zwischenablage kopiert
+      share_prefilled: Session wurde von einem geteilten Link vorausgefüllt
       share_ignored: Ein Timer läuft bereits. Die geteilten Parameter wurden ignoriert.
       stop: Stop
       cancel: Abbrechen
