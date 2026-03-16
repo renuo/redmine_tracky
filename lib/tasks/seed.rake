@@ -23,8 +23,6 @@ namespace :redmine do
   end
 end
 
-private
-
 def create_project(issue_per_project_amount, project_num)
   project = Project.create!(
     name: "Project #{project_num}",

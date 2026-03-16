@@ -12,28 +12,28 @@ class IssueConnector
   end
 
   def run
-    validate_issues ? create_connections : false
+    validate_issues? ? create_connections : false
   end
 
   private
 
-  def validate_issues
+  def validate_issues?
     issues_exist?
   end
 
   def issues_exist?
     found_issues = Issue.where(id: @issues)
     invalid_issue_ids = @issues - found_issues.pluck(:id)
-    if invalid_issue_ids.count.positive?
+    if invalid_issue_ids.any?
       invalid_issue_ids.each do |invalid_issue_id|
         @errors << { invalid_issue_id: invalid_issue_id }
       end
     end
-    @errors.count.zero?
+    @errors.none?
   end
 
   def create_connections
-    return false unless @errors.count.zero?
+    return false unless @errors.none?
 
     TimerSessionIssue.transaction do
       issue_creation = @issues.map do |issue_id|
@@ -44,6 +44,6 @@ class IssueConnector
       logger.error 'Issue arose during connection creation' if issue_creation.any?(false)
       raise ActiveRecord::Rollback, 'Issue arose during connection creation' if issue_creation.any?(false)
     end
-    @errors.count.zero?
+    @errors.none?
   end
 end

@@ -67,7 +67,7 @@ module TimerSessionsHelper
     "#{issue.id} #{issue.project.name}"
   end
 
-  def draw_gap_separator(time_entity, previous_time_entity)
+  def draw_gap_separator?(time_entity, previous_time_entity)
     return false if time_entity.nil? || previous_time_entity.nil?
     return false if !time_entity.timer_session? || !previous_time_entity.timer_session?
 
