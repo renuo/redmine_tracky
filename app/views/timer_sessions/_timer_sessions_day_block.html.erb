@@ -17,7 +17,7 @@
             time_entity != other_entity && 
             other_entity.overlaps?(time_entity)
           end,
-          gap_separator: draw_gap_separator(time_entity, previous_time_entity)
+          gap_separator: draw_gap_separator?(time_entity, previous_time_entity)
         ) %>
       <% end %>
     </tbody>

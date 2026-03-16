@@ -52,3 +52,4 @@ AllCops:
     - 'db/**/*'
     - 'vendor/**/*'
     - 'node_modules/**/*'
+    - 'app/services/issue_connector.rb' # can be re-enabled once we drop support for redmine 6
