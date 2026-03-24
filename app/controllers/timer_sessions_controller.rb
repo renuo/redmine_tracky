@@ -3,8 +3,7 @@
 class TimerSessionsController < TrackyController
   def index
     @timer_sessions_in_range = TimerSession.includes(:time_entries, :timer_session_time_entries, issues: :project)
-                                           .finished
-                                           .created_by(User.current)
+                                           .finished.created_by(User.current)
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_session_ids(@timer_sessions_in_range)
     set_timer_sessions
     @timer_offset = offset_for_time_zone
@@ -25,10 +24,7 @@ class TimerSessionsController < TrackyController
 
   def rebalance
     @timer_session = user_scoped_timer_session(params[:id])
-    TimeRebalancer.new(
-      @timer_session.relevant_issues.map(&:id),
-      @timer_session
-    ).force_rebalance
+    TimeRebalancer.new(@timer_session.relevant_issues.map(&:id), @timer_session).force_rebalance
     flash[:notice] = l(:notice_successful_update)
     redirect_to timer_sessions_path
   end
@@ -55,8 +51,7 @@ class TimerSessionsController < TrackyController
     timer_session_template = user_scoped_timer_session(params[:id])
     linked_issues = timer_session_template.relevant_issues
     new_timer_session = timer_session_template.dup
-    new_timer_session.update(timer_end: nil,
-                             finished: false,
+    new_timer_session.update(timer_end: nil, finished: false,
                              timer_start: (User.current.time_zone || Time.zone).now.asctime)
     IssueConnector.new(linked_issues.map(&:id) || [], new_timer_session).run
     redirect_to timer_sessions_path
@@ -64,19 +59,10 @@ class TimerSessionsController < TrackyController
 
   def update
     @timer_session = user_scoped_timer_session(params[:id])
-    if @timer_session.update(timer_session_update_params)
-      if issue_selection_submitted? && selected_issue_ids.blank?
-        @timer_session.errors.add(:issue_id, :no_selection)
-        return render_js :update
-      end
+    return render_js(:update) unless @timer_session.update(timer_session_update_params)
+    return render_no_selection_error if issue_selection_submitted? && selected_issue_ids.blank?
 
-      TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id),
-                         @timer_session).rebalance_entries
-      flash[:notice] = l(:notice_successful_update)
-      render_js(@timer_session.valid? ? :update_redirect : :update)
-    else
-      render_js :update
-    end
+    render_rebalanced_update
   end
 
   private
@@ -100,27 +86,33 @@ class TimerSessionsController < TrackyController
     TimerSession.where(user: User.current).find(id)
   end
 
-  def timer_session_params
-    params.require(:timer_session).permit(:comments,
-                                          :timer_start,
-                                          :timer_end,
-                                          :issue_id,
-                                          issue_ids: [])
-  end
-
-  def timer_session_update_params
-    timer_session_params.except(:issue_id, :issue_ids)
-  end
-
   def selected_issue_ids
     return timer_session_params[:issue_ids].reject(&:blank?) if timer_session_params.key?(:issue_ids)
-    return Array.wrap(timer_session_params[:issue_id]).reject(&:blank?) if timer_session_params.key?(:issue_id)
 
-    nil
+    Array.wrap(timer_session_params[:issue_id]).reject(&:blank?) if timer_session_params.key?(:issue_id)
   end
 
   def issue_selection_submitted?
     timer_session_params.key?(:issue_ids) || timer_session_params.key?(:issue_id)
+  end
+
+  def render_no_selection_error
+    @timer_session.errors.add(:issue_id, :no_selection)
+    render_js :update
+  end
+
+  def render_rebalanced_update
+    TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id), @timer_session).rebalance_entries
+    flash[:notice] = l(:notice_successful_update)
+    render_js(@timer_session.valid? ? :update_redirect : :update)
+  end
+
+  def timer_session_params
+    params.require(:timer_session).permit(:comments, :timer_start, :timer_end, :issue_id, issue_ids: [])
+  end
+
+  def timer_session_update_params
+    timer_session_params.except(:issue_id, :issue_ids)
   end
 
   def report_query_params
