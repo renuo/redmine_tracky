@@ -82,8 +82,10 @@ class TimerSessionsControllerTest < ActionController::TestCase
           timer_session: { comments: 'NEW IPA TOPIC', issue_id: @other_issue.id }
         }, xhr: true)
 
+    timer_session = @controller.instance_variable_get(:@timer_session)
+
     assert_response 200
-    assert_empty assigns(:timer_session).errors[:issue_id]
+    assert_empty timer_session.errors[:issue_id]
     assert_equal [@other_issue.id], @timer_session.reload.issue_ids
   end
 
@@ -95,8 +97,10 @@ class TimerSessionsControllerTest < ActionController::TestCase
           timer_session: { comments: 'NEW IPA TOPIC', issue_ids: [''] }
         }, xhr: true)
 
+    timer_session = @controller.instance_variable_get(:@timer_session)
+
     assert_response 200
-    assert_includes assigns(:timer_session).errors[:issue_id],
+    assert_includes timer_session.errors[:issue_id],
                     I18n.t('activerecord.errors.models.timer_session.attributes.issue_id.no_selection', locale: :en)
     assert_equal original_issue_ids, @timer_session.reload.issue_ids
   end
