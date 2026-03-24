@@ -64,8 +64,13 @@ class TimerSessionsController < TrackyController
 
   def update
     @timer_session = user_scoped_timer_session(params[:id])
-    if @timer_session.update(timer_session_params)
-      TimeRebalancer.new(timer_session_params[:issue_ids],
+    if @timer_session.update(timer_session_update_params)
+      if issue_selection_submitted? && selected_issue_ids.blank?
+        @timer_session.errors.add(:issue_id, :no_selection)
+        return render_js :update
+      end
+
+      TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id),
                          @timer_session).rebalance_entries
       flash[:notice] = l(:notice_successful_update)
       render_js(@timer_session.valid? ? :update_redirect : :update)
@@ -99,7 +104,23 @@ class TimerSessionsController < TrackyController
     params.require(:timer_session).permit(:comments,
                                           :timer_start,
                                           :timer_end,
+                                          :issue_id,
                                           issue_ids: [])
+  end
+
+  def timer_session_update_params
+    timer_session_params.except(:issue_id, :issue_ids)
+  end
+
+  def selected_issue_ids
+    return timer_session_params[:issue_ids].reject(&:blank?) if timer_session_params.key?(:issue_ids)
+    return Array.wrap(timer_session_params[:issue_id]).reject(&:blank?) if timer_session_params.key?(:issue_id)
+
+    nil
+  end
+
+  def issue_selection_submitted?
+    timer_session_params.key?(:issue_ids) || timer_session_params.key?(:issue_id)
   end
 
   def report_query_params

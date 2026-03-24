@@ -19,10 +19,15 @@ class TimerSessionsControllerTest < ActionController::TestCase
 
   def setup
     @issue = Issue.find(1)
+    @other_issue = Issue.find(2)
     @time_entry = TimeEntry.find(1)
     @user = User.find(1)
     @timer_session = FactoryBot.create(:timer_session,
                                        user: @user)
+    TimerSessionIssue.create!(
+      issue: @issue,
+      timer_session_id: @timer_session.id
+    )
     TimerSessionTimeEntry.create!(
       time_entry: @time_entry,
       timer_session_id: @timer_session.id
@@ -69,6 +74,31 @@ class TimerSessionsControllerTest < ActionController::TestCase
 
     assert_response 200
     assert @timer_session.comments, 'NEW IPA TOPIC'
+  end
+
+  test 'update accepts singular issue_id param' do
+    put(:update, params: {
+          id: @timer_session.id,
+          timer_session: { comments: 'NEW IPA TOPIC', issue_id: @other_issue.id }
+        }, xhr: true)
+
+    assert_response 200
+    assert_empty assigns(:timer_session).errors[:issue_id]
+    assert_equal [@other_issue.id], @timer_session.reload.issue_ids
+  end
+
+  test 'update with explicit empty issue selection does not continue' do
+    original_issue_ids = @timer_session.issue_ids
+
+    put(:update, params: {
+          id: @timer_session.id,
+          timer_session: { comments: 'NEW IPA TOPIC', issue_ids: [''] }
+        }, xhr: true)
+
+    assert_response 200
+    assert_includes assigns(:timer_session).errors[:issue_id],
+                    I18n.t('activerecord.errors.models.timer_session.attributes.issue_id.no_selection', locale: :en)
+    assert_equal original_issue_ids, @timer_session.reload.issue_ids
   end
 
   test 'continue' do
