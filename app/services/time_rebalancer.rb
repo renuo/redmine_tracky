@@ -29,6 +29,7 @@ class TimeRebalancer
 
   def validate
     @timer_session.errors.add(:issue_id, :no_selection) if @issues.blank?
+    @timer_session.errors.add(:issue_id, :no_selection) if @issues.any? { it.blank? }
   end
 
   def handle_issues_changed

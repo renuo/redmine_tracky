@@ -89,13 +89,36 @@ class TimerSessionsControllerTest < ActionController::TestCase
     assert_equal [@other_issue.id], @timer_session.reload.issue_ids
   end
 
-  test 'update with explicit empty issue selection does not continue' do
+  test 'update with empty string in issue array selection does not continue' do
     original_issue_ids = @timer_session.issue_ids
 
     put(:update, params: {
           id: @timer_session.id,
           timer_session: { comments: 'NEW IPA TOPIC', issue_ids: [''] }
         }, xhr: true)
+
+    timer_session = @controller.instance_variable_get(:@timer_session)
+
+    assert_response 200
+    assert_includes timer_session.errors[:issue_id],
+                    I18n.t('activerecord.errors.models.timer_session.attributes.issue_id.no_selection', locale: :en)
+    assert_equal original_issue_ids, @timer_session.reload.issue_ids
+  end
+
+  test 'update with an empty array as issue selection does not continue' do
+    original_issue_ids = @timer_session.issue_ids
+
+    put :update,
+        params: { id: @timer_session.id },
+        body: {
+          timer_session: {
+            comments: 'NEW IPA TOPIC',
+            issue_ids: []
+          }
+        }.to_json,
+        as: :json,
+        format: :js,
+        xhr: true
 
     timer_session = @controller.instance_variable_get(:@timer_session)
 

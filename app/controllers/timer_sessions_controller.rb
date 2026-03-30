@@ -59,10 +59,14 @@ class TimerSessionsController < TrackyController
 
   def update
     @timer_session = user_scoped_timer_session(params[:id])
-    return render_js(:update) unless @timer_session.update(timer_session_update_params)
-    return render_no_selection_error if issue_selection_submitted? && selected_issue_ids.blank?
 
-    render_rebalanced_update
+    if @timer_session.update(timer_session_update_params)
+      TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id), @timer_session).rebalance_entries
+      flash[:notice] = l(:notice_successful_update)
+      render_js(:update_redirect)
+    else
+      render_js :update
+    end
   end
 
   private
@@ -90,21 +94,6 @@ class TimerSessionsController < TrackyController
     return timer_session_params[:issue_ids].reject(&:blank?) if timer_session_params.key?(:issue_ids)
 
     Array.wrap(timer_session_params[:issue_id]).reject(&:blank?) if timer_session_params.key?(:issue_id)
-  end
-
-  def issue_selection_submitted?
-    timer_session_params.key?(:issue_ids) || timer_session_params.key?(:issue_id)
-  end
-
-  def render_no_selection_error
-    @timer_session.errors.add(:issue_id, :no_selection)
-    render_js :update
-  end
-
-  def render_rebalanced_update
-    TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id), @timer_session).rebalance_entries
-    flash[:notice] = l(:notice_successful_update)
-    render_js(@timer_session.valid? ? :update_redirect : :update)
   end
 
   def timer_session_params
