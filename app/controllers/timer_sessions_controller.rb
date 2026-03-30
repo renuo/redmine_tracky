@@ -61,7 +61,8 @@ class TimerSessionsController < TrackyController
     @timer_session = user_scoped_timer_session(params[:id])
 
     if @timer_session.update(timer_session_update_params)
-      TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id), @timer_session).rebalance_entries
+      TimeRebalancer.new(selected_issue_ids || @timer_session.relevant_issues.map(&:id), @timer_session)
+                    .rebalance_entries
       flash[:notice] = l(:notice_successful_update)
       render_js(:update_redirect)
     else
