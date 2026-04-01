@@ -87,4 +87,14 @@ class TimeRebalancerTest < ActiveSupport::TestCase
     assert_equal 1, TimerSessionIssue.count
     assert_equal issue_id, @timer_session.issues.first.id
   end
+
+  test '#rebalance_entries - blank issue input adds no_selection error' do
+    original_issue_ids = @timer_session.issue_ids
+
+    TimeRebalancer.new([''], @timer_session).rebalance_entries
+
+    assert_includes @timer_session.errors[:issue_id],
+                    I18n.t('activerecord.errors.models.timer_session.attributes.issue_id.no_selection', locale: :en)
+    assert_equal original_issue_ids, @timer_session.reload.issue_ids
+  end
 end

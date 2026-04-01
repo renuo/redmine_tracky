@@ -1,4 +1,4 @@
-<% @timer_session.validate %>
+<% @timer_session.validate if @timer_session.errors.empty? %>
 $('#ajax-modal').html(
   ("<%= j render 'edit_modal', timer_session: @timer_session %>")
 );

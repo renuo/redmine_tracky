@@ -30,7 +30,8 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
   end
 
   def validate_issues_selected
-    @record.errors.add(:issue_id, :no_selection) if @record.issues.none?
+    @record.errors.add(:issue_id, :no_selection) if @record.issues.blank?
+    @record.errors.add(:issue_id, :no_selection) if @record.issues.any?(&:blank?)
   end
 
   def validate_minimal_duration

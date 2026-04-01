@@ -2,13 +2,14 @@
 
 class TimeRebalancer
   def initialize(issues, timer_session)
-    @issues = (issues || []).map(&:to_i)
+    @issues = Array.wrap(issues).reject(&:blank?).map(&:to_i).uniq
     @issue_ids = timer_session.relevant_issues.map(&:id).map(&:to_i)
     @timer_session = timer_session
     validate
   end
 
   def rebalance_entries
+    return if @issues.blank?
     return unless @timer_session.valid?
 
     if issues_changed?
@@ -28,6 +29,7 @@ class TimeRebalancer
 
   def validate
     @timer_session.errors.add(:issue_id, :no_selection) if @issues.blank?
+    @timer_session.errors.add(:issue_id, :no_selection) if @issues.any?(&:blank?)
   end
 
   def handle_issues_changed
