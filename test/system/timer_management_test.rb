@@ -185,12 +185,19 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_no_text I18n.t('timer_sessions.timer.share_ignored')
   end
 
-  test 'clears share query params from URL after prefilling' do
-    visit timer_sessions_path(
-      comments: 'Sprint planning',
-      timer_start: '01.01.2026 09:00',
-      timer_end: '01.01.2026 10:00'
-    )
+  test 'redirects to clean URL when share params are ignored due to active session' do
+    FactoryBot.create(:timer_session, finished: false, user: User.current)
+    visit timer_sessions_path(comments: 'Meeting', timer_start: '01.01.2026 09:00')
+
+    assert_text I18n.t('timer_sessions.timer.share_ignored')
+
+    current_url = page.current_url
+    assert_not current_url.include?('comments='), 'URL should not contain comments param'
+    assert_not current_url.include?('timer_start='), 'URL should not contain timer_start param'
+  end
+
+  test 'redirects to clean URL after prefilling from shared link' do
+    visit timer_sessions_path(comments: 'Sprint planning', timer_start: '01.01.2026 09:00')
 
     assert_text I18n.t('timer_sessions.timer.share_prefilled')
     assert_equal 'Sprint planning', find('#timer_session_comments').value
@@ -198,7 +205,6 @@ class TimerManagementTest < ApplicationSystemTestCase
     current_url = page.current_url
     assert_not current_url.include?('comments='), 'URL should not contain comments param'
     assert_not current_url.include?('timer_start='), 'URL should not contain timer_start param'
-    assert_not current_url.include?('timer_end='), 'URL should not contain timer_end param'
   end
 
   test 'preserves filter parameters when stopping a timer' do

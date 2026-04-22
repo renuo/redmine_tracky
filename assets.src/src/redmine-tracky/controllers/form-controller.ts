@@ -10,9 +10,6 @@ export default class extends Controller {
   declare readonly descriptionTarget: HTMLInputElement
   declare readonly issueTargets: Element[]
   declare readonly shareCopiedMessageValue: string
-  declare readonly sharePrefilledMessageValue: string
-  declare readonly shareIgnoredMessageValue: string
-  declare readonly sessionActiveValue: boolean
 
   private connected = false
 
@@ -27,18 +24,10 @@ export default class extends Controller {
 
   static values = {
     shareCopiedMessage: String,
-    sharePrefilledMessage: String,
-    shareIgnoredMessage: String,
-    sessionActive: Boolean,
   }
 
   public connect() {
     this.connected = true
-    if (this.sessionActiveValue) {
-      this.showShareIgnoredNotice()
-    } else {
-      this.prefillFieldsFromURL()
-    }
   }
 
   public disconnect() {
@@ -96,63 +85,12 @@ export default class extends Controller {
     url.search = params.toString()
 
     navigator.clipboard.writeText(url.toString()).then(() => {
-      this.showFlash(this.shareCopiedMessageValue, 'notice')
+      this.showFlash(this.shareCopiedMessageValue)
     })
   }
 
-  private prefillFieldsFromURL() {
-    const urlParams = new URLSearchParams(window.location.search)
-
-    const prefilled = [
-      this.prefillField(urlParams, 'comments', this.descriptionTarget),
-      this.prefillField(urlParams, 'timer_start', this.startTarget),
-      this.prefillField(urlParams, 'timer_end', this.endTarget),
-    ].some(Boolean)
-
-    if (prefilled) {
-      this.showFlash(this.sharePrefilledMessageValue, 'notice')
-      this.clearShareParams()
-    }
-  }
-
-  private clearShareParams() {
-    // Defer so child controllers (e.g. issue-completion) can read the URL before we wipe it.
-    setTimeout(() => {
-      const url = new URL(window.location.href)
-      url.searchParams.delete('comments')
-      url.searchParams.delete('timer_start')
-      url.searchParams.delete('timer_end')
-      url.searchParams.delete('issue_ids[]')
-      window.history.replaceState({}, '', url.toString())
-    }, 0)
-  }
-
-  private prefillField(urlParams: URLSearchParams, param: string, target: HTMLInputElement): boolean {
-    const value = urlParams.get(param)
-    if (!value) return false
-
-    target.value = value
-    target.dispatchEvent(new Event('change'))
-    return true
-  }
-
-  private showShareIgnoredNotice() {
-    if (!this.sessionActiveValue) return
-
-    const urlParams = new URLSearchParams(window.location.search)
-    const hasShareParams = urlParams.has('comments') ||
-      urlParams.has('timer_start') ||
-      urlParams.has('timer_end') ||
-      urlParams.getAll('issue_ids[]').some((v) => v !== '')
-
-    if (hasShareParams) {
-      this.showFlash(this.shareIgnoredMessageValue, 'warning')
-      this.clearShareParams()
-    }
-  }
-
-  private showFlash(message: string, type: 'notice' | 'warning') {
-    const flashId = `flash_${type}`
+  private showFlash(message: string) {
+    const flashId = 'flash_notice'
     const existing = document.getElementById(flashId)
     if (existing) {
       existing.textContent = message
@@ -165,7 +103,7 @@ export default class extends Controller {
 
     const flash = document.createElement('div')
     flash.id = flashId
-    flash.className = `flash ${type}`
+    flash.className = 'flash notice'
     flash.textContent = message
     container.prepend(flash)
   }

@@ -1,8 +1,5 @@
 <div class="box" data-controller="form timer" data-timer-timezone-value="<%= offset_for_time_zone %>"
-     data-form-share-copied-message-value="<%= t('timer_sessions.timer.share_copied') %>"
-     data-form-share-prefilled-message-value="<%= t('timer_sessions.timer.share_prefilled') %>"
-     data-form-share-ignored-message-value="<%= t('timer_sessions.timer.share_ignored') %>"
-     data-form-session-active-value="<%= timer_session.persisted? %>">
+     data-form-share-copied-message-value="<%= t('timer_sessions.timer.share_copied') %>">
   <div class="timer-container">
     <% active_timer_session = timer_session %>
     <%= labelled_form_for(active_timer_session,

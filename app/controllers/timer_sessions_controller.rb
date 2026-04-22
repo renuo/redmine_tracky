@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-class TimerSessionsController < TrackyController
+class TimerSessionsController < TrackyController # rubocop:disable Metrics/ClassLength
+  before_action :redirect_share_params, only: :index
+
   def index
     @timer_sessions_in_range = TimerSession.includes(:time_entries, :timer_session_time_entries, issues: :project)
                                            .finished.created_by(User.current)
     @non_matching_timer_session_ids = TimeDiscrepancyLoader.uneven_timer_session_ids(@timer_sessions_in_range)
     set_timer_sessions
     @timer_offset = offset_for_time_zone
-    @current_timer_session = TimerSession.active.find_by(user: User.current) || TimerSession.new
+    @current_timer_session = build_current_timer_session
   end
 
   def report
@@ -113,5 +115,40 @@ class TimerSessionsController < TrackyController
     return {} unless params[:filter].is_a?(ActionController::Parameters)
 
     params[:filter].permit(:min_date, :max_date).to_h
+  end
+
+  def share_attrs
+    params.permit(:comments, :timer_start, :timer_end).to_h
+  end
+
+  def share_params_present?
+    share_attrs.values.any?(&:present?) || params[:issue_ids].present?
+  end
+
+  def redirect_share_params
+    return unless share_params_present?
+
+    if TimerSession.active.exists?(user: User.current)
+      flash[:warning] = t('timer_sessions.timer.share_ignored')
+    else
+      stash_share_for_redirect
+    end
+    redirect_to timer_sessions_path(filter: params[:filter])
+  end
+
+  def stash_share_for_redirect
+    flash[:notice] = t('timer_sessions.timer.share_prefilled')
+    session[:pending_share] = share_attrs.merge(issue_ids: Array(params[:issue_ids]))
+  end
+
+  def build_current_timer_session
+    active = TimerSession.active.find_by(user: User.current)
+    return active if active
+
+    attrs = session.delete(:pending_share) || {}
+    new_session = TimerSession.new(attrs.except('issue_ids', :issue_ids))
+    ids = attrs['issue_ids'] || attrs[:issue_ids]
+    new_session.issues = Issue.visible.where(id: ids) if ids.present?
+    new_session
   end
 end

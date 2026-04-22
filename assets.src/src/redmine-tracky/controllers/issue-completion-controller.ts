@@ -18,7 +18,6 @@ export default class extends Controller {
 
   connect() {
     this.listenForInput()
-    this.prefillFromURL()
   }
 
   private listenForInput() {
@@ -41,25 +40,6 @@ export default class extends Controller {
         },
       },
     )
-  }
-
-  private prefillFromURL() {
-    const urlParams = new URLSearchParams(window.location.search)
-    const issueIds = urlParams.getAll('issue_ids[]')
-
-    issueIds.filter(v => v !== "").forEach((id) => {
-      const url = window.RedmineTracky.issueCompletionPath
-      const data = { term: id, scope: 'all' }
-
-      $.get(url, data, null, 'json')
-        .done((results: CompletionResult[]) => {
-          const [result] = results
-          this.addIssue({ item: result })
-        })
-        .fail(() => {
-          console.error(`Failed to fetch issue with ID: ${id}`)
-        })
-    })
   }
 
   private addIssue(issue: { item: CompletionResult }) {
