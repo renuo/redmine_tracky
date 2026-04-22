@@ -40,6 +40,17 @@ class TimerSessionEntryComponent < ViewComponent::Base
     User.current.allowed_to_globally?(action: :continue, controller: 'timer_sessions')
   end
 
+  def share_url
+    datetime_format = I18n.t('timer_sessions.formats.datetime_format')
+    params = {
+      issue_ids: @timer_session_entry.issues.map(&:id),
+      comments: @timer_session_entry.comments,
+      timer_start: @timer_session_entry.timer_start&.strftime(datetime_format),
+      timer_end: @timer_session_entry.timer_end&.strftime(datetime_format)
+    }.compact_blank
+    timer_sessions_path(params)
+  end
+
   def row_classes
     classes = []
     classes << 'error-block' if display_discrepancy_errors?

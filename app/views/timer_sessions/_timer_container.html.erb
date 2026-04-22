@@ -82,10 +82,10 @@
               <%= t('timer_sessions.timer.cancel') %>
             <% end %>
           <% end %>
-          <button type="submit" data-name="timer-share" data-action="click->form#share">
+          <%= f.button :share, type: :submit, data: { name: 'timer-share', action: 'click->form#share' } do %>
             <%= t('timer_sessions.timer.share') %>
             <%= sprite_icon('link') %>
-          </button>
+          <% end %>
         </div>
       <% elsif !timer_session.persisted? && User.current.allowed_to_globally?(action: :create, controller: 'time_tracker') %>
         <div class="starting-action-buttons">
@@ -97,10 +97,10 @@
             <%= t('timer_sessions.timer.continue_last_session') %>
             <%= sprite_icon('add') %>
           <% end %>
-          <button type="submit" data-name="timer-share" data-action="click->form#share">
+          <%= f.button :share, type: :submit, data: { name: 'timer-share', action: 'click->form#share' } do %>
             <%= t('timer_sessions.timer.share') %>
             <%= sprite_icon('link') %>
-          </button>
+          <% end %>
         </div>
       <% end %>
     <% end %>

@@ -85,21 +85,17 @@ export default class extends Controller {
 
   public share(event: Event) {
     event.preventDefault()
-    const parts: string[] = []
-    const issueIds = this.extractIssueIds()
-    const comments = this.descriptionTarget.value
-    const timerStart = this.startTarget.value
-    const timerEnd = this.endTarget.value
 
-    issueIds.forEach((id) => parts.push(`issue_ids[]=${encodeURIComponent(id)}`))
-    if (comments) parts.push(`comments=${encodeURIComponent(comments)}`)
-    if (timerStart) parts.push(`timer_start=${encodeURIComponent(timerStart)}`)
-    if (timerEnd) parts.push(`timer_end=${encodeURIComponent(timerEnd)}`)
+    const params = new URLSearchParams()
+    this.extractIssueIds().forEach((id) => params.append('issue_ids[]', id))
+    if (this.descriptionTarget.value) params.set('comments', this.descriptionTarget.value)
+    if (this.startTarget.value) params.set('timer_start', this.startTarget.value)
+    if (this.endTarget.value) params.set('timer_end', this.endTarget.value)
 
-    const query = parts.length > 0 ? `?${parts.join('&')}` : ''
-    const url = `${window.location.origin}${window.location.pathname}${query}`
+    const url = new URL(window.location.pathname, window.location.origin)
+    url.search = params.toString()
 
-    navigator.clipboard.writeText(url).then(() => {
+    navigator.clipboard.writeText(url.toString()).then(() => {
       this.showFlash(this.shareCopiedMessageValue, 'notice')
     })
   }
@@ -120,6 +116,7 @@ export default class extends Controller {
   }
 
   private clearShareParams() {
+    // Defer so child controllers (e.g. issue-completion) can read the URL before we wipe it.
     setTimeout(() => {
       const url = new URL(window.location.href)
       url.searchParams.delete('comments')

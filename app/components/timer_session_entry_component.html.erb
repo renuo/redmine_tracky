@@ -27,6 +27,14 @@
                     data: { confirm: t(:text_are_you_sure), timer_session_destroy_button: '' },
                     method: :delete, class: 'icon-only icon-del') %>
       <% end %>
+      <%= link_to(sprite_icon('link', t('timer_sessions.timer.share'), icon_only: true),
+                  share_url,
+                  data: { controller: 'share-link',
+                          action: 'click->share-link#copy',
+                          share_link_copied_message_value: t('timer_sessions.timer.share_copied'),
+                          timer_session_share_button: '',
+                          session_id: timer_session_entry.id },
+                  class: 'icon-only icon-link') %>
       <% if display_discrepancy_errors? %>
         <%= link_to(sprite_icon('warning', t('timer_sessions.messaging.errors.discrepancy_in_time_sum.title'), icon_only: true),
                     timer_sessions_time_error_path(timer_session_entry),

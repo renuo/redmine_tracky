@@ -90,6 +90,22 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     assert has_content?(I18n.t(:label_spent_time))
   end
 
+  test 'share button in row has href with session params' do
+    session = @timer_sessions.last
+    link = find("[data-timer-session-share-button][data-session-id='#{session.id}']", match: :first)
+    href = link['href']
+
+    assert_includes href, "issue_ids%5B%5D=#{session.issues.first.id}"
+    assert_includes href, "comments=#{CGI.escape(session.comments)}"
+    assert_includes href, 'timer_start='
+    assert_includes href, 'timer_end='
+  end
+
+  test 'share button in row copies link to clipboard' do
+    find('[data-timer-session-share-button]', match: :first).click
+    assert_text I18n.t('timer_sessions.timer.share_copied')
+  end
+
   test 'preserves filter parameters when updating a timer session' do
     filter_date = 1.week.ago.strftime('%Y-%m-%d')
     current_date = Date.today.strftime('%Y-%m-%d')
