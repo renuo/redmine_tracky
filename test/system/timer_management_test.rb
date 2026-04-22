@@ -161,12 +161,13 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_text I18n.t('timer_sessions.timer.share_copied')
   end
 
-  test 'share button not visible when timer is active' do
-    FactoryBot.create(:timer_session, finished: false, user: User.current)
+  test 'share button is visible when timer is active' do
+    FactoryBot.create(:timer_session, :with_issues, finished: false, user: User.current)
     visit timer_sessions_path
 
     assert has_content?(I18n.t('timer_sessions.timer.stop'))
-    assert_no_selector('[data-name="timer-share"]')
+    find('[data-name="timer-share"]', wait: 5).click
+    assert_text I18n.t('timer_sessions.timer.share_copied')
   end
 
   test 'shows only ignored notice when active session exists and url has params' do
@@ -182,6 +183,22 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     assert_text I18n.t('timer_sessions.timer.share_prefilled')
     assert_no_text I18n.t('timer_sessions.timer.share_ignored')
+  end
+
+  test 'clears share query params from URL after prefilling' do
+    visit timer_sessions_path(
+      comments: 'Sprint planning',
+      timer_start: '01.01.2026 09:00',
+      timer_end: '01.01.2026 10:00'
+    )
+
+    assert_text I18n.t('timer_sessions.timer.share_prefilled')
+    assert_equal 'Sprint planning', find('#timer_session_comments').value
+
+    current_url = page.current_url
+    assert_not current_url.include?('comments='), 'URL should not contain comments param'
+    assert_not current_url.include?('timer_start='), 'URL should not contain timer_start param'
+    assert_not current_url.include?('timer_end='), 'URL should not contain timer_end param'
   end
 
   test 'preserves filter parameters when stopping a timer' do

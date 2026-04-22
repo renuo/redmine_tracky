@@ -115,7 +115,19 @@ export default class extends Controller {
 
     if (prefilled) {
       this.showFlash(this.sharePrefilledValue, 'notice')
+      this.clearShareParams()
     }
+  }
+
+  private clearShareParams() {
+    setTimeout(() => {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('comments')
+      url.searchParams.delete('timer_start')
+      url.searchParams.delete('timer_end')
+      url.searchParams.delete('issue_ids[]')
+      window.history.replaceState({}, '', url.toString())
+    }, 0)
   }
 
   private prefillField(urlParams: URLSearchParams, param: string, target: HTMLInputElement): boolean {
@@ -138,6 +150,7 @@ export default class extends Controller {
 
     if (hasShareParams) {
       this.showFlash(this.shareIgnoredValue, 'warning')
+      this.clearShareParams()
     }
   }
 

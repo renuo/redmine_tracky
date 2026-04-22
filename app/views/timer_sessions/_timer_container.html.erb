@@ -82,6 +82,10 @@
               <%= t('timer_sessions.timer.cancel') %>
             <% end %>
           <% end %>
+          <button type="submit" data-name="timer-share" data-action="click->form#share">
+            <%= t('timer_sessions.timer.share') %>
+            <%= sprite_icon('link') %>
+          </button>
         </div>
       <% elsif !timer_session.persisted? && User.current.allowed_to_globally?(action: :create, controller: 'time_tracker') %>
         <div class="starting-action-buttons">
