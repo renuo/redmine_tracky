@@ -39,6 +39,7 @@ Administration => Roles & Permissions
 - Lint: `rake lint`
 - Test: `rake test`
 - Watch Assets: `rake watch`
+- Database seeding: `rails redmine:sample_data:seed`
 
 ## Time Tracking Flow
 
