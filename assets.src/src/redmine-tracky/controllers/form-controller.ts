@@ -9,9 +9,9 @@ export default class extends Controller {
   declare readonly absolutInputTarget: HTMLInputElement
   declare readonly descriptionTarget: HTMLInputElement
   declare readonly issueTargets: Element[]
-  declare readonly shareCopiedValue: string
-  declare readonly sharePrefilledValue: string
-  declare readonly shareIgnoredValue: string
+  declare readonly shareCopiedMessageValue: string
+  declare readonly sharePrefilledMessageValue: string
+  declare readonly shareIgnoredMessageValue: string
   declare readonly sessionActiveValue: boolean
 
   private connected = false
@@ -26,9 +26,9 @@ export default class extends Controller {
   ]
 
   static values = {
-    shareCopied: String,
-    sharePrefilled: String,
-    shareIgnored: String,
+    shareCopiedMessage: String,
+    sharePrefilledMessage: String,
+    shareIgnoredMessage: String,
     sessionActive: Boolean,
   }
 
@@ -100,7 +100,7 @@ export default class extends Controller {
     const url = `${window.location.origin}${window.location.pathname}${query}`
 
     navigator.clipboard.writeText(url).then(() => {
-      this.showFlash(this.shareCopiedValue, 'notice')
+      this.showFlash(this.shareCopiedMessageValue, 'notice')
     })
   }
 
@@ -114,7 +114,7 @@ export default class extends Controller {
     ].some(Boolean)
 
     if (prefilled) {
-      this.showFlash(this.sharePrefilledValue, 'notice')
+      this.showFlash(this.sharePrefilledMessageValue, 'notice')
       this.clearShareParams()
     }
   }
@@ -149,7 +149,7 @@ export default class extends Controller {
       urlParams.getAll('issue_ids[]').some((v) => v !== '')
 
     if (hasShareParams) {
-      this.showFlash(this.shareIgnoredValue, 'warning')
+      this.showFlash(this.shareIgnoredMessageValue, 'warning')
       this.clearShareParams()
     }
   }
