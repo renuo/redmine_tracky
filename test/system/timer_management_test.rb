@@ -30,6 +30,7 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert has_content?(I18n.t('timer_sessions.index.title'))
     find('[data-name="timer-cancel"]', wait: 5).click
     page.driver.browser.switch_to.alert.accept
+    assert_no_selector('[data-name="timer-cancel"]', wait: 5)
     assert has_content?(I18n.t('timer_sessions.timer.start'))
   end
 
