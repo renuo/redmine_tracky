@@ -42,9 +42,9 @@ class FinishedTimerSessionValidator < ActiveModel::Validator
 
   def validate_day_limit
     return if (
-        @record.splittable_hours + TimerSession.created_by(@record.user)
-        .recorded_on(@record.timer_start.to_date).sum(:hours)
-      ) <= SettingsManager.max_hours_recorded_per_day.to_f
+      @record.splittable_hours + TimerSession.created_by(@record.user)
+      .recorded_on(@record.timer_start.to_date).sum(:hours)
+    ) <= SettingsManager.max_hours_recorded_per_day.to_f
 
     @record.errors.add(:timer_start, :limit_reached_day)
   end
