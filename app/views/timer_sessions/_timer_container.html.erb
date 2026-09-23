@@ -1,5 +1,8 @@
 <div class="box" data-controller="form timer" data-timer-timezone-value="<%= offset_for_time_zone %>">
   <div class="timer-container">
+    <div data-timer-target="timezoneWarning" class="flash warning" hidden>
+      <%= t('timer_sessions.messaging.timezone_warning') %>
+    </div>
     <% active_timer_session = timer_session %>
     <%= labelled_form_for(active_timer_session,
       url: time_tracker_path,
