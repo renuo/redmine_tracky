@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        redmine-version: [6.0-stable, master]
+        redmine-version: [6.0-stable, 6.1-stable, 7.0-stable, master]
     steps:
       - name: Checkout Redmine
         uses: actions/checkout@v4
