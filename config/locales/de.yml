@@ -49,7 +49,8 @@ de:
       comments_placeholder: An was arbeitest du gerade?
       timer_start_hint: Wenn du dieses Feld leer lässt, wir die aktuelle Zeit verwendet
       timer_end_hint: Wenn du dieses Feld mein Stoppen leer lässt, wird die aktuelle Zeit verwendet
-      timezone_warning: Die Zeitzone deines Browsers stimmt nicht mit der ausgewählten Zeitzone überrein.
+      timezone_warning_html: 'Die Zeitzone deines Browsers stimmt nicht mit der ausgewählten Zeitzone in deinen %{account_url} überein.'
+      account_settings: 'Account Einstellungen'
       issue_list_hint: Falls du mehr als ein Issue auswählst, splitten wir die Zeit auf die Issues aufgeteilt
       no_time_entries_found: Es wurden keine Zeiteinträge gefunden!
       overlap_error: Überlappen der Zeiterfassungen!
