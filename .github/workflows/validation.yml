@@ -57,6 +57,7 @@ jobs:
           GITHUB_ACTIONS: true
 
       - name: Run linters
+        if: matrix.redmine-version != 'master'
         working-directory: plugins/redmine_tracky
         run: bundle exec rake lint
 
