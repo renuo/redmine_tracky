@@ -33,10 +33,12 @@ jobs:
           path: plugins/redmine_tracky/assets.src/node_modules
           key: npm-${{ hashFiles('plugins/redmine_tracky/assets.src/package-lock.json') }}-${{ matrix.redmine-version }}
 
+      - name: Copy tracky ruby version
+        run: cp plugins/redmine_tracky/.ruby-version .
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2.7'
           bundler-cache: true
 
       - name: Set up Node
