@@ -8,13 +8,16 @@ export default class extends Controller {
   declare readonly descriptionTarget: HTMLInputElement
   declare readonly labelTarget: HTMLInputElement
   declare readonly timezoneValue: number
+  declare readonly timezoneWarningTarget: HTMLDivElement
   readonly timeDiffFields: DurationUnits = ['hours', 'minutes', 'seconds']
   readonly timeDiffFormat = 'hh:mm:ss'
 
-  static targets = ['start', 'end', 'label', 'description']
+  static targets = ['start', 'end', 'label', 'description', 'timezoneWarning']
   static values = { timezone: Number }
 
   connect() {
+    this.checkTimezone()
+
     const start = this.startTarget.value
     const end = this.endTarget.value
 
@@ -84,5 +87,11 @@ export default class extends Controller {
 
   private adjustedDateTime() {
     return DateTime.local()
+  }
+
+  private checkTimezone() {
+    const isSameTimezone = DateTime.local().offset === this.timezoneValue
+
+    this.timezoneWarningTarget.hidden = isSameTimezone
   }
 }
