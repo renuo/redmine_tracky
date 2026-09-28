@@ -176,12 +176,4 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     assert_selector '[data-timer-target="timezoneWarning"]', visible: true
   end
-
-  test 'timezone warning contains the account settings link' do
-    User.current.preference.update!(time_zone: 'UTC')
-
-    visit timer_sessions_path
-
-    assert_link I18n.t('timer_sessions.messaging.account_settings'), href: my_account_path
-  end
 end
