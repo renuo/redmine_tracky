@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module RedmineTracky
-  VERSION = '1.0.0'
-
   def self.root
     File.dirname(__FILE__, 2)
   end

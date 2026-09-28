@@ -160,4 +160,20 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_equal filter_date, find('input[name="filter[min_date]"]').value
     assert_equal current_date, find('input[name="filter[max_date]"]').value
   end
+
+  test 'timezone warning is hidden when account timezone matches browser timezone' do
+    User.current.preference.update!(time_zone: 'Europe/Zurich')
+
+    visit timer_sessions_path
+
+    assert_selector '[data-timer-target="timezoneWarning"]', visible: false
+  end
+
+  test 'timezone warning is shown when account timezone differs from browser timezone' do
+    User.current.preference.update!(time_zone: 'UTC')
+
+    visit timer_sessions_path
+
+    assert_selector '[data-timer-target="timezoneWarning"]', visible: true
+  end
 end
