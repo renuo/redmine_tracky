@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+ENV["_ORIGINAL_TZ"] = ENV["TZ"]
+ENV["TZ"] = "Europe/Zurich"
 
 require File.expand_path('test_helper', __dir__)
 require File.expand_path('../../../test/application_system_test_case', __dir__)
@@ -18,4 +20,9 @@ def login_user(login, password)
     find('input[name=login]').click
   end
   assert_current_path '/my/page', ignore_query: true
+end
+
+Minitest.after_run do
+  ENV["TZ"] = ENV["_ORIGINAL_TZ"]
+  ENV["_ORIGINAL_TZ"] = nil
 end
