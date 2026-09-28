@@ -6,7 +6,7 @@ Redmine::Plugin.register :redmine_tracky do
   name 'Tracky plugin'
   author 'Nick Anthony Flueckiger'
   description 'Time tracking plugin for Redmine'
-  version '0.1.0'
+  version '0.2.0'
   url 'https://github.com/renuo/redmine_tracky'
   author_url 'https://github.com/renuo'
 
