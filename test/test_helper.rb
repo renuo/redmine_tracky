@@ -41,7 +41,8 @@ end
 FactoryBot.definition_file_paths = [File.expand_path('factories', __dir__)]
 FactoryBot.find_definitions
 
-require File.expand_path("#{File.dirname(__FILE__)}/../../../test/test_helper")
+# __dir__ resolves the plugins/redmine_tracky symlink, so Redmine is found via the working directory
+require File.expand_path('test/test_helper', Dir.pwd)
 
 module ActiveSupport
   class TestCase

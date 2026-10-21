@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-bin/run & bundle exec rake watch
+cd "$(dirname "$0")/.."
+
+bin/run & rake watch

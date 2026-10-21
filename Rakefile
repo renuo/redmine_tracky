@@ -2,6 +2,9 @@
 
 REDMINE_URL = 'http://localhost:3000'
 MAILHOG_URL = 'http://localhost:8025'
+REDMINE_ROOT = File.expand_path('tmp/redmine', __dir__)
+
+ENV['BUNDLE_GEMFILE'] ||= File.join(REDMINE_ROOT, 'Gemfile')
 
 desc 'Reset the database.'
 task :reset do
@@ -19,7 +22,7 @@ task :reset do
   commands << 'db:seed' if rails_env == 'development'
 
   commands.each do |command|
-    sh "cd ../.. && RAILS_ENV=#{rails_env} rake #{command}"
+    sh "cd #{REDMINE_ROOT} && RAILS_ENV=#{rails_env} bin/rails #{command}"
   end
 
   puts "The env '#{rails_env}' has been reset."
@@ -55,7 +58,7 @@ end
 
 desc 'Run code.'
 task :run do
-  sh 'cd ../.. && bundle exec rails s'
+  sh "cd #{REDMINE_ROOT} && bin/rails server"
 end
 
 desc 'Lint all code.'
@@ -88,9 +91,12 @@ end
 
 desc 'Test Ruby code.'
 task :test_ruby do
-  file = ENV.fetch('TEST', nil)
-  file = "test/#{file}" if file
-  sh "cd ../.. && RAILS_ENV=test rake test TEST=plugins/redmine_tracky/#{file}"
+  sh "cd #{REDMINE_ROOT} && RAILS_ENV=test bin/rails test plugins/redmine_tracky/test/#{ENV.fetch('TEST', nil)}"
+end
+
+desc 'Test Redmine with Tracky installed.'
+task :test_redmine do
+  sh "cd #{REDMINE_ROOT} && RAILS_ENV=test bin/rails test"
 end
 
 desc 'Test JavaScript code.'

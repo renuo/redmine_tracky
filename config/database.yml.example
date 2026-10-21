@@ -1,0 +1,12 @@
+default: &default
+  adapter: postgresql
+  host: 127.0.0.1
+  encoding: utf8
+
+development:
+  <<: *default
+  database: redmine_tracky_development
+
+test:
+  <<: *default
+  database: redmine_tracky_test

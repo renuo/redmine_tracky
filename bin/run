@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-bundle exec rake run
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+rake run

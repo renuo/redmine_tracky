@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+case "${1:-}" in
+  '') rake lint test ;;
+  --integration) rake lint test test_redmine ;;
+  *) echo 'Usage: bin/check [--integration]' >&2; exit 1 ;;
+esac
