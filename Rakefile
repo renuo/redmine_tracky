@@ -21,6 +21,7 @@ task :reset do
 
   commands << 'db:seed' if rails_env == 'development'
 
+  rm_f File.join(REDMINE_ROOT, 'db/schema.rb')
   commands.each do |command|
     sh "cd #{REDMINE_ROOT} && RAILS_ENV=#{rails_env} bin/rails #{command}"
   end

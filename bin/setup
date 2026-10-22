@@ -21,6 +21,8 @@ cd ../$redmine
 
 bundle config set --local path ../bundle
 bundle install -j 4
+# Rails loads a leftover schema dump into a fresh database, creating plugin tables without marking their migrations as run
+rm -f db/schema.rb
 bin/rails db:create db:migrate redmine:plugins:redmine_tracky:install
 REDMINE_LANG=en bin/rails redmine:load_default_data
 if bin/rails runner 'exit Project.none?'; then
