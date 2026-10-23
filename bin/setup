@@ -1,19 +1,30 @@
 #!/usr/bin/env bash
-cp -n .ruby-version ../../.ruby-version
+set -euo pipefail
+cd "$(dirname "$0")/.."
 
-# Install Dependencies
-[[ -v GITHUB_ACTIONS ]] && bundle config set --local path vendor/bundle
-BUNDLE_GEMFILE=PluginGemfile bundle install -j 4
+ruby=$(ruby -e 'print RUBY_VERSION')
+[[ $ruby == "$(<.ruby-version)" ]] || { echo "Ruby $(<.ruby-version) required, found $ruby" >&2; exit 1; }
+
+redmine=tmp/redmine
+
+[[ -d $redmine ]] || git clone --depth 1 --branch "${REDMINE_VERSION:-7.0-stable}" https://github.com/redmine/redmine.git $redmine
+ln -sfn ../../.. $redmine/plugins/redmine_tracky
+
+db=config/database.yml.example
+[[ -v GITHUB_ACTIONS ]] && db=.github/database.yml
+[[ -f $redmine/config/database.yml ]] || cp $db $redmine/config/database.yml
+
 cd assets.src
 npm install
 npm run build
-cd ../../..
+cd ../$redmine
 
-# Configure Database
-db=config/database.yml.example
-[[ -v GITHUB_ACTIONS ]] && db=plugins/redmine_tracky/.github/database.yml
-cp -n $db config/database.yml
-
+bundle config set --local path ../bundle
 bundle install -j 4
-bundle exec rake db:create db:migrate db:seed redmine:sample_data:seed
-bundle exec rake redmine:plugins:redmine_tracky:install
+# Rails loads a leftover schema dump into a fresh database, creating plugin tables without marking their migrations as run
+rm -f db/schema.rb
+bin/rails db:create db:migrate redmine:plugins:redmine_tracky:install
+REDMINE_LANG=en bin/rails redmine:load_default_data
+if bin/rails runner 'exit Project.none?'; then
+  bin/rails redmine:sample_data:seed
+fi

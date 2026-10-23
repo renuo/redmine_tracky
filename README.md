@@ -7,19 +7,22 @@ Improved time tracking for Redmine (tested using Redmine 6.0)
 - npm
 - Bash [(>= 5.0)](https://www.gnu.org/software/bash/)
 - MySQL or PostgreSQL [(>= 16)](https://www.postgresql.org/download/)
-- Ruby [(= 3.2.7)](https://www.ruby-lang.org/en/downloads/)
+- Chromium or Chrome (system tests)
+- Ruby [(= 3.3.7)](https://www.ruby-lang.org/en/downloads/)
 
 ## Development Setup
 
 ```sh
-git clone -b 6.0-stable https://github.com/redmine/redmine
-git clone https://github.com/renuo/redmine_tracky redmine/plugins/redmine_tracky
-cd redmine/plugins/redmine_tracky
+git clone https://github.com/renuo/redmine_tracky
+cd redmine_tracky
 
 bin/setup
 ```
 
-Optional: Adjust the [database file](../../config/database.yml)
+`bin/setup` checks out Redmine (`REDMINE_VERSION`, default `7.0-stable`) into `tmp/redmine`,
+links the plugin into it and seeds a PostgreSQL database on `127.0.0.1`.
+
+Optional: Adjust `tmp/redmine/config/database.yml`
 
 ## Production Setup
 
@@ -35,10 +38,9 @@ Administration => Roles & Permissions
 
 ### Development
 
-- Run: `rake run`
-- Lint: `rake lint`
-- Test: `rake test`
-- Watch Assets: `rake watch`
+- Run: `bin/run` (`bin/dev` to also watch assets)
+- Lint and test (incl. system tests): `bin/check`
+- Additionally run Redmine's own tests: `bin/check --integration`
 
 ## Time Tracking Flow
 

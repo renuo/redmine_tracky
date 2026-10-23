@@ -4,7 +4,7 @@ ENV['_ORIGINAL_TZ'] = ENV.fetch('TZ', nil)
 ENV['TZ'] = 'Europe/Zurich'
 
 require File.expand_path('test_helper', __dir__)
-require File.expand_path('../../../test/application_system_test_case', __dir__)
+require File.expand_path('test/application_system_test_case', Dir.pwd)
 
 # Redmine core dropped this from its own ApplicationSystemTestCase (redmine/redmine@19a0472, 2026-06-22),
 # which lets Rails default to multiple parallel workers and makes every system test collide on one Capybara session.
