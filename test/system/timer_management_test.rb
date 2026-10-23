@@ -95,14 +95,15 @@ class TimerManagementTest < ApplicationSystemTestCase
     )
     visit timer_sessions_path
     assert_nil TimerSession.last.timer_end
-    time_in_user_time_zone = User.current.convert_time_to_user_timezone(Time.zone.now)
+    datetime_format = I18n.t('timer_sessions.formats.datetime_format')
+    corrected_end = User.current.convert_time_to_user_timezone(30.minutes.ago).strftime(datetime_format)
 
-    fill_in 'timer_session_timer_end',
-            with: time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format'))
+    # Focusing the empty field makes flatpickr prefill it with the current time, which typing would append to
+    find('#timer_session_timer_end').click
+    fill_in 'timer_session_timer_end', with: corrected_end
     find('[data-name="timer-stop"]').click
     assert has_content?(timer_session.comments)
-    assert_equal(time_in_user_time_zone.strftime(I18n.t('timer_sessions.formats.datetime_format')),
-                 TimerSession.last.timer_end.strftime(I18n.t('timer_sessions.formats.datetime_format')))
+    assert_equal corrected_end, TimerSession.last.timer_end.strftime(datetime_format)
   end
 
   test 'loading timer with issues from url' do

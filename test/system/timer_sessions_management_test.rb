@@ -68,8 +68,11 @@ class TimerSessionsManagementTest < ApplicationSystemTestCase
     assert_equal 3, TimerSession.count
     find('[data-timer-session-destroy-button]', match: :first).click
     page.driver.browser.switch_to.alert.accept
-    assert has_content?(@timer_sessions.first.comments)
-    assert has_content?(@timer_sessions.second.comments)
+    assert has_content?(I18n.t(:notice_successful_delete))
+    remaining, destroyed = @timer_sessions.partition { |timer_session| TimerSession.exists?(timer_session.id) }
+    assert_equal 1, destroyed.size
+    remaining.each { |timer_session| assert has_content?(timer_session.comments) }
+    assert has_no_content?(destroyed.first.comments)
     assert_equal 2, TimerSession.count
     assert_equal 2, TimerSessionIssue.count
     assert_equal 2, TimerSessionTimeEntry.count
