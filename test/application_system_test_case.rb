@@ -10,6 +10,15 @@ require File.expand_path('test/application_system_test_case', Dir.pwd)
 # which lets Rails default to multiple parallel workers and makes every system test collide on one Capybara session.
 ApplicationSystemTestCase.parallelize(workers: 1)
 
+class ApplicationSystemTestCase
+  # Capybara deletes cookies before leaving the page, so a response still in flight would log in the next test
+  def before_teardown
+    super
+  ensure
+    wait_for_ajax
+  end
+end
+
 # borrowed and adapted from Redmine application system test case.
 # https://github.com/redmine/redmine/blob/06bbaebef8366bf19f73da0bf4e1315d23dc4697/test/application_system_test_case.rb#L69-L78
 def login_user(login, password)
