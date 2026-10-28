@@ -106,6 +106,28 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_equal corrected_end, TimerSession.last.timer_end.strftime(datetime_format)
   end
 
+  test 'prefills end with start when timer was started before today' do
+    FactoryBot.create(:timer_session, finished: false, user: User.current, timer_start: 2.days.ago, timer_end: nil)
+    visit timer_sessions_path
+
+    timer_start = find('#timer_session_timer_start').value
+    assert_predicate timer_start, :present?
+
+    find('#timer_session_timer_end').click
+    assert_field 'timer_session_timer_end', with: timer_start
+  end
+
+  test 'prefills end with current time when timer was started today' do
+    FactoryBot.create(:timer_session, finished: false, user: User.current, timer_start: 1.minute.ago, timer_end: nil)
+    visit timer_sessions_path
+
+    find('#timer_session_timer_end').click
+    browser_today = evaluate_script(<<~JS)
+      new Date().toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    JS
+    assert_field 'timer_session_timer_end', with: /\A#{browser_today} /
+  end
+
   test 'loading timer with issues from url' do
     visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
 
