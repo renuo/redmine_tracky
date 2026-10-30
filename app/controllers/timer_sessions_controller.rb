@@ -71,6 +71,18 @@ class TimerSessionsController < TrackyController
   end
 
   private
+  # A running timer always wins. Shared values never overwrite an active session.
+  def current_or_prefilled_timer_session
+    prefill = TimerSessionPrefill.new(params[:timer_session])
+    active_session = TimerSession.active.find_by(user: User.current)
+
+    if active_session
+      flash.now[:warning] = t('timer_sessions.messaging.prefill_ignored') if prefill.prefilled?
+      active_session
+    else
+      prefill.build
+    end
+  end
 
   def set_timer_sessions
     @timer_sessions = apply_filter(@timer_sessions_in_range, :timer_start)
