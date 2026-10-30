@@ -91,6 +91,10 @@ en:
         total_hours_worked: 'Total Hours: %{hours} h'
     rebalance:
       button: Rebalance
+      share:
+      button: Copy link to share this timer session
+      copied: Link copied to clipboard
+      copy_prompt: 'Copy this link to share the timer session:'
     destroy:
       button: Delete Timer Session
     edit:
