@@ -209,7 +209,7 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     visit timer_sessions_path
 
-    assert_selector '[data-timer-target="timezoneWarning"]', visible: false
+    assert_selector '[data-tracky--timer-target="timezoneWarning"]', visible: false
   end
 
   test 'timezone warning is shown when account timezone differs from browser timezone' do
@@ -217,6 +217,6 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     visit timer_sessions_path
 
-    assert_selector '[data-timer-target="timezoneWarning"]', visible: true
+    assert_selector '[data-tracky--timer-target="timezoneWarning"]', visible: true
   end
 end

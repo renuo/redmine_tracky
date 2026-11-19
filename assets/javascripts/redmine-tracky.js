@@ -123,7 +123,7 @@ class ListController extends Controller {
   }
 
   removeItem({ target }) {
-    target.closest('[data-form-target="issue"]')?.remove()
+    target.closest('[data-tracky--form-target="issue"]')?.remove()
   }
 
   buildItem(item) {
@@ -182,7 +182,7 @@ class IssueCompletionController extends Controller {
   }
 
   addIssue(item) {
-    this.application.getControllerForElementAndIdentifier(this.listAnchorTarget, 'list')?.addItem(item)
+    this.application.getControllerForElementAndIdentifier(this.listAnchorTarget, 'tracky--list')?.addItem(item)
   }
 
   cleanup() {
@@ -221,14 +221,14 @@ class FlatpickrController extends Controller {
   }
 
   startDateOfSession() {
-    if (this.element.getAttribute('data-form-target') !== 'end') return undefined
+    if (this.element.getAttribute('data-tracky--form-target') !== 'end') return undefined
 
-    return this.element.closest('form')?.querySelector('[data-form-target="start"]')?._flatpickr?.selectedDates[0]
+    return this.element.closest('form')?.querySelector('[data-tracky--form-target="start"]')?._flatpickr?.selectedDates[0]
   }
 }
 
-application.register('form', FormController)
-application.register('timer', TimerController)
-application.register('list', ListController)
-application.register('issue-completion', IssueCompletionController)
-application.register('flatpickr', FlatpickrController)
+application.register('tracky--form', FormController)
+application.register('tracky--timer', TimerController)
+application.register('tracky--list', ListController)
+application.register('tracky--issue-completion', IssueCompletionController)
+application.register('tracky--flatpickr', FlatpickrController)
