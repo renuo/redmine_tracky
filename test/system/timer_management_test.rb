@@ -129,7 +129,10 @@ class TimerManagementTest < ApplicationSystemTestCase
   end
 
   test 'shows the elapsed time of a running timer' do
-    FactoryBot.create(:timer_session, finished: false, user: User.current, timer_start: 90.minutes.ago, timer_end: nil)
+    User.current.preference.update!(time_zone: 'Europe/Zurich')
+    # Sessions store the user's wall-clock time without zone, as SessionCreator does with asctime
+    timer_start = User.current.convert_time_to_user_timezone(90.minutes.ago).asctime
+    FactoryBot.create(:timer_session, finished: false, user: User.current, timer_start:, timer_end: nil)
     visit timer_sessions_path
 
     assert_selector '#hours-clock', text: /\A01:3[01]:\d\d\z/
