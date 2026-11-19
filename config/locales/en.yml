@@ -104,6 +104,4 @@ en:
       date_with_year_and_weekday: '%A %d.%m.%Y'
       date_without_year: '%d.%m'
       datetime_format: '%d.%m.%Y %H:%M'
-      jquery_datetime_format: d.m.Y H:i
-      js_datetime_format: 'dd.MM.yyyy HH:mm'
       time: '%H:%M'

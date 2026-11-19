@@ -1,1 +1,2 @@
-assets/javascripts/* linguist-generated
+assets/javascripts/flatpickr.min.js linguist-vendored
+assets/stylesheets/flatpickr.min.css linguist-vendored

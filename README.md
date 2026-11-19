@@ -4,7 +4,6 @@ Improved time tracking for Redmine 6.1 and later
 
 ## Prerequisites
 
-- npm
 - Bash [(>= 5.0)](https://www.gnu.org/software/bash/)
 - MySQL or PostgreSQL [(>= 16)](https://www.postgresql.org/download/)
 - Chromium or Chrome (system tests)
@@ -38,7 +37,7 @@ Administration => Roles & Permissions
 
 ### Development
 
-- Run: `bin/run` (`bin/dev` to also watch assets)
+- Run: `bin/run`
 - Lint and test (incl. system tests): `bin/check`
 - Additionally run Redmine's own tests: `bin/check --integration`
 

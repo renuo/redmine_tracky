@@ -6,8 +6,6 @@ pkgs.mkShell {
     pkgs.bashInteractive
 
     pkgs.ruby_2_7
-    pkgs.nodePackages.yarn
-    pkgs.nodejs
     pkgs.rake
   ];
 }

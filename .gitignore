@@ -1,5 +1,2 @@
 .bundle
-node_modules
-
-yarn-error*
 /tmp/

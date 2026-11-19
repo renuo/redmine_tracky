@@ -64,12 +64,6 @@ end
 
 desc 'Lint all code.'
 task :lint do
-  Rake::Task['lint_ruby'].execute
-  Rake::Task['lint_javascript'].execute
-end
-
-desc 'Lint Ruby code.'
-task :lint_ruby do
   sh "bundle exec rubocop #{'-f g' if ENV.key?('GITHUB_ACTIONS')} -c .rubocop.yml"
   sh 'bundle exec brakeman -q -z --no-summary --no-pager'
 end
@@ -79,38 +73,12 @@ task :format do
   sh 'bundle exec rubocop -c .rubocop.yml . -A'
 end
 
-desc 'Lint JavaScript code.'
-task :lint_javascript do
-  sh 'cd assets.src && npm run lint'
-end
-
 desc 'Test all code.'
 task :test do
-  Rake::Task['test_ruby'].execute
-  Rake::Task['test_javascript'].execute
-end
-
-desc 'Test Ruby code.'
-task :test_ruby do
   sh "cd #{REDMINE_ROOT} && RAILS_ENV=test bin/rails test plugins/redmine_tracky/test/#{ENV.fetch('TEST', nil)}"
 end
 
 desc 'Test Redmine with Tracky installed.'
 task :test_redmine do
   sh "cd #{REDMINE_ROOT} && RAILS_ENV=test bin/rails test"
-end
-
-desc 'Test JavaScript code.'
-task :test_javascript do
-  # TODO: sh 'cd assets.src && npm run test'
-end
-
-desc 'Compile CSS and JS assets.'
-task :build do
-  sh 'cd assets.src && npm run build'
-end
-
-desc 'Watch and compile CSS and JS assets.'
-task :watch do
-  sh 'cd assets.src && npm run watch'
 end
