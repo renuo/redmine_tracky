@@ -10,7 +10,7 @@ Redmine::Plugin.register :redmine_tracky do
   url 'https://github.com/renuo/redmine_tracky'
   author_url 'https://github.com/renuo'
 
-  requires_redmine version_or_higher: '6.0.0'
+  requires_redmine version_or_higher: '6.1.0'
 
   project_module :redmine_tracky do
     permission :view_polls, polls: :index

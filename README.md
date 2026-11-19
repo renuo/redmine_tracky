@@ -1,6 +1,6 @@
 # Redmine-Tracky
 
-Improved time tracking for Redmine (tested using Redmine 6.0)
+Improved time tracking for Redmine 6.1 and later
 
 ## Prerequisites
 
