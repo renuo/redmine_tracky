@@ -1,4 +1,4 @@
-<div class="redmine-tracky" data-controller="issue-completion">
+<div class="redmine-tracky" data-controller="tracky--issue-completion">
   <div class="edit-modal">
     <%= error_messages_for timer_session %>
     <%= labelled_form_for(timer_session, remote: true) do |f| %>
@@ -7,7 +7,7 @@
           <div class="box">
             <%= render 'shared/ticker_issue_list', timer_session: timer_session, data_anker: 'data-update-issue-deletion-action', container_data_anker: 'data-update-issue-selection-container' %>
             <hr>
-            <%= f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id', type: :search, data: { issue_completion_target: 'input' } %>
+            <%= f.text_field :issue_id, label: false, id: 'timer_session_update_issue_id', type: :search, data: { 'tracky--issue-completion-target': 'input' } %>
             <% if SettingsManager.visible_hints %>
               <small class="form-text text-muted"><%= t('timer_sessions.messaging.issue_list_hint') %></small>
             <% end %>

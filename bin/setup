@@ -14,10 +14,7 @@ db=config/database.yml.example
 [[ -v GITHUB_ACTIONS ]] && db=.github/database.yml
 [[ -f $redmine/config/database.yml ]] || cp $db $redmine/config/database.yml
 
-cd assets.src
-npm install
-npm run build
-cd ../$redmine
+cd $redmine
 
 bundle config set --local path ../bundle
 bundle install -j 4

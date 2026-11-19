@@ -1,6 +1,6 @@
-<div class="box" data-controller="form timer" data-timer-timezone-value="<%= offset_for_time_zone %>">
+<div class="box" data-controller="tracky--form tracky--timer" data-tracky--timer-timezone-value="<%= offset_for_time_zone %>">
   <div class="timer-container">
-    <div data-timer-target="timezoneWarning" class="flash warning" hidden>
+    <div data-tracky--timer-target="timezoneWarning" class="flash warning" hidden>
       <%= t('timer_sessions.messaging.timezone_warning_html', account_url: link_to(t('timer_sessions.messaging.account_settings'), my_account_path)) %>
     </div>
     <% active_timer_session = timer_session %>
@@ -15,18 +15,18 @@
         <div class="text-center mb-3">
           <div>
             <h1>
-              <span id="hours-clock" class="left-text" data-timer-target="label">??:??</span>
+              <span id="hours-clock" class="left-text" data-tracky--timer-target="label">??:??</span>
             </h1>
           </div>
         </div>
       <% end %>
       <div class="row">
-        <div class="issue-container" data-controller="issue-completion">
+        <div class="issue-container" data-controller="tracky--issue-completion">
           <div class="box">
             <%= render 'shared/ticker_issue_list', timer_session: active_timer_session,
                 data_anker: 'data-issue-deletion-action', container_data_anker: 'data-issue-selection-container' %>
             <hr>
-            <%= f.text_field :issue_id, label: false, type: :search, data: { issue_completion_target: 'input' },
+            <%= f.text_field :issue_id, label: false, type: :search, data: { 'tracky--issue-completion-target': 'input' },
                 required: active_timer_session.persisted?, autofocus: 'autofocus' %>
             <% if SettingsManager.visible_hints %>
               <small class="form-text text-muted"><%= t('timer_sessions.messaging.issue_list_hint') %></small>
@@ -36,7 +36,7 @@
       </div>
       <div class="mb-3 row">
         <div class="col-12">
-          <%= f.text_field :comments, data: { form_target: 'description', timer_target: 'description', action: 'change->form#change' },
+          <%= f.text_field :comments, data: { 'tracky--form-target': 'description', 'tracky--timer-target': 'description', action: 'change->tracky--form#change' },
               placeholder: t('timer_sessions.messaging.comments_placeholder'),
               required: active_timer_session.persisted?, class: 'w-100' %>
           <% if SettingsManager.visible_hints %>
@@ -63,7 +63,7 @@
         </div>
       </div>
       <% if f.object.persisted? %>
-        <%= f.text_field :absolute_time, class: 'w-100', data: { form_target: 'absolutInput', action: 'change->form#absoluteTime' }, placeholder: t('timer_sessions.timer.absolute_time_placeholder') %>
+        <%= f.text_field :absolute_time, class: 'w-100', data: { 'tracky--form-target': 'absolutInput', action: 'change->tracky--form#absoluteTime' }, placeholder: t('timer_sessions.timer.absolute_time_placeholder') %>
         <% if SettingsManager.visible_hints %>
           <small class="form-text text-muted"><%= t('timer_sessions.messaging.timer_absolute_time_hint') %></small>
         <% end %>
@@ -72,7 +72,7 @@
       <% if timer_session.persisted? %>
         <div data-ending-action-buttons>
           <% if User.current.allowed_to_globally?(action: :update, controller: 'time_tracker') %>
-            <%= f.button :stop, type: :submit, data: { name: 'timer-stop', form_target: 'stopButton' }, name: :stop do %>
+            <%= f.button :stop, type: :submit, data: { name: 'timer-stop', 'tracky--form-target': 'stopButton' }, name: :stop do %>
               <%= t('timer_sessions.timer.stop') %>
             <% end %>
           <% end %>

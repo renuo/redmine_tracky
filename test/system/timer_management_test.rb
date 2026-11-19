@@ -128,6 +128,29 @@ class TimerManagementTest < ApplicationSystemTestCase
     assert_field 'timer_session_timer_end', with: /\A#{browser_today} /
   end
 
+  test 'shows the elapsed time of a running timer' do
+    User.current.preference.update!(time_zone: 'Europe/Zurich')
+    # Sessions store the user's wall-clock time without zone, as SessionCreator does with asctime
+    timer_start = User.current.convert_time_to_user_timezone(90.minutes.ago).asctime
+    FactoryBot.create(:timer_session, finished: false, user: User.current, timer_start:, timer_end: nil)
+    visit timer_sessions_path
+
+    assert_selector '#hours-clock', text: /\A01:3[01]:\d\d\z/
+  end
+
+  test 'sets the end from a number of hours after the start' do
+    FactoryBot.create(:timer_session, finished: false, user: User.current, timer_start: 3.hours.ago, timer_end: nil)
+    visit timer_sessions_path
+    datetime_format = I18n.t('timer_sessions.formats.datetime_format')
+    timer_start = Time.strptime(find('#timer_session_timer_start').value, datetime_format)
+
+    fill_in 'timer_session_absolute_time', with: '1.5'
+    find('#timer_session_absolute_time').send_keys(:tab)
+
+    assert_field 'timer_session_timer_end', with: (timer_start + 90.minutes).strftime(datetime_format)
+    assert_field 'timer_session_absolute_time', with: ''
+  end
+
   test 'loading timer with issues from url' do
     visit timer_sessions_path(issue_ids: [Issue.first.id, Issue.second.id])
 
@@ -189,7 +212,7 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     visit timer_sessions_path
 
-    assert_selector '[data-timer-target="timezoneWarning"]', visible: false
+    assert_selector '[data-tracky--timer-target="timezoneWarning"]', visible: false
   end
 
   test 'timezone warning is shown when account timezone differs from browser timezone' do
@@ -197,6 +220,6 @@ class TimerManagementTest < ApplicationSystemTestCase
 
     visit timer_sessions_path
 
-    assert_selector '[data-timer-target="timezoneWarning"]', visible: true
+    assert_selector '[data-tracky--timer-target="timezoneWarning"]', visible: true
   end
 end

@@ -1,2 +1,6 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'flatpickr.min.css', 'redmine-tracky.css', plugin: 'redmine_tracky' %>
+<% end %>
 <%= render 'shared/js_variables' %>
-<%= javascript_include_tag "redmine-tracky.js", type: "module", plugin: 'redmine_tracky' %>
+<%= javascript_include_tag 'flatpickr.min.js', plugin: 'redmine_tracky' %>
+<%= javascript_include_tag 'redmine-tracky.js', type: 'module', plugin: 'redmine_tracky' %>

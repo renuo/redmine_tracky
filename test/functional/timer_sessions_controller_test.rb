@@ -55,7 +55,7 @@ class TimerSessionsControllerTest < ActionController::TestCase
     @user.preference.update(time_zone: 'Tijuana')
     get(:index)
     assert_response 200
-    assert_match(/data-timer-timezone-value="-4[28]0"/, response.body)
+    assert_match(/data-tracky--timer-timezone-value="-4[28]0"/, response.body)
   end
 
   test 'index - with filter' do
@@ -67,6 +67,30 @@ class TimerSessionsControllerTest < ActionController::TestCase
     assert_response 200
     assert_not response.body.include?(@issue.subject)
     assert_not response.body.include?(@timer_session.splittable_hours.round(2).to_s)
+  end
+
+  test 'index marks a session whose time entries do not add up' do
+    get(:index)
+    assert_select 'tr.error-block', count: 1
+    assert_select 'tr.error-block [data-timer-session-discrepancy-button]', count: 1
+  end
+
+  test 'index marks sessions overlapping each other' do
+    noon = Time.zone.now.change(hour: 12)
+    @timer_session.update!(timer_start: noon, timer_end: noon + 1.hour)
+    FactoryBot.create(:timer_session, user: @user, timer_start: noon + 30.minutes, timer_end: noon + 90.minutes)
+    get(:index)
+    assert_select 'tr.error-block-overlap', count: 2
+    assert_select 'tr.gap-marker', count: 0
+  end
+
+  test 'index marks a gap between sessions' do
+    noon = Time.zone.now.change(hour: 12)
+    @timer_session.update!(timer_start: noon, timer_end: noon + 1.hour)
+    FactoryBot.create(:timer_session, user: @user, timer_start: noon + 2.hours, timer_end: noon + 3.hours)
+    get(:index)
+    assert_select 'tr.gap-marker', count: 1
+    assert_select 'tr.error-block-overlap', count: 0
   end
 
   test 'update' do
