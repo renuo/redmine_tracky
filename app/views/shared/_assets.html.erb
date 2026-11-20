@@ -1,2 +1,28 @@
 <%= render 'shared/js_variables' %>
 <%= javascript_include_tag "redmine-tracky.js", type: "module", plugin: 'redmine_tracky' %>
+<script>
+  (function () {
+    if (window.RedmineTracky && RedmineTracky.shareHandlerBound) return;
+    window.RedmineTracky = window.RedmineTracky || {};
+    RedmineTracky.shareHandlerBound = true;
+
+    document.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-timer-session-share-button]');
+      if (!button) return;
+
+      event.preventDefault();
+      var url = new URL(button.getAttribute('href'), window.location.href).href;
+      var fallback = function () { window.prompt(RedmineTracky.shareCopyPrompt, url); };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(function () {
+          var originalTitle = button.getAttribute('title');
+          button.setAttribute('title', RedmineTracky.shareCopiedMessage);
+          setTimeout(function () { button.setAttribute('title', originalTitle); }, 2000);
+        }, fallback);
+      } else {
+        fallback();
+      }
+    });
+  })();
+</script>

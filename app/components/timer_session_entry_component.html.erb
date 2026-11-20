@@ -9,6 +9,13 @@
   <td><%= format_worked_hours(timer_session_entry.recorded_hours) %></td>
   <td class="timer-session-table-actions">
     <% if timer_session_entry? %>
+<% if can_share_entry? %>
+        <%= link_to(sprite_icon('link', t('timer_sessions.share.button'), icon_only: true),
+                    timer_session_share_path(timer_session_entry),
+                    title: t('timer_sessions.share.button'),
+                    data: { timer_session_share_button: '' },
+                    class: 'icon-only icon-link') %>
+      <% end %>
       <% if can_continue_entry? %>
         <%= link_to(sprite_icon('arrow-right', t(:button_continue), icon_only: true),
                     timer_sessions_continue_path(timer_session_entry),

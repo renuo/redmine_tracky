@@ -79,4 +79,7 @@ module TimerSessionsHelper
       link_to issue_information(issue), issue_path(issue)
     end
   end
+def timer_session_share_path(timer_session_entry)
+    timer_sessions_path(timer_session: TimerSessionPrefill.share_params(timer_session_entry))
+  end
 end

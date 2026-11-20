@@ -54,6 +54,7 @@ de:
       issue_list_hint: Falls du mehr als ein Issue auswählst, splitten wir die Zeit auf die Issues aufgeteilt
       no_time_entries_found: Es wurden keine Zeiteinträge gefunden!
       overlap_error: Überlappen der Zeiterfassungen!
+      prefill_ignored: Es läuft bereits ein Timer, daher wurden die Werte aus dem geteilten Link ignoriert.
       timer_absolute_time_hint: |-
         Wenn du dieses Field füllst, wird der aktuelle Startzeitpunkt verschoben um die absolut gesetzte Dauer der Erfassung zu erhalten.
         Sollte kein Endzeitpunkt gegeben sein, wird die aktuelle Zeit verwendet.
@@ -86,6 +87,10 @@ de:
         total_hours_worked: 'Totale Stunden: %{hours} h'
     rebalance:
       button: 'Ausbalancieren'
+      share:
+      button: Link zum Teilen dieser Zeiterfassung kopieren
+      copied: Link in die Zwischenablage kopiert
+      copy_prompt: 'Link zum Teilen der Zeiterfassung kopieren:'
     edit:
       title: Arbeitseintrag bearbeiten
       update: Überarbeiten

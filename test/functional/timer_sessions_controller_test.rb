@@ -67,6 +67,43 @@ class TimerSessionsControllerTest < ActionController::TestCase
     assert_response 200
     assert_not response.body.include?(@issue.subject)
     assert_not response.body.include?(@timer_session.splittable_hours.round(2).to_s)
+    test 'index prefills the timer form from shared params' do
+    get(:index, params: {
+          timer_session: {
+            issue_ids: [@other_issue.id], comments: 'Pairing session',
+            timer_start: '2026-01-05T09:00:00Z', timer_end: '2026-01-05T10:30:00Z'
+          }
+        })
+    expected_start = Time.zone.parse('2026-01-05T09:00:00Z').strftime(I18n.t('timer_sessions.formats.datetime_format'))
+
+    assert_response 200
+    assert_select "input[name='timer_session[comments]'][value=?]", 'Pairing session'
+    assert_select "input[name='timer_session[issue_ids][]'][value=?]", @other_issue.id.to_s
+    assert_select "input[name='timer_session[timer_start]'][value=?]", expected_start
+  end
+
+  test 'index ignores unknown issue ids in shared params' do
+    get(:index, params: { timer_session: { issue_ids: [999_999] } })
+
+    assert_response 200
+    assert_select "input[name='timer_session[issue_ids][]'][value='999999']", false
+  end
+
+  test 'index does not override a running timer with shared params' do
+    FactoryBot.create(:timer_session, user: @user, finished: false, timer_end: nil, comments: 'Running one')
+    get(:index, params: { timer_session: { comments: 'From link' } })
+
+    assert_response 200
+    assert_select "input[name='timer_session[comments]'][value=?]", 'Running one'
+    assert_equal I18n.t('timer_sessions.messaging.prefill_ignored'), flash[:warning]
+  end
+
+  test 'index renders a share link for finished timer sessions' do
+    get(:index)
+
+    assert_response 200
+    assert_select 'a[data-timer-session-share-button][href*=?]', 'timer_session'
+  end
   end
 
   test 'update' do

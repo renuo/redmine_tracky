@@ -59,6 +59,7 @@ en:
       issue_list_hint: If you select more than one issue we will split the worked hours evenly
       no_time_entries_found: No time entries found
       overlap_error: Overlapping time entries
+      prefill_ignored: A timer is already running, so the values from the shared link were ignored.
       timer_absolute_time_hint: |-
         If you set this value it will re-arange the start time of the session to match the absolute duration from the current end time.
         If no end time is given it will use the current time.
@@ -90,6 +91,10 @@ en:
         total_hours_worked: 'Total Hours: %{hours} h'
     rebalance:
       button: Rebalance
+      share:
+      button: Copy link to share this timer session
+      copied: Link copied to clipboard
+      copy_prompt: 'Copy this link to share the timer session:'
     destroy:
       button: Delete Timer Session
     edit:
